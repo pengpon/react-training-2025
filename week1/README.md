@@ -1,5 +1,7 @@
 # Week 1 - Mission
 
+  [Week1 頁面連結](https://pengpon.github.io/react-training-2025/week1/)
+
 ## 開發
 - 使用 Vite 建立 React 專案樣板
 - sass 撰寫 CSS 樣式
