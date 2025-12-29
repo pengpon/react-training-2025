@@ -28,13 +28,13 @@ const Product = ({ item }) => {
           </div>
           <div className="product-action">
             <button type="button" className="button" onClick={handleClick}>
-              <span className="button-content" >
+              <span className="button-content">
                 {isExpand ? "收合細節" : "展開細節"}
               </span>
             </button>
           </div>
         </div>
-        { isExpand && (
+        {isExpand && (
           <div className="product-detail">
             <span>
               <span className="title">產品描述：</span>
@@ -52,6 +52,9 @@ const Product = ({ item }) => {
 };
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
   const [productsData, setProductsData] = useState([]);
 
   useEffect(() => {
@@ -61,7 +64,9 @@ const App = () => {
         setProductsData(res.data.products);
       } catch (error) {
         console.error(error.message);
+        setIsError(true);
       }
+        setIsLoading(false);
     };
     fetchProductsData();
   }, []);
@@ -72,6 +77,9 @@ const App = () => {
         <h1 className="main-title">查看產品列表 & 單一產品細節</h1>
         <div className="container">
           <div className="product-list">
+            { isLoading && (<><p className="status">資料載入中...</p></>)}
+            { isError && (<><p className="status">無法取得資料</p></>)}
+
             {productsData.map((product) => (
               <Product key={product.id} item={product} />
             ))}

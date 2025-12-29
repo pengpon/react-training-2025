@@ -17,6 +17,13 @@ img {
   text-align: center;
   color: #89986D;
 }
+
+.status {
+  font-size: 1.2rem;
+  text-align: center;
+  color:#cb321e;
+}
+
 .container {
   max-width: 1200px;
   width: 80%;
@@ -61,7 +68,7 @@ img {
     }
 
     .price-sale {
-      color: rgb(203, 50, 30);
+      color: #cb321e
     }
 
     .price-regular {
@@ -111,7 +118,6 @@ img {
       &:hover::before {
         width: 100%;
       }
-
     }
   }
 
