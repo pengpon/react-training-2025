@@ -1,0 +1,139 @@
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.main {
+  width: 100vw;
+  height: 100vh;
+  font-family: "Noto Sans TC", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+
+  background-color: #F0F0F0;
+}
+
+.main-title {
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  color: #89986D;
+}
+.container {
+  max-width: 1200px;
+  width: 80%;
+  margin: auto;
+}
+
+.product-list {
+  .product-container {
+    margin-bottom: 20px;
+  }
+
+  .product-item {
+    display: flex;
+    gap: 2%;
+    justify-content: space-between;
+    max-height: 200px;
+    padding: 1.6rem;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background: white;
+  }
+
+  .product-image {
+    width: 30%;
+    display: flex;
+  }
+
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 30%;
+
+    &--title {
+      font-size: 1.2rem;
+    }
+
+    &--price {
+      display: flex;
+      gap: 5%;
+      font-weight: 700;
+    }
+
+    .price-sale {
+      color: rgb(203, 50, 30);
+    }
+
+    .price-regular {
+      text-decoration: line-through;
+      color: #666666;
+    }
+  }
+
+  .product-action {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 30%;
+
+    .button {
+      overflow: hidden;
+      position: relative;
+      padding: 1rem 1.6rem;
+      border: none;
+      border-radius: 30px;
+      background-color: #F0F0F0;
+      transition: background-color .3s, color .3s;
+      cursor: pointer;
+
+      &::before {
+        position: absolute;
+        z-index: 0;
+        content: "";
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background-color: #121111;
+        transition: width .4s;
+      }
+
+      &-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      &:hover {
+        color: white;
+      }
+
+      &:hover::before {
+        width: 100%;
+      }
+
+    }
+  }
+
+  .product-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 1rem;
+    padding: 1.6rem;
+    background-color: white;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    .title {
+      color: #121111;
+    }
+    .content {
+      font-style: italic;
+      color: #666666;
+    }
+  }
+}
