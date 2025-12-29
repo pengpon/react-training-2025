@@ -1,18 +1,29 @@
-# React + Vite
+# Week 1 - Mission
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 開發
+- 使用 Vite 建立 React 專案樣板
+- sass 撰寫 CSS 樣式
+- 透過 axios 取得 `ec-course-api.hexschool.io/v2/api` API 資料
 
-Currently, two official plugins are available:
+## 功能
+- 使用者可查看產品列表
+- 使用者點擊【展開細節】按鈕，可顯示該項產品細節
+- 展開產品細節後，可再點擊【收合細節】按鈕，收合資訊
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 開發 & 打包部署
+`node 使用 v24.12.0`
+```bash
+# 進入 week1 目錄下
 
-## React Compiler
+# 安裝 package
+npm install
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+# 啟動本機 Server
+npm run dev
 
-Note: This will impact Vite dev & build performances.
+# 打包產生靜態檔 dist
+npm run build
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# 打包並部署至遠端 gh-pages 分支
+npm run deploy
+```
