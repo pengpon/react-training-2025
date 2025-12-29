@@ -5,7 +5,13 @@ import "./App.scss";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Product = ({ item }) => {
+  const [isExpand, setIsExpand] = useState(false);
   const { title, price, origin_price, description, content, imageUrl } = item;
+
+  const handleClick = () => {
+    setIsExpand(!isExpand);
+  };
+
   return (
     <>
       <div className="product-container">
@@ -21,21 +27,25 @@ const Product = ({ item }) => {
             </div>
           </div>
           <div className="product-action">
-            <button type="button" className="button">
-              <span className="button-content">展開細節</span>
+            <button type="button" className="button" onClick={handleClick}>
+              <span className="button-content" >
+                {isExpand ? "收合細節" : "展開細節"}
+              </span>
             </button>
           </div>
         </div>
-        <div className="product-detail">
-          <span>
-            <span className="title">產品描述：</span>
-            <span className="content">{description}</span>
-          </span>
-          <span>
-            <span className="title">食用方式：</span>
-            <span className="content">{content}</span>
-          </span>
-        </div>
+        { isExpand && (
+          <div className="product-detail">
+            <span>
+              <span className="title">產品描述：</span>
+              <span className="content">{description}</span>
+            </span>
+            <span>
+              <span className="title">食用方式：</span>
+              <span className="content">{content}</span>
+            </span>
+          </div>
+        )}
       </div>
     </>
   );
