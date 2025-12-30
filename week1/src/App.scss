@@ -39,7 +39,7 @@ img {
     display: flex;
     gap: 2%;
     justify-content: space-between;
-    max-height: 200px;
+    max-height: 160px;
     padding: 1.6rem;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
@@ -118,6 +118,13 @@ img {
       &:hover::before {
         width: 100%;
       }
+
+      &-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
     }
   }
 
@@ -127,9 +134,10 @@ img {
     gap: 20px;
     font-size: 1rem;
     padding: 1.6rem;
-    background-color: white;
+    border-top: 2px solid #F0F0F0;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+    background-color: white;
 
     .title {
       color: #121111;
