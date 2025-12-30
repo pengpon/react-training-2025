@@ -7,6 +7,11 @@
 - sass 撰寫 CSS 樣式
 - 透過 axios 取得 `ec-course-api.hexschool.io/v2/api` API 資料
 
+### 畫面參考
+參考 ezTravel 航班列表呈現方式，如下圖：
+![ezTravel-list](./images/reference-1.png)
+每筆航班可點擊【航班資訊】展開/收合 內容資訊
+
 ## 功能
 - 使用者可查看產品列表
 - 使用者點擊【展開細節】按鈕，可顯示該項產品細節
@@ -29,3 +34,12 @@ npm run build
 # 打包並部署至遠端 gh-pages 分支
 npm run deploy
 ```
+
+## 畫面截圖
+
+產品列表
+<img src="./images/desktop-1.png" width="600" alt="product-list">
+
+展開單一產品內容資訊
+<img src="./images/desktop-2.png" width="600" alt="show-product-info">
+
