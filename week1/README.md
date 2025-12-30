@@ -10,6 +10,7 @@
 ### 畫面參考
 參考 ezTravel 航班列表呈現方式，如下圖：
 ![ezTravel-list](./images/reference-1.png)
+
 每筆航班可點擊【航班資訊】展開/收合 內容資訊
 
 ## 功能
@@ -38,8 +39,11 @@ npm run deploy
 ## 畫面截圖
 
 產品列表
+
 <img src="./images/desktop-1.png" width="600" alt="product-list">
 
+
 展開單一產品內容資訊
+
 <img src="./images/desktop-2.png" width="600" alt="show-product-info">
 
