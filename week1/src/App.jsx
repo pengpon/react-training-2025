@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./App.scss";
 
@@ -86,19 +86,22 @@ const App = () => {
 
   const [productsData, setProductsData] = useState([]);
 
-  useEffect(() => {
-    const fetchProductsData = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/root/products/all`);
-        setProductsData(res.data.products);
-      } catch (error) {
-        console.error(error.message);
-        setIsError(true);
-      }
+  // 抽出 fetchProductsData 方便重複使用，例如:抓取最新資料
+  const fetchProductsData = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API_URL}/root/products/all`);
+      setProductsData(res.data.products);
+    } catch (error) {
+      console.error(error.message);
+      setIsError(true);
+    } finally {
       setIsLoading(false);
-    };
-    fetchProductsData();
+    }
   }, []);
+
+  useEffect(() => {
+    fetchProductsData();
+  }, [fetchProductsData]);
 
   return (
     <>
