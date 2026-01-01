@@ -6,7 +6,15 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const Product = ({ item }) => {
   const [isExpand, setIsExpand] = useState(false);
-  const { title, price, origin_price, description, content, imageUrl } = item;
+  const {
+    title,
+    price,
+    origin_price,
+    description,
+    content,
+    imageUrl,
+    imagesUrl,
+  } = item;
 
   const handleClick = () => {
     setIsExpand(!isExpand);
@@ -56,6 +64,15 @@ const Product = ({ item }) => {
               <span className="title">食用方式：</span>
               <span className="content">{content}</span>
             </span>
+            <div className="images-container">
+              {
+                // imagesUrl 可能為空
+                imagesUrl &&
+                  imagesUrl.map((image, index) => (
+                    <img src={image} alt={`others-image-${index + 1}`} />
+                  ))
+              }
+            </div>
           </div>
         )}
       </div>
