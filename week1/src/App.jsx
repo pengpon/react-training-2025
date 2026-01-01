@@ -17,7 +17,7 @@ const Product = ({ item }) => {
       <div className="product-container">
         <div className="product-item">
           <div className="product-image">
-            <img src={imageUrl} alt="apple" />
+            <img src={imageUrl} alt={title} />
           </div>
           <div className="product-info">
             <p className="product-info--title">{title}</p>
