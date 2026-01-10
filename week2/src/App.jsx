@@ -1,11 +1,12 @@
 import "./App.css";
 import { useState, useEffect, useCallback } from "react";
 import api from "./axiosInstance";
-import { setCookie } from "./utility";
+import { getCookie, setCookie } from "./utility";
 
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuth, setIsAuth] = useState(false);
   const [products, setProducts] = useState([]);
   const [isModalShow, setIsModalShow] = useState(false);
@@ -266,6 +267,7 @@ const App = () => {
     };
 
     const signIn = async () => {
+      setIsLoading(true);
       try {
         const res = await api.post(`/admin/signin`, {
           username: username,
@@ -273,11 +275,14 @@ const App = () => {
         });
         setCookie("hexEcToken", res.data.token, res.data.expired);
         setIsAuth(true);
+        await getProducts();
       } catch (error) {
         console.error(error.message);
         const errorMessage = error.response.data.message;
         setErrorMessage(errorMessage);
         throw error;
+      } finally {
+        setIsLoading(false);
       }
     };
     return (
