@@ -49,38 +49,86 @@ const App = () => {
   };
 
   const ProductList = ({ products }) => {
-    const Product = ({product}) => {
+    const Product = ({ product }) => {
       return (
         <>
-          <a href="#" className="group">
-            <img
-              src={product.imageUrl}
-              alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
-              className="aspect-square w-full rounded-lg bg-gray-200 object-cover group-hover:opacity-75 xl:aspect-7/8"
-            />
-            <h3 className="mt-4 text-sm text-gray-700">{product.title}</h3>
-            <p className="mt-1 text-lg font-medium ">
-              <span className="text-amber-600">${product.price}</span>
-              <span className="text-gray-600 line-through">
+          <tr className="hover:bg-slate-50">
+            <td className="p-4 border-b border-slate-200">
+              <p className="block text-sm text-slate-800">{product.title}</p>
+            </td>
+            <td className="p-4 border-b border-slate-200">
+              <p className="block text-sm text-slate-800">${product.price}</p>
+            </td>
+            <td className="p-4 border-b border-slate-200">
+              <p className="block text-sm text-slate-800">
                 ${product.origin_price}
-              </span>
-            </p>
-          </a>
+              </p>
+            </td>
+            <td className="p-4 border-b border-slate-200">
+              <p className="block text-sm text-slate-800">{product.unit}</p>
+            </td>
+            <td className="p-4 border-b border-slate-200">
+              <p className="block text-sm text-slate-800">
+                {product.is_enabled ? "啟用" : "關閉"}
+              </p>
+            </td>
+            <td className="p-4 border-b border-slate-200">
+              <a
+                href="#"
+                data-id={product.id}
+                className="block text-sm font-semibold text-slate-800"
+                onClick={handleProductSelect}
+              >
+                查看產品詳情
+              </a>
+            </td>
+          </tr>
         </>
       );
     };
 
     return (
       <>
-        <div className="bg-white">
-          <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-            <h2 className="sr-only">Products</h2>
-            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        <div className="relative flex flex-col w-10/12 mx-auto my-5 overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+          <table className="w-full text-left table-auto min-w-max">
+            <thead>
+              <tr>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  <p className="block text-sm font-normal leading-none text-slate-500">
+                    名稱
+                  </p>
+                </th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  <p className="block text-sm font-normal leading-none text-slate-500">
+                    售價
+                  </p>
+                </th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  <p className="block text-sm font-normal leading-none text-slate-500">
+                    原價
+                  </p>
+                </th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  <p className="block text-sm font-normal leading-none text-slate-500">
+                    單位
+                  </p>
+                </th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  <p className="block text-sm font-normal leading-none text-slate-500">
+                    狀態
+                  </p>
+                </th>
+                <th className="p-4 border-b border-slate-300 bg-slate-50">
+                  <p className="block text-sm font-normal leading-none text-slate-500"></p>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
               {products.map((product) => (
-                  <Product key={product.id} product={product}/>
+                <Product key={product.id} product={product} />
               ))}
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
       </>
     );
