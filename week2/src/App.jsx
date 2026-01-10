@@ -10,6 +10,21 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [isModalShow, setIsModalShow] = useState(false);
   const [productSelectedId, setProductSelectedId] = useState("");
+  const checkAuth = useCallback(async () => {
+    try {
+      const res = await api.post(`/api/user/check`);
+      if (res.data.success) {
+        setIsAuth(true);
+        await getProducts();
+      }
+    } catch (error) {
+      console.error(error.message);
+      setErrorMessage(error.response.data.message);
+      setIsAuth(false);
+    }
+  }, []);
+
+  const getProducts = async () => {
     try {
       const res = await api.get(`/${API_PATH}/admin/products/all`);
       setProducts(Object.values(res.data.products));
@@ -303,6 +318,16 @@ const App = () => {
       </>
     );
   };
+
+  useEffect(() => {
+    const init = async () => {
+      if (getCookie("hexEcToken")) {
+        await checkAuth();
+      }
+      setIsLoading(false);
+    };
+    init();
+  }, [checkAuth]);
   return (
     <>
       {isLoading && <Spinner />}
