@@ -11,7 +11,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // check request URL
-    if (config.url.includes("/admin")) {
+    if (config.url.includes("/admin") || config.url.includes("/user/check")) {
       const token = getCookie("hexEcToken");
       if (token) {
         config.headers.Authorization = `${token}`;
