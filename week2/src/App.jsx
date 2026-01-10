@@ -10,6 +10,8 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [isModalShow, setIsModalShow] = useState(false);
   const [productSelectedId, setProductSelectedId] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const checkAuth = useCallback(async () => {
     try {
       const res = await api.post(`/api/user/check`);
@@ -273,6 +275,8 @@ const App = () => {
         setIsAuth(true);
       } catch (error) {
         console.error(error.message);
+        const errorMessage = error.response.data.message;
+        setErrorMessage(errorMessage);
         throw error;
       }
     };
@@ -304,6 +308,8 @@ const App = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+            {/* Error Message */}
+            <p className="mt-2 text-sm text-red-600">{errorMessage}</p>
             <div className="text-center">
               <button
                 type="submit"
