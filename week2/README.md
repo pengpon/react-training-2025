@@ -18,7 +18,7 @@
 - 後台管理者可進入[後台登入頁](https://pengpon.github.io/react-training-2025/week2/)
 - 若登入成功或是 cookie 存有有效的 Token，進入[後台登入頁](https://pengpon.github.io/react-training-2025/week2/)會直接顯示產品列表
 - 點擊單一產品『查看產品詳情』，會開啟 Modal 顯示產品描述、食用方式...等資訊
-- 進入[後台登入頁](https://pengpon.github.io/react-training-2025/week2/)時，若 cookie 中所存的 Token 無效，會顯示 Login 表單讓後台管理者重新輸入 Email、Password 重新登入
+- 進入[後台登入頁](https://pengpon.github.io/react-training-2025/week2/)時，若 cookie 中所存的 Token 無效，會顯示 Login 表單讓後台管理者輸入 Email、Password 重新登入
 
 
 ## 開發
