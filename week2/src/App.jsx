@@ -339,6 +339,19 @@ const App = () => {
     };
     init();
   }, [checkAuth]);
+
+  useEffect(() => {
+    if (isModalShow) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalShow]);
+
   return (
     <>
       {isLoading && <Spinner />}
