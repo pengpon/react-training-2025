@@ -288,13 +288,13 @@ const App = () => {
     return (
       <>
         <div className="w-screen flex justify-center items-center h-screen bg-stone-200 text-gray-700">
-          <form className="rounded-lg p-20 bg-gray-50" method="post">
+          <form className="rounded-lg p-20 bg-gray-50" onSubmit={handleSubmit}>
             <h1 className="text-xl mb-10">Login</h1>
             <div className="mb-4">
               <label htmlFor="username">Username:</label>
               <input
                 className="block border border-solid border-gray-300 rounded-sm hover:border-sky-700 focus:border-sky-700 focus:outline-0 p-1"
-                type="text"
+                type="email"
                 id="username"
                 name="username"
                 required
@@ -319,7 +319,6 @@ const App = () => {
               <button
                 type="submit"
                 className="rounded-sm px-4 py-2 text-gray-100 bg-sky-500 hover:bg-sky-700"
-                onClick={handleSubmit}
               >
                 Login
               </button>
