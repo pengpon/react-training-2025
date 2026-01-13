@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconEye, IconEyeSlash } from "./IconEyes";
+import { IconEye, IconEyeSlash } from "../components/Icons";
 
 function Login() {
   const [userData, setUserData] = useState({
