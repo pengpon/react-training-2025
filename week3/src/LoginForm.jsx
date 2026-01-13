@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { IconEye, IconEyeSlash } from "./IconEyes";
 
 function Login() {
   const [userData, setUserData] = useState({
@@ -6,10 +7,13 @@ function Login() {
     password: "",
   });
 
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
   };
+
   const handleSubmit = (e) => {
     // 防止提交表單時的頁面重整預設行為
     e.preventDefault();
@@ -23,7 +27,7 @@ function Login() {
           <img src="/src/assets/logo-with-slogan.png" alt="logo" />
         </div>
         <form
-          className="w-1/2 h-3/4 py-10 px-20 text-neutral-gray bg-white"
+          className="flex flex-col justify-center align-middle max-w-120 w-1/2 max-h-180 h-3/4 py-10 px-20 text-neutral-gray bg-white"
           onSubmit={handleSubmit}
         >
           <h1 className="text-3xl mb-10 text-center text-neutral-gray">
@@ -49,16 +53,24 @@ function Login() {
               <label htmlFor="password" className="text-lg">
                 Password:
               </label>
-              <input
-                className="block w-full p-1 border border-solid border-neutral-gray-light rounded-sm hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
-                type="password"
-                id="password"
-                name="password"
-                required
-                value={userData.password}
-                onChange={handleValueChange}
-                placeholder="Type your password"
-              />
+              <div className="relative">
+                <input
+                  className="block w-full p-1 border border-solid border-neutral-gray-light rounded-sm hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
+                  type={isShowPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  required
+                  value={userData.password}
+                  onChange={handleValueChange}
+                  placeholder="Type your password"
+                />
+                <span
+                  className="size-5 text-gray-400 absolute top-1/2 right-2 -translate-y-1/2"
+                  onClick={() => setIsShowPassword(!isShowPassword)}
+                >
+                  {isShowPassword ? <IconEye /> : <IconEyeSlash />}
+                </span>
+              </div>
             </div>
             <div className="mt-10 text-center">
               <button
