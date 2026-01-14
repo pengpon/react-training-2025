@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { IconEdit, IconTrash, IconX, IconPlus } from "../components/Icons";
 
 function ProductRow({ item, openModal }) {
@@ -57,7 +57,6 @@ function ProductRow({ item, openModal }) {
 }
 
 function ProductItemModal({
-  ref,
   selectedItem,
   onSubmit,
   closeModal,
@@ -251,11 +250,9 @@ function ProductItemModal({
 
 function ProductTableList() {
   const [isModalShow, setIsModalShow] = useState(false);
-  const modalRef = useRef(null);
   const [selectedProductItem, setSelectedProductItem] = useState({});
 
   const columnHeaders = ["名稱", "售價", "原價", "單位", "狀態", "動作"];
-
   const productsData = [
     {
       id: "123",
@@ -336,13 +333,14 @@ function ProductTableList() {
             ))}
           </tbody>
         </table>
-        <ProductItemModal
-          ref={modalRef}
-          onSubmit={handleSubmit}
-          closeModal={handleModalShow}
-          selectedItem={selectedProductItem}
-          isNewItem={false}
-        />
+        {isModalShow && (
+          <ProductItemModal
+            onSubmit={handleSubmit}
+            closeModal={handleModalClose}
+            selectedItem={selectedProductItem}
+            isNewItem={Object.keys(selectedProductItem).length === 0}
+          />
+        )}
       </div>
     </>
   );
