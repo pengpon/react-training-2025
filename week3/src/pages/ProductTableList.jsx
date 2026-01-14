@@ -1,9 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { IconEdit, IconTrash, IconX, IconPlus } from "../components/Icons";
+import {
+  fetchProducts,
+  createProduct,
+  editProduct,
+  deleteProduct,
+} from "../api/products";
 
-function ProductRow({ item, openModal }) {
-  const { id, title, description, price, origin_price, unit, is_enabled } =
-    item;
+function ProductRow({ item, openModal, removeProduct }) {
+  const {
+    id,
+    title,
+    description,
+    price,
+    origin_price,
+    unit,
+    is_enabled,
+    imageUrl,
+  } = item;
 
   return (
     <>
@@ -14,8 +28,8 @@ function ProductRow({ item, openModal }) {
         >
           <img
             className="w-10 rounded-full object-cover"
-            src="https://storage.googleapis.com/vue-course-api.appspot.com/root/1767869084719.jpg"
-            alt="watermelon"
+            src={imageUrl}
+            alt={title}
           />
           <div className="ps-3">
             <div className="text-base font-semibold">{title}</div>
@@ -46,7 +60,13 @@ function ProductRow({ item, openModal }) {
             >
               <IconEdit />
             </a>
-            <a href="#" type="button" className="size-5 delete">
+            <a
+              href="#"
+              type="button"
+              className="size-5"
+              onClick={removeProduct}
+              data-id={id}
+            >
               <IconTrash />
             </a>
           </div>
@@ -56,19 +76,16 @@ function ProductRow({ item, openModal }) {
   );
 }
 
-function ProductItemModal({
-  selectedItem,
-  onSubmit,
-  closeModal,
-  isNewItem,
-}) {
+function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
+  // title, category, unit, price, origin_price 必填
   const [formData, setFormData] = useState({ ...selectedItem });
 
   const handleOnChange = (e) => {
     let { name, value } = e.target;
-    if (name === "is_enabled") {
-      value = e.target.checked ? true : false;
-    }
+
+    if (name === "is_enabled") value = e.target.checked ? true : false;
+    if (name === "price" || name === "origin_price") value = Number(value);
+
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -102,8 +119,8 @@ function ProductItemModal({
               </button>
             </div>
             <form action="#" onSubmit={(e) => onSubmit(e, formData)}>
-              <div className="grid gap-4 grid-cols-3 py-4 md:py-6 text-neutral-gray">
-                <div className="col-span-2">
+              <div className="grid gap-4 grid-cols-4 py-4 md:py-6 text-neutral-gray">
+                <div className="col-span-3">
                   <label
                     htmlFor="title"
                     className="block mb-2.5 text-sm font-medium text-neutral-gray"
@@ -120,24 +137,22 @@ function ProductItemModal({
                     required={isNewItem}
                   />
                 </div>
-                <div className="col-span-1 sm:col-span-1 flex">
+                <div className="col-span-1 sm:col-span-1">
                   <label
-                    className="inline-flex items-center cursor-pointer"
-                    htmlFor="is_enabled"
+                    htmlFor="category"
+                    className="block mb-2.5 text-sm font-medium"
                   >
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      id="is_enabled"
-                      checked={!!formData.is_enabled}
-                      name="is_enabled"
-                      onChange={handleOnChange}
-                    />
-                    <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-100 dark:peer-focus:ring-gray-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                    <span className="select-none ms-3 text-sm font-medium">
-                      是否上架
-                    </span>
+                    類別
                   </label>
+                  <input
+                    type="text"
+                    name="category"
+                    id="category"
+                    className="bg-white border border-primary-light text-sm rounded-lg focus:border-primary focus:outline-0 block w-full px-3 py-2.5 shadow-xs placeholder:text-gray-600"
+                    required={isNewItem}
+                    defaultValue={formData.category}
+                    onChange={handleOnChange}
+                  />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label
@@ -192,7 +207,26 @@ function ProductItemModal({
                     onChange={handleOnChange}
                   />
                 </div>
-                <div className="col-span-3">
+                <div className="col-span-2 sm:col-span-1 flex">
+                  <label
+                    className="inline-flex items-center cursor-pointer"
+                    htmlFor="is_enabled"
+                  >
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      id="is_enabled"
+                      checked={!!formData.is_enabled}
+                      name="is_enabled"
+                      onChange={handleOnChange}
+                    />
+                    <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-100 dark:peer-focus:ring-gray-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                    <span className="select-none ms-3 text-sm font-medium">
+                      是否上架
+                    </span>
+                  </label>
+                </div>
+                <div className="col-span-4">
                   <label
                     htmlFor="description"
                     className="block mb-2.5 text-sm font-medium text-gray-900"
@@ -208,7 +242,7 @@ function ProductItemModal({
                     onChange={handleOnChange}
                   ></textarea>
                 </div>
-                <div className="col-span-3">
+                <div className="col-span-4">
                   <label
                     htmlFor="content"
                     className="block mb-2.5 text-sm font-medium"
@@ -251,44 +285,44 @@ function ProductItemModal({
 function ProductTableList() {
   const [isModalShow, setIsModalShow] = useState(false);
   const [selectedProductItem, setSelectedProductItem] = useState({});
-
+  const [productsData, setProductsData] = useState([]);
   const columnHeaders = ["名稱", "售價", "原價", "單位", "狀態", "動作"];
-  const productsData = [
-    {
-      id: "123",
-      title: "新鮮柑橘",
-      description: "富含維生素與天然果酸，清爽果香來自新鮮採收。",
-      price: 32,
-      origin_price: 40,
-      unit: "顆",
-      is_enabled: true,
-      content: "123456",
-    },
-    {
-      id: "456",
-      title: "456",
-      description: "123",
-      price: 123,
-      origin_price: 123,
-      unit: "123",
-      is_enabled: false,
-      content: "123456",
-    },
-  ];
 
-  const handleSelectedModal = (e) => {
-    const [selectedItem] = productsData.filter(
-      (product) => product.id === e.currentTarget.dataset.id
-    );
-
-    setSelectedProductItem(selectedItem);
-    handleModalShow();
+  const addNewProduct = async (data) => {
+    try {
+      const res = await createProduct(data);
+      // TODO: show result message on the screen
+      console.log(res.data);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      getAllProducts();
+    }
   };
 
-  const handleSubmit = (e, formData) => {
-    e.preventDefault();
-    console.log("submit", formData);
-    handleModalClose();
+  const editOriginProduct = async (id, data) => {
+    try {
+      const res = await editProduct(id, data);
+      // TODO: show result message on the screen
+      console.log(res.data);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      getAllProducts();
+    }
+  };
+
+  // TODO: 刪除前出現提醒,再詢問一次
+  const removeProduct = async (id) => {
+    try {
+      const res = await deleteProduct(id);
+      // TODO: show result message on the screen
+      console.log(res.data);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      getAllProducts();
+    }
   };
 
   const handleModalShow = () => {
@@ -299,6 +333,35 @@ function ProductTableList() {
     setSelectedProductItem({});
     setIsModalShow(false);
   };
+
+  const handleSelectedModal = (e) => {
+    const [selectedItem] = productsData.filter(
+      (product) => product.id === e.currentTarget.dataset.id
+    );
+    setSelectedProductItem(selectedItem);
+    handleModalShow();
+  };
+
+  const handleRemoveProduct = (e) => {
+    removeProduct(e.currentTarget.dataset.id);
+  };
+
+  const handleSubmit = (e, formData) => {
+    e.preventDefault();
+    const isCreateProduct = Object.keys(selectedProductItem).length === 0;
+    if (isCreateProduct) addNewProduct(formData);
+    if (!isCreateProduct) editOriginProduct(selectedProductItem.id, formData);
+    handleModalClose();
+  };
+
+  const getAllProducts = useCallback(async () => {
+    const res = await fetchProducts();
+    setProductsData(Object.values(res.data.products));
+  }, []);
+
+  useEffect(() => {
+    getAllProducts();
+  }, [getAllProducts]);
 
   return (
     <>
@@ -329,6 +392,7 @@ function ProductTableList() {
                 item={item}
                 key={item.id}
                 openModal={handleSelectedModal}
+                removeProduct={handleRemoveProduct}
               />
             ))}
           </tbody>

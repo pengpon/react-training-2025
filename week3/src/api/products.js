@@ -13,10 +13,10 @@ export const fetchProducts = () =>
   axiosInstance.get(`${API_PATH}/admin/products/all`);
 
 export const createProduct = (data) =>
-  axiosInstance.get(`${API_PATH}/admin/product`, { data });
+  axiosInstance.post(`${API_PATH}/admin/product`, { data });
 
 export const editProduct = (id, data) =>
-  axiosInstance.get(`${API_PATH}/admin/product/${id}`, { data });
+  axiosInstance.put(`${API_PATH}/admin/product/${id}`, { data });
 
 export const deleteProduct = (id) =>
-  axiosInstance.get(`${API_PATH}/admin/product/${id}`);
+  axiosInstance.delete(`${API_PATH}/admin/product/${id}`);
