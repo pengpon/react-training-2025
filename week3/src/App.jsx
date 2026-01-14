@@ -1,12 +1,14 @@
 import "./App.css";
 // import LoginForm from './pages/LoginForm'
-import TableList from './pages/ProductTableList'
+import TableList from "./pages/ProductTableList";
 
 function App() {
   return (
     <>
-      {/* <LoginForm /> */}
-      <TableList />
+      <div className="w-screen h-screen bg-secondary/60 p-10">
+        {/* <LoginForm /> */}
+        <TableList />
+      </div>
     </>
   );
 }
