@@ -6,4 +6,4 @@ import axiosInstance from "./axiosInstance";
 // [POST] /v2/api/user/check 驗證
 
 export const signIn = (data) => axiosInstance.post("/admin/signin", data);
-export const checkAuth = () => axiosInstance.post("/api//user/check");
+export const checkAuth = () => axiosInstance.post("/api/user/check");

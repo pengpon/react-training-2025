@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { IconEye, IconEyeSlash } from "../components/Icons";
+import { signIn } from "../api/auth";
+import { setCookie } from "../utils/cookie";
 
-function Login() {
+function Login({onLoginSuccess}) {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
@@ -14,10 +16,22 @@ function Login() {
     setUserData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const adminSignIn = async (data) => {
+    try {
+      const res = await signIn(data);
+      console.log(res.data.products);
+      setCookie("hexEcToken", res.data.token, res.data.expired);
+      onLoginSuccess()
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   const handleSubmit = (e) => {
     // 防止提交表單時的頁面重整預設行為
     e.preventDefault();
     console.log("submit", userData);
+    adminSignIn(userData);
   };
 
   return (
