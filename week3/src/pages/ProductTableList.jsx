@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { IconEdit, IconTrash, IconX } from "../components/Icons";
+import { IconEdit, IconTrash, IconX, IconPlus } from "../components/Icons";
 
 function ProductRow({ item, openModal }) {
   const { id, title, description, price, origin_price, unit, is_enabled } =
@@ -80,10 +80,9 @@ function ProductItemModal({
   return (
     <>
       <div
-        ref={ref}
         tabIndex="-1"
         onClick={closeModal}
-        className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-20 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-950/50 "
+        className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-20 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-950/50 "
       >
         <div
           className="m-auto relative p-4 w-full max-w-md max-h-full z-30"
@@ -92,7 +91,7 @@ function ProductItemModal({
           <div className="relative bg-white border border-gray-100 rounded-md shadow-sm p-4 md:p-6">
             <div className="flex items-center justify-between border-b border-gray-200 pb-4 md:pb-5">
               <h3 className="text-lg font-medium text-neutral-gray-dark">
-                編輯商品
+                {isNewItem ? "新增" : "編輯"}商品
               </h3>
               <button
                 type="button"
@@ -292,18 +291,31 @@ function ProductTableList() {
   const handleSubmit = (e, formData) => {
     e.preventDefault();
     console.log("submit", formData);
-    handleModalShow();
+    handleModalClose();
   };
 
   const handleModalShow = () => {
-    setIsModalShow(!isModalShow);
-    modalRef.current.classList.toggle("hidden");
+    setIsModalShow(true);
+  };
+
+  const handleModalClose = () => {
+    setSelectedProductItem({});
+    setIsModalShow(false);
   };
 
   return (
     <>
-      <div className="relative overflow-x-auto bg-white shadow-xs rounded-md border border-neutral-gray-light">
-        <div className="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 p-4"></div>
+      <div className="relative overflow-x-auto px-10 py-8 bg-white shadow-xs rounded-xl ">
+        <div className="flex items-center justify-end flex-column md:flex-row flex-wrap mb-10 ">
+          <button
+            type="button"
+            className="inline-flex items-center text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
+            onClick={handleModalShow}
+          >
+            <IconPlus style={"size-5 me-2"} />
+            新增產品
+          </button>
+        </div>
         <table className="w-full text-sm text-left rtl:text-right text-neutral-gray">
           <thead className="text-sm text-neutral-gray border-b border-neutral-gray-light">
             <tr>
