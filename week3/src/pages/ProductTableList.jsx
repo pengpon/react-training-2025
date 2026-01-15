@@ -8,6 +8,7 @@ import {
 
 import { IconEdit, IconTrash, IconX, IconPlus } from "../components/Icons";
 import Spinner from "../components/Spinner";
+import Toast from "../utils/swal";
 
 function ProductActionAlert({ selectedItem, handleAlertAction }) {
   return (
@@ -338,8 +339,15 @@ function ProductTableList() {
   const addNewProduct = async (data) => {
     try {
       const res = await createProduct(data);
-      // TODO: show result message on the screen
-      console.log(res.data);
+
+      Toast.fire({
+        position: "top",
+        icon: "success",
+        title: res.data.message,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#80c684",
+      });
     } catch (error) {
       console.error(error.message);
     }
@@ -348,19 +356,30 @@ function ProductTableList() {
   const editOriginProduct = async (id, data) => {
     try {
       const res = await editProduct(id, data);
-      // TODO: show result message on the screen
-      console.log(res.data);
+      Toast.fire({
+        position: "top",
+        icon: "success",
+        title: res.data.message,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#80c684",
+      });
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  // TODO: 刪除前出現提醒,再詢問一次
   const removeProduct = async (id) => {
     try {
       const res = await deleteProduct(id);
-      // TODO: show result message on the screen
-      console.log(res.data);
+      Toast.fire({
+        position: "top",
+        icon: "success",
+        title: res.data.message,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#80c684",
+      });
     } catch (error) {
       console.error(error.message);
     }
