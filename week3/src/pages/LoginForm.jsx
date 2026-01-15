@@ -19,7 +19,6 @@ function Login({onLoginSuccess}) {
   const adminSignIn = async (data) => {
     try {
       const res = await signIn(data);
-      console.log(res.data.products);
       setCookie("hexEcToken", res.data.token, res.data.expired);
       onLoginSuccess()
     } catch (error) {
@@ -30,7 +29,6 @@ function Login({onLoginSuccess}) {
   const handleSubmit = (e) => {
     // 防止提交表單時的頁面重整預設行為
     e.preventDefault();
-    console.log("submit", userData);
     adminSignIn(userData);
   };
 
