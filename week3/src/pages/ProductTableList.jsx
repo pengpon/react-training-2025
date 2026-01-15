@@ -29,6 +29,7 @@ function ProductActionAlert({ selectedItem, handleAlertAction }) {
             </div>
             <div className="text-center md:text-right mt-4 md:flex md:justify-end md:gap-2">
               <button
+                title="刪除"
                 type="button"
                 className="block w-full md:inline-block md:w-auto px-4 py-3 md:py-2 bg-red-200 text-red-700 rounded-lg font-medium text-sm md:ml-2 cursor-pointer"
                 data-confirm="true"
@@ -37,6 +38,7 @@ function ProductActionAlert({ selectedItem, handleAlertAction }) {
                 刪除
               </button>
               <button
+                title="取消"
                 type="button"
                 className="block w-full md:inline-block md:w-auto px-4 py-3 md:py-2 bg-neutral-gray-light rounded-lg font-medium text-sm mt-4 md:mt-0 cursor-pointer"
                 data-confirm=""
@@ -71,9 +73,10 @@ function ProductRow({ item, openModal, removeProduct }) {
           scope="row"
           className="flex items-center px-6 py-4 text-neutral-gray-dark whitespace-nowrap"
         >
+          {/* //HACK: 新增產品尚未提供上傳圖片功能, 先以假圖替代 */}
           <img
             className="w-10 rounded-full object-cover"
-            src={imageUrl}
+            src={imageUrl || "https://dummyimage.com/300x300/4a5565/fff&text=image"}
             alt={title}
           />
           <div className="ps-3">
@@ -99,6 +102,7 @@ function ProductRow({ item, openModal, removeProduct }) {
             <a
               href="#"
               type="button"
+              title="編輯"
               className="size-5"
               onClick={openModal}
               data-id={id}
@@ -108,6 +112,7 @@ function ProductRow({ item, openModal, removeProduct }) {
             <a
               href="#"
               type="button"
+              title="刪除"
               className="size-5"
               onClick={removeProduct}
               data-id={id}
@@ -156,6 +161,7 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
               </h3>
               <button
                 type="button"
+                title="關閉"
                 className="text-neutral-gray bg-transparent hover:text-white hover:bg-primary rounded-full text-sm w-9 h-9 ms-auto inline-flex justify-center items-center cursor-pointer"
                 onClick={closeModal}
               >
@@ -307,12 +313,14 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
               <div className="flex items-center space-x-4 border-t border-gray-200 pt-4 md:pt-6 justify-center">
                 <button
                   type="submit"
+                  title="儲存"
                   className="inline-flex items-center  text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
                 >
                   儲存
                 </button>
                 <button
                   type="button"
+                  title="取消"
                   className="text-primary-dark bg-white box-border border border-primary focus:ring-4 focus:ring-gray-100 shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
                   onClick={closeModal}
                 >
@@ -464,8 +472,9 @@ function ProductTableList() {
     <>
       <div className="w-screen h-screen bg-secondary/60 p-10">
         <div className="relative overflow-x-auto px-10 py-8 bg-white shadow-xs rounded-xl ">
-          <div className="flex items-center justify-end flex-column md:flex-row flex-wrap mb-10 ">
+          <div className="flex items-center flex-column md:flex-row flex-wrap mb-10 ">
             <button
+              title="新增產品"
               type="button"
               className="inline-flex items-center text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
               onClick={handleModalShow}

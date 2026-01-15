@@ -3,7 +3,7 @@ import { IconEye, IconEyeSlash } from "../components/Icons";
 import { signIn } from "../api/auth";
 import { setCookie } from "../utils/cookie";
 
-function Login({onLoginSuccess}) {
+function Login({ onLoginSuccess }) {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
@@ -20,7 +20,7 @@ function Login({onLoginSuccess}) {
     try {
       const res = await signIn(data);
       setCookie("hexEcToken", res.data.token, res.data.expired);
-      onLoginSuccess()
+      onLoginSuccess();
     } catch (error) {
       console.error(error.message);
     }
@@ -86,6 +86,7 @@ function Login({onLoginSuccess}) {
             </div>
             <div className="mt-10 text-center">
               <button
+                title="登入"
                 type="submit"
                 className="text-lg rounded-sm px-4 py-2 text-white bg-primary hover:bg-primary-dark"
               >
