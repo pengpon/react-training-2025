@@ -87,7 +87,7 @@ export function IconTrash() {
   );
 }
 
-export function IconX() {
+export function IconX({ style = "size-6" }) {
   return (
     <>
       <svg
@@ -96,7 +96,7 @@ export function IconX() {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-6"
+        className={style}
       >
         <path
           strokeLinecap="round"
@@ -108,7 +108,7 @@ export function IconX() {
   );
 }
 
-export function IconPlus({ style='size-6'}) {
+export function IconPlus({ style = "size-6" }) {
   return (
     <>
       <svg

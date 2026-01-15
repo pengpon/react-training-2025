@@ -73,10 +73,11 @@ function ProductRow({ item, openModal, removeProduct }) {
           scope="row"
           className="flex items-center px-6 py-4 text-neutral-gray-dark whitespace-nowrap"
         >
-          {/* //HACK: 新增產品尚未提供上傳圖片功能, 先以假圖替代 */}
           <img
             className="w-10 rounded-full object-cover"
-            src={imageUrl || "https://dummyimage.com/300x300/4a5565/fff&text=image"}
+            src={
+              imageUrl || "https://dummyimage.com/300x300/4a5565/fff&text=image"
+            }
             alt={title}
           />
           <div className="ps-3">
@@ -151,7 +152,7 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
         className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-20 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-950/50 "
       >
         <div
-          className="m-auto relative p-4 w-full max-w-md max-h-full z-30"
+          className="m-auto relative p-4 w-full max-w-xl max-h-full z-30"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="relative bg-white border border-gray-100 rounded-md shadow-sm p-4 md:p-6">
@@ -277,7 +278,81 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
                     </span>
                   </label>
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-2 border-b border-neutral-gray-light pb-3">
+                  <label
+                    htmlFor="description"
+                    className="block mb-2.5 text-sm font-medium text-gray-900 "
+                  >
+                    封面圖片
+                  </label>
+                  <div className="relative p-3">
+                    {formData.imageUrl && (
+                      <>
+                        <img
+                          className="w-full border rounded-xl border-neutral-gray-light object-cover"
+                          src={formData.imageUrl}
+                          alt={`${formData.title}-cover`}
+                        />
+                        <button
+                          title="移除封面"
+                          type="button"
+                          className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                        >
+                          <IconX style="size-3" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  {!formData.imageUrl && (
+                    <button
+                      title="新增圖片"
+                      type="button"
+                      className="col-span-3 flex justify-center items-center gap-2 mx-auto font-medium text-sm text-primary-dark cursor-pointer"
+                    >
+                      <IconPlus style="size-6 flex ju bg-primary text-white rounded-full p-1" />
+                      新增封面
+                    </button>
+                  )}
+                </div>
+                <div className="col-span-2 border-b border-neutral-gray-light pb-3">
+                  <label
+                    htmlFor="description"
+                    className="block mb-2.5 text-sm font-medium text-gray-900"
+                  >
+                    其他圖片
+                  </label>
+                  <div className="grid grid-cols-2">
+                    {formData.imagesUrl.map((image, index) => (
+                      <div className="relative p-3 col-span-1" key={index}>
+                        <img
+                          className="w-full border rounded-xl border-neutral-gray-light object-cover"
+                          src={
+                            image ||
+                            "https://dummyimage.com/300x300/4a5565/fff&text=image"
+                          }
+                          alt={`${formData.title}-${index}`}
+                        />
+                        <button
+                          title="移除其他圖片"
+                          type="button"
+                          className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                        >
+                          <IconX style="size-3" />
+                        </button>
+                      </div>
+                    ))}
+
+                    <button
+                      title="新增其他圖片"
+                      type="button"
+                      className="col-span-2 flex justify-center items-center gap-2 font-medium text-sm text-primary-dark cursor-pointer"
+                    >
+                      <IconPlus style="size-6 bg-primary text-white rounded-full p-1" />
+                      新增其他圖片
+                    </button>
+                  </div>
+                </div>
+                <div className="col-span-2 mb-3">
                   <label
                     htmlFor="description"
                     className="block mb-2.5 text-sm font-medium text-gray-900"
@@ -287,13 +362,13 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
                   <textarea
                     id="description"
                     name="description"
-                    rows="4"
+                    rows="3"
                     className="block bg-white border border-primary-light text-sm rounded-md focus:border-primary focus:outline-0 w-full p-3.5 shadow-xs placeholder:text-gray-600"
                     defaultValue={formData.description}
                     onChange={handleOnChange}
                   ></textarea>
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-2">
                   <label
                     htmlFor="content"
                     className="block mb-2.5 text-sm font-medium"
@@ -303,7 +378,7 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
                   <textarea
                     id="content"
                     name="content"
-                    rows="2"
+                    rows="3"
                     className="block bg-white border border-primary-light text-sm rounded-md focus:border-primary focus:outline-0 w-full p-3.5 shadow-xs placeholder:text-gray-600"
                     defaultValue={formData.content}
                     onChange={handleOnChange}
