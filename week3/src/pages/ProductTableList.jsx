@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
-import { IconEdit, IconTrash, IconX, IconPlus } from "../components/Icons";
 import {
   fetchProducts,
   createProduct,
   editProduct,
   deleteProduct,
 } from "../api/products";
+
+import { IconEdit, IconTrash, IconX, IconPlus } from "../components/Icons";
+import Spinner from "../components/Spinner";
 
 function ProductRow({ item, openModal, removeProduct }) {
   const {
@@ -283,6 +285,7 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
 }
 
 function ProductTableList() {
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalShow, setIsModalShow] = useState(false);
   const [selectedProductItem, setSelectedProductItem] = useState({});
   const [productsData, setProductsData] = useState([]);
@@ -295,8 +298,6 @@ function ProductTableList() {
       console.log(res.data);
     } catch (error) {
       console.error(error.message);
-    } finally {
-      getAllProducts();
     }
   };
 
@@ -307,8 +308,6 @@ function ProductTableList() {
       console.log(res.data);
     } catch (error) {
       console.error(error.message);
-    } finally {
-      getAllProducts();
     }
   };
 
@@ -320,8 +319,6 @@ function ProductTableList() {
       console.log(res.data);
     } catch (error) {
       console.error(error.message);
-    } finally {
-      getAllProducts();
     }
   };
 
@@ -342,69 +339,102 @@ function ProductTableList() {
     handleModalShow();
   };
 
-  const handleRemoveProduct = (e) => {
-    removeProduct(e.currentTarget.dataset.id);
+  const handleRemoveProduct = async (e) => {
+    setIsLoading(true);
+    await removeProduct(e.currentTarget.dataset.id);
+    await getAllProducts();
+    setIsLoading(false);
   };
 
-  const handleSubmit = (e, formData) => {
+  const handleSubmit = async (e, formData) => {
     e.preventDefault();
-    const isCreateProduct = Object.keys(selectedProductItem).length === 0;
-    if (isCreateProduct) addNewProduct(formData);
-    if (!isCreateProduct) editOriginProduct(selectedProductItem.id, formData);
+    setIsLoading(true);
     handleModalClose();
+
+    const isCreateProduct = Object.keys(selectedProductItem).length === 0;
+
+    if (isCreateProduct) {
+      await addNewProduct(formData);
+    } else {
+      await editOriginProduct(selectedProductItem.id, formData);
+    }
+
+    await getAllProducts();
+    setIsLoading(false);
   };
 
   const getAllProducts = useCallback(async () => {
-    const res = await fetchProducts();
-    setProductsData(Object.values(res.data.products));
+    try {
+      const res = await fetchProducts();
+      setProductsData(Object.values(res.data.products));
+    } catch (error) {
+      console.error(error.message);
+    }
   }, []);
 
   useEffect(() => {
-    getAllProducts();
+    const init = async () => {
+      setIsLoading(true);
+      await getAllProducts();
+      setIsLoading(false);
+    };
+    init();
   }, [getAllProducts]);
 
   return (
     <>
-      <div className="relative overflow-x-auto px-10 py-8 bg-white shadow-xs rounded-xl ">
-        <div className="flex items-center justify-end flex-column md:flex-row flex-wrap mb-10 ">
-          <button
-            type="button"
-            className="inline-flex items-center text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
-            onClick={handleModalShow}
-          >
-            <IconPlus style={"size-5 me-2"} />
-            新增產品
-          </button>
+      <div className="w-screen h-screen bg-secondary/60 p-10">
+        <div className="relative overflow-x-auto px-10 py-8 bg-white shadow-xs rounded-xl ">
+          <div className="flex items-center justify-end flex-column md:flex-row flex-wrap mb-10 ">
+            <button
+              type="button"
+              className="inline-flex items-center text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
+              onClick={handleModalShow}
+            >
+              <IconPlus style={"size-5 me-2"} />
+              新增產品
+            </button>
+          </div>
+          <table className="w-full text-sm text-left rtl:text-right text-neutral-gray">
+            <thead className="text-sm text-neutral-gray border-b border-neutral-gray-light">
+              <tr>
+                {columnHeaders.map((header, index) => (
+                  <th scope="col" className="px-6 py-3 font-medium" key={index}>
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <>
+                  <tr>
+                    <td className="p-2" colSpan={columnHeaders.length}>
+                      <Spinner />
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                productsData.map((item) => (
+                  <ProductRow
+                    item={item}
+                    key={item.id}
+                    openModal={handleSelectedModal}
+                    removeProduct={handleRemoveProduct}
+                  />
+                ))
+              )}
+            </tbody>
+          </table>
+          {isModalShow && (
+            <ProductItemModal
+              onSubmit={handleSubmit}
+              closeModal={handleModalClose}
+              selectedItem={selectedProductItem}
+              isNewItem={Object.keys(selectedProductItem).length === 0}
+            />
+          )}
         </div>
-        <table className="w-full text-sm text-left rtl:text-right text-neutral-gray">
-          <thead className="text-sm text-neutral-gray border-b border-neutral-gray-light">
-            <tr>
-              {columnHeaders.map((header, index) => (
-                <th scope="col" className="px-6 py-3 font-medium" key={index}>
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {productsData.map((item) => (
-              <ProductRow
-                item={item}
-                key={item.id}
-                openModal={handleSelectedModal}
-                removeProduct={handleRemoveProduct}
-              />
-            ))}
-          </tbody>
-        </table>
-        {isModalShow && (
-          <ProductItemModal
-            onSubmit={handleSubmit}
-            closeModal={handleModalClose}
-            selectedItem={selectedProductItem}
-            isNewItem={Object.keys(selectedProductItem).length === 0}
-          />
-        )}
       </div>
     </>
   );
