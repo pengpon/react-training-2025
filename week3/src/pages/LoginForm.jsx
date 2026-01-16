@@ -36,7 +36,7 @@ function Login({ onLoginSuccess }) {
     <>
       <div className="flex justify-center items-center h-screen bg-secondary-dark">
         <div className="w-1/3">
-          <img src="./src/assets/logo-with-slogan.png" alt="logo" />
+          <img src="./logo-with-slogan.png" alt="logo" />
         </div>
         <form
           className="flex flex-col justify-center align-middle max-w-120 w-1/2 max-h-180 h-3/4 py-10 px-20 text-neutral-gray bg-white"
