@@ -198,7 +198,7 @@ function ProductItemModal({
       <div
         tabIndex="-1"
         onClick={closeModal}
-        className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-20 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-950/50 "
+        className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-20 justify-center items-center w-full md:inset-0 h-full bg-gray-950/50 "
       >
         <div
           className="m-auto relative p-4 w-full max-w-xl max-h-full z-30"
