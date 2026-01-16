@@ -74,11 +74,13 @@ function ProductRow({ item, openModal, removeProduct }) {
           className="flex items-center px-6 py-4 text-neutral-gray-dark whitespace-nowrap"
         >
           <img
-            className="w-10 rounded-full object-cover"
-            src={
-              imageUrl || "https://dummyimage.com/300x300/4a5565/fff&text=image"
-            }
+            src={imageUrl || "https://placehold.co/300x300?text=Empty"}
             alt={title}
+            className="w-10 rounded-full object-cover"
+            onError={(e) => {
+              e.target.src =
+                "https://placehold.co/300x300/9CAB84/FFF?text=Error";
+            }}
           />
           <div className="ps-3">
             <div className="text-base font-semibold">{title}</div>
@@ -127,17 +129,64 @@ function ProductRow({ item, openModal, removeProduct }) {
   );
 }
 
-function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
+function ProductItemModal({
+  selectedItem,
+  onSubmit,
+  onKeyDown,
+  closeModal,
+  isNewItem,
+}) {
   // title, category, unit, price, origin_price 必填
   const [formData, setFormData] = useState({ ...selectedItem });
+  const [tempEditImageUrl, setTempEditImageUrl] = useState("");
+  const [tempEditOtherImageUrl, setTempEditOtherImageUrl] = useState("");
+
+  // 封面 & 其他圖片共用
+  const handleImageEdit = (e) => {
+    const { name, value } = e.target;
+    if (name === "imageUrl") setTempEditImageUrl(value);
+    if (name === "imagesUrl") setTempEditOtherImageUrl(value);
+  };
+
+  const handleRemoveOtherImage = (index) => {
+    setFormData((prevData) => {
+      const newImages = prevData.imagesUrl.filter((_, i) => i !== index);
+      return {
+        ...prevData,
+        imagesUrl: newImages,
+      };
+    });
+  };
+
+  const handleImageRemove = () => {
+    setFormData((prevData) => ({ ...prevData, imageUrl: "" }));
+  };
 
   const handleOnChange = (e) => {
     let { name, value } = e.target;
 
+    if (name.includes("imageUrl") || name.includes("imagesUrl")) {
+      if (value.trim().length === 0) return;
+      value = value.trim();
+    }
+
+    // 特定個別欄位判斷
     if (name === "is_enabled") value = e.target.checked ? true : false;
     if (name === "price" || name === "origin_price") value = Number(value);
 
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === "imageUrl") {
+      setTempEditImageUrl("");
+    }
+
+    if (name === "imagesUrl") {
+      setTempEditOtherImageUrl("");
+    }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]:
+        name == "imagesUrl" ? [...(prevData.imagesUrl || []), value] : value,
+    }));
   };
 
   useEffect(() => {
@@ -170,7 +219,7 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
-            <form action="#" onSubmit={(e) => onSubmit(e, formData)}>
+            <form onSubmit={(e) => onSubmit(e, formData)} onKeyDown={onKeyDown}>
               <div className="grid gap-4 grid-cols-4 py-4 md:py-6 text-neutral-gray">
                 <div className="col-span-3">
                   <label
@@ -279,77 +328,93 @@ function ProductItemModal({ selectedItem, onSubmit, closeModal, isNewItem }) {
                   </label>
                 </div>
                 <div className="col-span-2 border-b border-neutral-gray-light pb-3">
-                  <label
-                    htmlFor="description"
-                    className="block mb-2.5 text-sm font-medium text-gray-900 "
-                  >
+                  <label className="block mb-2.5 text-sm font-medium text-gray-900 ">
                     封面圖片
                   </label>
                   <div className="relative p-3">
+                    {/* 有封面 */}
                     {formData.imageUrl && (
                       <>
                         <img
                           className="w-full border rounded-xl border-neutral-gray-light object-cover"
                           src={formData.imageUrl}
-                          alt={`${formData.title}-cover`}
+                          onError={(e) => {
+                            e.target.src =
+                              "https://placehold.co/300x300/9CAB84/FFF?text=Error";
+                          }}
+                          alt="cover"
                         />
                         <button
                           title="移除封面"
                           type="button"
                           className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                          onClick={handleImageRemove}
                         >
                           <IconX style="size-3" />
                         </button>
                       </>
                     )}
                   </div>
+                  {/* 無封面 */}
                   {!formData.imageUrl && (
-                    <button
-                      title="新增圖片"
-                      type="button"
-                      className="col-span-3 flex justify-center items-center gap-2 mx-auto font-medium text-sm text-primary-dark cursor-pointer"
-                    >
-                      <IconPlus style="size-6 flex ju bg-primary text-white rounded-full p-1" />
-                      新增封面
-                    </button>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        name="imageUrl"
+                        className="col-span-2 bg-white border border-primary-light text-sm rounded-lg focus:border-primary focus:outline-0 block w-full px-3 py-2.5 shadow-xs placeholder:text-gray-600"
+                        defaultValue={tempEditImageUrl}
+                        onChange={handleImageEdit}
+                        onBlur={handleOnChange}
+                      />
+                    </div>
                   )}
                 </div>
                 <div className="col-span-2 border-b border-neutral-gray-light pb-3">
                   <label
-                    htmlFor="description"
+                    htmlFor="imagesUrl"
                     className="block mb-2.5 text-sm font-medium text-gray-900"
                   >
                     其他圖片
                   </label>
                   <div className="grid grid-cols-2">
-                    {formData.imagesUrl.map((image, index) => (
-                      <div className="relative p-3 col-span-1" key={index}>
-                        <img
-                          className="w-full border rounded-xl border-neutral-gray-light object-cover"
-                          src={
-                            image ||
-                            "https://dummyimage.com/300x300/4a5565/fff&text=image"
-                          }
-                          alt={`${formData.title}-${index}`}
-                        />
-                        <button
-                          title="移除其他圖片"
-                          type="button"
-                          className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                    {formData.imagesUrl?.[0] &&
+                      formData.imagesUrl.map((image, index) => (
+                        <div
+                          className="relative p-3 col-span-1"
+                          key={`${image}-${index}`}
                         >
-                          <IconX style="size-3" />
-                        </button>
-                      </div>
-                    ))}
+                          <img
+                            className="w-full border rounded-xl border-neutral-gray-light object-cover"
+                            src={image}
+                            alt={`other-image-${index}`}
+                            onError={(e) => {
+                              e.target.src =
+                                "https://placehold.co/300x300/9CAB84/FFF?text=Error";
+                            }}
+                          />
 
-                    <button
-                      title="新增其他圖片"
-                      type="button"
-                      className="col-span-2 flex justify-center items-center gap-2 font-medium text-sm text-primary-dark cursor-pointer"
-                    >
-                      <IconPlus style="size-6 bg-primary text-white rounded-full p-1" />
-                      新增其他圖片
-                    </button>
+                          <button
+                            title="移除圖片"
+                            type="button"
+                            className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                            onClick={() => handleRemoveOtherImage(index)}
+                          >
+                            <IconX style="size-3" />
+                          </button>
+                        </div>
+                      ))}
+
+                    <div className="col-span-2 flex items-center gap-2 text-primary">
+                      <input
+                        type="text"
+                        name="imagesUrl"
+                        id="imagesUrl"
+                        className="bg-white border border-primary-light text-sm rounded-lg focus:border-primary focus:outline-0 block w-full px-3 py-2.5 shadow-xs placeholder:text-gray-600"
+                        value={tempEditOtherImageUrl}
+                        onChange={handleImageEdit}
+                        onBlur={handleOnChange}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="col-span-2 mb-3">
@@ -508,6 +573,14 @@ function ProductTableList() {
     }
   };
 
+  const handleFormKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (e.target.tagName !== "TEXTAREA") {
+        e.preventDefault();
+      }
+    }
+  };
+
   const handleSubmit = async (e, formData) => {
     e.preventDefault();
     setIsLoading(true);
@@ -592,6 +665,7 @@ function ProductTableList() {
           {isModalShow && (
             <ProductItemModal
               onSubmit={handleSubmit}
+              onKeyDown={handleFormKeyDown}
               closeModal={handleModalClose}
               selectedItem={selectedProductItem}
               isNewItem={Object.keys(selectedProductItem).length === 0}
