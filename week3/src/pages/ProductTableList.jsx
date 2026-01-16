@@ -555,20 +555,23 @@ function ProductTableList() {
       (product) => product.id === e.currentTarget.dataset.id
     );
     setSelectedProductItem(selectedItem);
-    setIsLoading(true);
     setIsActionAlertShow(true);
   };
 
   const handleRemoveProduct = async (e) => {
+    setIsLoading(true);
+
     setIsActionAlertShow(false);
     const isDelete = e.currentTarget.dataset.confirm;
     try {
-      if (isDelete) await removeProduct(selectedProductItem.id);
+      if (isDelete) {
+        await removeProduct(selectedProductItem.id);
+        await getAllProducts();
+      }
     } catch (error) {
       console.error(error.message);
     } finally {
       setSelectedProductItem({});
-      await getAllProducts();
       setIsLoading(false);
     }
   };
