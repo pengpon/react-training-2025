@@ -12,6 +12,18 @@ function ProductItemModal({
   const [formData, setFormData] = useState({ ...selectedItem });
   const [tempEditImageUrl, setTempEditImageUrl] = useState("");
   const [tempEditOtherImageUrl, setTempEditOtherImageUrl] = useState("");
+  const originalData = { ...selectedItem };
+  const [isShowOriginalData, setIsShowOriginalData] = useState({
+    title: false,
+    category: false,
+    origin_price: false,
+    price: false,
+    unit: false,
+  });
+
+  const isDisabledSubmit = Object.values(isShowOriginalData).some(
+    (value) => value,
+  );
 
   // 封面 & 其他圖片共用
   const handleImageEdit = (e) => {
@@ -34,8 +46,21 @@ function ProductItemModal({
     setFormData((prevData) => ({ ...prevData, imageUrl: "" }));
   };
 
+  const handleRequiredOnBlur = (e) => {
+    const { value, name } = e.target;
+    // 清空必填欄位時, 提醒原本設定的內容
+    if (!value.trim()) {
+      setIsShowOriginalData((prev) => ({ ...prev, [name]: true }));
+    }
+  };
+
   const handleOnChange = (e) => {
     let { name, value } = e.target;
+    let fields = Object.keys(isShowOriginalData);
+    if (fields.includes(name)) {
+      if (value.trim())
+        setIsShowOriginalData((prev) => ({ ...prev, [name]: false }));
+    }
 
     if (name.includes("imageUrl") || name.includes("imagesUrl")) {
       if (value.trim().length === 0) return;
@@ -99,6 +124,7 @@ function ProductItemModal({
                     className="block mb-2.5 text-sm font-medium text-neutral-gray"
                   >
                     名稱
+                    <span className="text-status-warning">*</span>
                   </label>
                   <input
                     type="text"
@@ -108,7 +134,17 @@ function ProductItemModal({
                     defaultValue={formData.title}
                     onChange={handleOnChange}
                     required={isNewItem}
+                    onBlur={handleRequiredOnBlur}
                   />
+                  <span
+                    className={
+                      isShowOriginalData.title
+                        ? "text-xs text-status-error"
+                        : "hidden"
+                    }
+                  >
+                    提醒：名稱為必填，原輸入內容為 {originalData.title}
+                  </span>
                 </div>
                 <div className="col-span-1 sm:col-span-1">
                   <label
@@ -116,6 +152,7 @@ function ProductItemModal({
                     className="block mb-2.5 text-sm font-medium"
                   >
                     類別
+                    <span className="text-status-warning">*</span>
                   </label>
                   <input
                     type="text"
@@ -125,7 +162,17 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.category}
                     onChange={handleOnChange}
+                    onBlur={handleRequiredOnBlur}
                   />
+                  <span
+                    className={
+                      isShowOriginalData.category
+                        ? "text-xs text-status-error"
+                        : "hidden"
+                    }
+                  >
+                    提醒：類別為必填，原輸入內容為 {originalData.category}
+                  </span>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label
@@ -133,6 +180,7 @@ function ProductItemModal({
                     className="block mb-2.5 text-sm font-medium"
                   >
                     售價
+                    <span className="text-status-warning">*</span>
                   </label>
                   <input
                     type="number"
@@ -143,7 +191,17 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.price}
                     onChange={handleOnChange}
+                    onBlur={handleRequiredOnBlur}
                   />
+                  <span
+                    className={
+                      isShowOriginalData.price
+                        ? "text-xs text-status-error"
+                        : "hidden"
+                    }
+                  >
+                    提醒：售價為必填，原輸入內容為 {originalData.price}
+                  </span>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label
@@ -151,6 +209,7 @@ function ProductItemModal({
                     className="block mb-2.5 text-sm font-medium"
                   >
                     原價
+                    <span className="text-status-warning">*</span>
                   </label>
                   <input
                     type="number"
@@ -161,7 +220,17 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.origin_price}
                     onChange={handleOnChange}
+                    onBlur={handleRequiredOnBlur}
                   />
+                  <span
+                    className={
+                      isShowOriginalData.origin_price
+                        ? "text-xs text-status-error"
+                        : "hidden"
+                    }
+                  >
+                    提醒：原價為必填，原輸入內容為 {originalData.origin_price}
+                  </span>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label
@@ -169,6 +238,7 @@ function ProductItemModal({
                     className="block mb-2.5 text-sm font-medium"
                   >
                     單位
+                    <span className="text-status-warning">*</span>
                   </label>
                   <input
                     type="text"
@@ -178,7 +248,17 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.unit}
                     onChange={handleOnChange}
+                    onBlur={handleRequiredOnBlur}
                   />
+                  <span
+                    className={
+                      isShowOriginalData.unit
+                        ? "text-xs text-status-error"
+                        : "hidden"
+                    }
+                  >
+                    提醒：單位為必填，原輸入內容為 {originalData.unit}
+                  </span>
                 </div>
                 <div className="col-span-2 sm:col-span-1 flex">
                   <label
@@ -326,7 +406,8 @@ function ProductItemModal({
                 <button
                   type="submit"
                   title="儲存"
-                  className="inline-flex items-center  text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
+                  className="inline-flex items-center text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none disabled:bg-gray-50 disabled:text-gray-400 disabled:border-0 disabled:cursor-auto cursor-pointer"
+                  disabled={isDisabledSubmit}
                 >
                   儲存
                 </button>

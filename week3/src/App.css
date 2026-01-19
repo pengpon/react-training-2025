@@ -13,4 +13,6 @@
   --color-neutral-gray-light: var(--color-gray-200);
   --color-enabled: var(--color-emerald-700);
   --color-disabled: var(--color-rose-700);
+  --color-status-error: var(--color-red-500);
+  --color-status-warning: var(--color-amber-500);
 }
