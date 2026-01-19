@@ -10,7 +10,7 @@ import { IconPlus } from "../components/Icons";
 import Spinner from "../components/Spinner";
 import ProductActionAlert from "../components/ProductActionAlert";
 import ProductItemModal from "../components/ProductItemModal";
-import ProductRow from "../components/ProductRow"
+import ProductRow from "../components/ProductRow";
 import Toast from "../utils/swal";
 
 function ProductTableList() {
@@ -36,6 +36,7 @@ function ProductTableList() {
       });
     } catch (error) {
       console.error(error.message);
+      throw error;
     }
   };
 
@@ -52,6 +53,7 @@ function ProductTableList() {
       });
     } catch (error) {
       console.error(error.message);
+      throw error;
     }
   };
 
@@ -68,6 +70,7 @@ function ProductTableList() {
       });
     } catch (error) {
       console.error(error.message);
+      throw error;
     }
   };
 
@@ -125,18 +128,18 @@ function ProductTableList() {
   const handleSubmit = async (e, formData) => {
     e.preventDefault();
     setIsLoading(true);
-    handleModalClose();
 
     const isCreateProduct = Object.keys(selectedProductItem).length === 0;
 
-    if (isCreateProduct) {
-      await addNewProduct(formData);
-    } else {
-      await editOriginProduct(selectedProductItem.id, formData);
+    try {
+      if (isCreateProduct) await addNewProduct(formData);
+      if (!isCreateProduct) await editOriginProduct(selectedProductItem.id, formData);
+      handleModalClose();
+      await getAllProducts();
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error.message);
     }
-
-    await getAllProducts();
-    setIsLoading(false);
   };
 
   const getAllProducts = useCallback(async () => {
