@@ -316,8 +316,16 @@ function ProductItemModal({
                         className="col-span-2 bg-white border border-primary-light text-sm rounded-lg focus:border-primary focus:outline-0 block w-full px-3 py-2.5 shadow-xs placeholder:text-gray-600"
                         defaultValue={tempEditImageUrl}
                         onChange={handleImageEdit}
-                        onBlur={handleOnChange}
                       />
+                      <button
+                        type="button"
+                        name="imageUrl"
+                        value={tempEditImageUrl}
+                        className="min-w-16 p-2 text-sm rounded-md text-white bg-primary hover:bg-primary-dark cursor-pointer"
+                        onClick={handleOnChange}
+                      >
+                        新增
+                      </button>
                     </div>
                   )}
                 </div>
@@ -364,8 +372,16 @@ function ProductItemModal({
                         className="bg-white border border-primary-light text-sm rounded-lg focus:border-primary focus:outline-0 block w-full px-3 py-2.5 shadow-xs placeholder:text-gray-600"
                         value={tempEditOtherImageUrl}
                         onChange={handleImageEdit}
-                        onBlur={handleOnChange}
                       />
+                      <button
+                        type="button"
+                        name="imagesUrl"
+                        value={tempEditOtherImageUrl}
+                        className="min-w-16 p-2 text-sm rounded-md text-white bg-primary hover:bg-primary-dark cursor-pointer"
+                        onClick={handleOnChange}
+                      >
+                        新增
+                      </button>
                     </div>
                   </div>
                 </div>
