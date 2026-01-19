@@ -13,16 +13,16 @@ function ProductItemModal({
   const [tempEditImageUrl, setTempEditImageUrl] = useState("");
   const [tempEditOtherImageUrl, setTempEditOtherImageUrl] = useState("");
   const originalData = { ...selectedItem };
-  const [isShowOriginalData, setIsShowOriginalData] = useState({
-    title: false,
-    category: false,
-    origin_price: false,
-    price: false,
-    unit: false,
+  const [requiredFieldHasValue, setRequiredFieldHasValue] = useState({
+    title: true,
+    category: true,
+    origin_price: true,
+    price: true,
+    unit: true,
   });
 
-  const isDisabledSubmit = Object.values(isShowOriginalData).some(
-    (value) => value,
+  let isDisabledSubmit = Object.values(requiredFieldHasValue).some(
+    (value) => !value,
   );
 
   // 封面 & 其他圖片共用
@@ -46,20 +46,12 @@ function ProductItemModal({
     setFormData((prevData) => ({ ...prevData, imageUrl: "" }));
   };
 
-  const handleRequiredOnBlur = (e) => {
-    const { value, name } = e.target;
-    // 清空必填欄位時, 提醒原本設定的內容
-    if (!value.trim()) {
-      setIsShowOriginalData((prev) => ({ ...prev, [name]: true }));
-    }
-  };
-
   const handleOnChange = (e) => {
     let { name, value } = e.target;
-    let fields = Object.keys(isShowOriginalData);
+    let fields = Object.keys(requiredFieldHasValue);
     if (fields.includes(name)) {
-      if (value.trim())
-        setIsShowOriginalData((prev) => ({ ...prev, [name]: false }));
+      let hasValue = value.trim();
+      setRequiredFieldHasValue((prev) => ({ ...prev, [name]: hasValue }));
     }
 
     if (name.includes("imageUrl") || name.includes("imagesUrl")) {
@@ -89,6 +81,18 @@ function ProductItemModal({
   useEffect(() => {
     setFormData(selectedItem);
   }, [selectedItem]);
+
+  useEffect(() => {
+    if (isNewItem) {
+      setRequiredFieldHasValue({
+        title: false,
+        category: false,
+        origin_price: false,
+        price: false,
+        unit: false,
+      });
+    }
+  }, [isNewItem]);
 
   return (
     <>
@@ -134,11 +138,10 @@ function ProductItemModal({
                     defaultValue={formData.title}
                     onChange={handleOnChange}
                     required={isNewItem}
-                    onBlur={handleRequiredOnBlur}
                   />
                   <span
                     className={
-                      isShowOriginalData.title
+                      !requiredFieldHasValue.title && !isNewItem
                         ? "text-xs text-status-error"
                         : "hidden"
                     }
@@ -162,11 +165,10 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.category}
                     onChange={handleOnChange}
-                    onBlur={handleRequiredOnBlur}
                   />
                   <span
                     className={
-                      isShowOriginalData.category
+                      !requiredFieldHasValue.category && !isNewItem
                         ? "text-xs text-status-error"
                         : "hidden"
                     }
@@ -191,11 +193,10 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.price}
                     onChange={handleOnChange}
-                    onBlur={handleRequiredOnBlur}
                   />
                   <span
                     className={
-                      isShowOriginalData.price
+                      !requiredFieldHasValue.price && !isNewItem
                         ? "text-xs text-status-error"
                         : "hidden"
                     }
@@ -220,11 +221,10 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.origin_price}
                     onChange={handleOnChange}
-                    onBlur={handleRequiredOnBlur}
                   />
                   <span
                     className={
-                      isShowOriginalData.origin_price
+                      !requiredFieldHasValue.origin_price && !isNewItem
                         ? "text-xs text-status-error"
                         : "hidden"
                     }
@@ -248,11 +248,10 @@ function ProductItemModal({
                     required={isNewItem}
                     defaultValue={formData.unit}
                     onChange={handleOnChange}
-                    onBlur={handleRequiredOnBlur}
                   />
                   <span
                     className={
-                      isShowOriginalData.unit
+                      !requiredFieldHasValue.unit && !isNewItem
                         ? "text-xs text-status-error"
                         : "hidden"
                     }
