@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  /* Color */
+  --color-primary: #9cab84;
+  --color-primary-light: #c5d89d;
+  --color-primary-dark: #89986d;
+
+  --color-secondary: #f6f0d7;
+  --color-secondary-light: #faf7eb;
+  --color-secondary-dark: #c4c0ac;
+
+  --bg-surface: #e5e5e5;
+
+  --color-status-success: #54c474;
+  --color-status-error: #fa5e66;
+  --color-status-danger: #d1242f;
+  --color-status-warning: #ff8f40;
+  --color-status-enabled: #54c474;
+  --color-status-disabled: #fa5e66;
+
+  /* Fonts */
+  --font-sans: "Inter", "system-ui", "sans-serif";
+  --font-mono: "JetBrains Mono", "monospace";
+
+  /* Radius */
+  --radius-main: 10px;
+  --radius-card: 16px;
+  --radius-input: 6px;
+  /* --radius-full:  */
+
+  /* Shadow */
+  --shadow-soft:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-primary: 0 10px 15px -3px rgba(79, 70, 229, 0.1);
+}
+
+/* Component */
+@layer components {
+  /* Button */
+  .btn-primary {
+    @apply px-4 py-2 rounded-main text-white bg-primary hover:bg-primary-dark cursor-pointer;
+  }
+  .btn-ghost {
+    @apply p-2 rounded-main hover:bg-white cursor-pointer;
+  }
+  /* Input */
+  .input-base {
+    @apply w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm;
+  }
+}
