@@ -48,4 +48,9 @@
   .input-base {
     @apply w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm;
   }
+
+  /* Full Container */
+  .full-container {
+    @apply absolute flex justify-center items-center w-full h-full z-10;
+  }
 }
