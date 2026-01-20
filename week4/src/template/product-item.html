@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Item</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        /* Color */
+        --color-primary: #9CAB84;
+        --color-primary-light: #C5D89D;
+        --color-primary-dark: #89986D;
+
+        --color-secondary: #F6F0D7;
+        --color-secondary-light: #FAF7EB;
+        --color-secondary-dark: #C4C0AC;
+
+        --bg-surface: #E5E5E5;
+
+        --color-status-success: #54C474;
+        --color-status-error: #FA5E66;
+        --color-status-warning: #FF8F40;
+        --color-status-enabled: #54C474;
+        --color-status-disabled: #FA5E66;
+
+        /* Fonts */
+        --font-sans: "Inter", "system-ui", "sans-serif";
+        --font-mono: "JetBrains Mono", "monospace";
+
+        /* Radius */
+        --radius-main: 10px;
+        --radius-card: 16px;
+        --radius-input: 6px;
+        /* --radius-full:  */
+
+        /* Shadow */
+        --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        --shadow-primary: 0 10px 15px -3px rgba(79, 70, 229, 0.1);
+      }
+
+      /* Component */
+      @layer components {
+        /* Button */
+        .btn-primary {
+          @apply px-4 py-2 rounded-main text-white bg-primary hover:bg-primary-dark cursor-pointer;
+        }
+        .btn-ghost {
+          @apply p-2 rounded-main hover:bg-white cursor-pointer;
+        }
+        /* Input */
+        .input-base {
+          @apply w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      tabindex="-1"
+      class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-20 justify-center items-center w-full md:inset-0 h-full bg-gray-950/50 "
+    >
+      <div class="relative z-30 w-full max-w-xl max-h-full m-auto  p-4 ">
+        <div
+          class="relative p-4 rounded-main bg-white border-gray-100 shadow-soft"
+        >
+          <div
+            class="pb-4 flex justify-between items-center border-b border-gray-200"
+          >
+            <h3 class="text-lg font-medium text-gray-900">新增/編輯商品</h3>
+            <button
+              type="button"
+              class="inline-flex justify-center items-center w-10 h-10 rounded-full text-gray-800 bg-transparent hover:text-white hover:bg-primary cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <form>
+            <div
+              class="grid gap-4 grid-cols-4 py-4 text-sm font-medium text-gray-600"
+            >
+              <div class="col-span-3">
+                <label for="title" class="block mb-2.5">
+                  名稱
+                  <span class="text-status-warning">*</span>
+                </label>
+                <input type="text" name="title" id="title" class="input-base" />
+              </div>
+              <div class="col-span-1">
+                <label for="category" class="block mb-2.5">
+                  類別
+                  <span class="text-status-warning">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="category"
+                  id="category"
+                  class="input-base"
+                />
+              </div>
+              <div class="col-span-1">
+                <label for="price" class="block mb-2.5">
+                  售價
+                  <span class="text-status-warning">*</span>
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  min="0"
+                  id="price"
+                  class="input-base"
+                />
+              </div>
+              <div class="col-span-1">
+                <label for="origin_price" class="block mb-2.5">
+                  原價
+                  <span class="text-status-warning">*</span>
+                </label>
+                <input
+                  type="number"
+                  name="origin_price"
+                  min="0"
+                  id="origin_price"
+                  class="input-base"
+                />
+              </div>
+              <div class="col-span-1">
+                <label htmlFor="unit" class="block mb-2.5">
+                  單位
+                  <span class="text-status-warning">*</span>
+                </label>
+                <input type="text" name="unit" id="unit" class="input-base" />
+              </div>
+              <div class="col-span-1 flex">
+                <label
+                  class="inline-flex items-center cursor-pointer"
+                  for="is_enabled"
+                >
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    id="is_enabled"
+                    checked
+                    name="is_enabled"
+                  />
+                  <div
+                    class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-100 dark:peer-focus:ring-gray-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"
+                  ></div>
+                  <span class="select-none ms-3"> 是否上架 </span>
+                </label>
+              </div>
+              <div class="col-span-2 pb-3">
+                <label for="imageUrl" class="block mb-2.5"> 封面圖片 </label>
+                <!-- 有封面 -->
+                <div class="relative p-3">
+                  <img
+                    class="w-full border rounded-xl border-neutral-gray-light object-cover"
+                    src="https://dummyimage.com/600x400/000/fff"
+                  />
+                  <button
+                    title="移除封面"
+                    type="button"
+                    class="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <!-- 無封面 -->
+                <div>
+                  <input
+                    type="file"
+                    name="imageUrl"
+                    id="imageUrl"
+                    class="btn-primary w-full"
+                    accept="image/*"
+                  />
+                </div>
+              </div>
+
+              <div class="col-span-2 pb-3">
+                <label for="imagesUrl" class="block mb-2.5 text-sm">
+                  其他圖片
+                </label>
+                <div
+                  class="grid grid-cols-2"
+                >
+                  <!-- 有圖片 -->
+                    <div class="relative p-3 col-span-1">
+                      <img
+                        src="https://dummyimage.com/300x200/000/fff"
+                        class="w-full border rounded-xl border-neutral-gray-light object-cover"
+                      />
+
+                      <button
+                        title="移除圖片"
+                        type="button"
+                        class="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-4"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="relative p-3 col-span-1">
+                      <img
+                        src="https://dummyimage.com/300x200/000/fff"
+                        class="w-full border rounded-xl border-neutral-gray-light object-cover"
+                      />
+
+                      <button
+                        title="移除圖片"
+                        type="button"
+                        class="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-4"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                  <div
+                    class="col-span-2 flex items-center gap-2"
+                  >
+                    <input
+                      type="file"
+                      name="imagesUrl"
+                      id="imagesUrl"
+                      class="btn-primary w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-2 mb-3">
+                <label
+                  htmlFor="description"
+                  class="block mb-2.5 text-sm font-medium text-gray-900"
+                >
+                  描述
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  rows="3"
+                  class="input-base"
+                ></textarea>
+              </div>
+              <div class="col-span-2">
+                <label htmlFor="content" class="block mb-2.5"> 食用方式 </label>
+                <textarea
+                  id="content"
+                  name="content"
+                  rows="3"
+                  class="input-base"
+                ></textarea>
+              </div>
+            </div>
+            <div
+              class="flex items-center space-x-4 border-t border-gray-200 pt-4 md:pt-6 justify-center"
+            >
+              <button
+                type="submit"
+                title="儲存"
+                class="inline-flex items-center  text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
+              >
+                儲存
+              </button>
+              <button
+                type="button"
+                title="取消"
+                class="text-primary-dark bg-white box-border border border-primary focus:ring-4 focus:ring-gray-100 shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
+              >
+                取消
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
