@@ -10,10 +10,10 @@ const StatusBadge = ({isEnabled}) => {
   );
 };
 
-const ActionButtons = () => {
+const ActionButtons = ({onEdit}) => {
   return (
     <>
-      <button href="#" type="button" className="btn-ghost">
+      <button href="#" type="button" className="btn-ghost" onClick={onEdit}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -48,7 +48,7 @@ const ActionButtons = () => {
     </>
   );
 };
-function ProductTableRow({ columns, data }) {
+function ProductTableRow({ columns, data, openEditModal }) {
   return (
     <>
       <tr className="border-b border-gray-100 hover:bg-gray-100 transition-colors duration-500">
@@ -85,7 +85,7 @@ function ProductTableRow({ columns, data }) {
           if (col.key === "actions") {
             return (
               <td key={col.key} className="px-6 py-4 flex gap-2">
-                <ActionButtons />
+                <ActionButtons onEdit={() => openEditModal(data.id)} />
               </td>
             );
           }
