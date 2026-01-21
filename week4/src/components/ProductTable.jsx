@@ -1,6 +1,6 @@
 import ProductTableRow from "./ProductTableRow";
 
-function ProductTable({ columns, data, openEditModal }) {
+function ProductTable({ columns, data, onActionClick }) {
   return (
     <>
       <table className="w-full text-sm text-left text-gray-600">
@@ -16,10 +16,10 @@ function ProductTable({ columns, data, openEditModal }) {
         <tbody>
           {data.map((item) => (
             <ProductTableRow
+              key={item.id}
               columns={columns}
               data={item}
-              key={item.id}
-              openEditModal={openEditModal}
+              onActionClick={onActionClick}
             />
           ))}
         </tbody>

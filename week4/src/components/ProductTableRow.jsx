@@ -10,10 +10,10 @@ const StatusBadge = ({isEnabled}) => {
   );
 };
 
-const ActionButtons = ({onEdit}) => {
+const ActionButtons = ({onActionClick}) => {
   return (
     <>
-      <button href="#" type="button" className="btn-ghost" onClick={onEdit}>
+      <button href="#" type="button" className="btn-ghost" onClick={onActionClick} data-type="edit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -29,7 +29,7 @@ const ActionButtons = ({onEdit}) => {
           />
         </svg>
       </button>
-      <button href="#" type="button" className="btn-ghost">
+      <button href="#" type="button" className="btn-ghost" onClick={onActionClick} data-type="delete">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -48,7 +48,7 @@ const ActionButtons = ({onEdit}) => {
     </>
   );
 };
-function ProductTableRow({ columns, data, openEditModal }) {
+function ProductTableRow({ columns, data, onActionClick }) {
   return (
     <>
       <tr className="border-b border-gray-100 hover:bg-gray-100 transition-colors duration-500">
@@ -85,7 +85,7 @@ function ProductTableRow({ columns, data, openEditModal }) {
           if (col.key === "actions") {
             return (
               <td key={col.key} className="px-6 py-4 flex gap-2">
-                <ActionButtons onEdit={() => openEditModal(data.id)} />
+                <ActionButtons onActionClick={(e) => onActionClick(e.currentTarget.dataset.type, data.id)} />
               </td>
             );
           }

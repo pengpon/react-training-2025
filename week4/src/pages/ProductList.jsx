@@ -3,11 +3,13 @@ import { fetchProducts } from "../api/products";
 import ProductTable from "../components/ProductTable";
 import Pagination from "../components/Pagination";
 import ProductItem from "../components/ProductItem";
+import Alert from "../components/Alert";
 
 function ProductList() {
   const [productsData, setProductsData] = useState([]);
   const [selectedProduct, setSelectProduct] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const columns = [
@@ -23,24 +25,38 @@ function ProductList() {
     setIsModalOpen(false);
   };
 
-  const openCreateModal = () => {
-    setSelectProduct(null);
-    setIsEditMode(false);
-    setIsModalOpen(true);
-  };
-
-  const openEditModal = (id) => {
-    const [item] = productsData.filter((product) => product.id === id);
+  const onActionClick = (type, id) => {
+    const item = productsData.find((product) => product.id === id) || {};
     setSelectProduct(item);
-    setIsEditMode(true);
-    setIsModalOpen(true);
+
+    switch (type) {
+      case "create":
+        setIsEditMode(false);
+        setIsModalOpen(true);
+        break;
+      case "edit":
+        setIsEditMode(true);
+        setIsModalOpen(true);
+        break;
+      case "delete":
+        setIsAlertOpen(true);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSubmit = (data) => {
-    // TODO: create new product or edit item
-    console.log(data)
+    // TODO: 串新增 / 編輯 API
+    console.log(data);
+    // 成功關閉, 失敗保持開啟
     setIsModalOpen(false);
-  }
+  };
+
+  const handleDelete = () => {
+    // TODO: 串 delete API
+  };
+
   const getProductByQuery = useCallback(async (page, category) => {
     const res = await fetchProducts(page, category);
 
@@ -53,6 +69,7 @@ function ProductList() {
     };
     init();
   }, [getProductByQuery]);
+
   return (
     <>
       <div className="w-screen h-screen p-10 bg-secondary/60 ">
@@ -61,7 +78,8 @@ function ProductList() {
             <button
               type="button"
               className="btn-primary"
-              onClick={openCreateModal}
+              onClick={(e) => onActionClick(e.target.dataset.type, "")}
+              data-type="create"
             >
               新增產品
             </button>
@@ -70,7 +88,7 @@ function ProductList() {
             <ProductTable
               columns={columns}
               data={productsData}
-              openEditModal={openEditModal}
+              onActionClick={onActionClick}
             />
           </div>
           <Pagination />
@@ -81,6 +99,13 @@ function ProductList() {
             closeModal={closeModal}
             data={selectedProduct}
             onSubmit={handleSubmit}
+          />
+        )}
+        {isAlertOpen && (
+          <Alert
+            data={selectedProduct}
+            onCancel={() => setIsAlertOpen(false)}
+            onConfirm={handleDelete}
           />
         )}
       </div>

@@ -1,9 +1,9 @@
-function Alert() {
+function Alert({data, onConfirm, onCancel}) {
   return (
     <>
       <div className="flex items-center justify-center fixed z-50 inset-0 bg-black/60">
         <div className="relative px-4 min-h-screen flex items-center justify-center">
-          <div className="relative bg-white rounded-lg max-w-md mx-auto p-4 fixed inset-x-0 bottom-0 z-50 mb-4 mx-4 relative shadow-lg">
+          <div className="relative bg-white rounded-lg max-w-md p-4 inset-x-0 bottom-0 z-50 mb-4 shadow-lg">
             <p className="mb-4 font-bold text-center">提醒 ! </p>
 
             <div className="flex justify-center items-center gap-4 mb-6">
@@ -24,7 +24,7 @@ function Alert() {
                 </svg>
               </div>
               <div className="text-gray-700">
-                <p className="text-md">是否確定刪除 嗎？</p>
+                <p className="text-md">是否確定刪除「 <span className="font-bold">{data.title}</span>」嗎？</p>
                 <span className="text-sm font-medium">注意: 此動作無法復原。</span>
               </div>
             </div>
@@ -33,13 +33,15 @@ function Alert() {
                 title="刪除"
                 type="button"
                 className="px-4 py-2 rounded-main border font-medium border-gray-200 text-status-danger bg-gray-100 hover:text-white hover:bg-status-danger cursor-pointer"
+                onClick={onConfirm}
               >
                 刪除
               </button>
               <button
                 title="取消"
                 type="button"
-                className="px-4 py-2 rounded-main border font-medium border-gray-200 text-gray-600 bg-white hover:bg-gray-50 cursor-pointer "
+                className="px-4 py-2 rounded-main border font-medium border-gray-200 text-gray-600 bg-white hover:bg-gray-50 cursor-pointer"
+                onClick={onCancel}
               >
                 取消
               </button>
