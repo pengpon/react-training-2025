@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef} from "react";
 import { fetchProducts } from "../api/products";
 import ProductTable from "../components/ProductTable";
 import Pagination from "../components/Pagination";
@@ -6,11 +6,16 @@ import ProductItem from "../components/ProductItem";
 import Alert from "../components/Alert";
 
 function ProductList() {
+  const pageRef = useRef(null)
   const [productsData, setProductsData] = useState([]);
   const [selectedProduct, setSelectProduct] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [pagination, setPagination] = useState({
+    current: null,
+    total: null,
+  });
 
   const columns = [
     { header: "產品", key: "summary" },
@@ -20,6 +25,13 @@ function ProductList() {
     { header: "狀態", key: "is_enabled" },
     { header: "動作", key: "actions" },
   ];
+
+  const getProductByQuery = useCallback(async (page, category) => {
+    const res = await fetchProducts(page, category);
+    const { current_page: current, total_pages: total } = res.data.pagination;
+    setPagination({ current, total });
+    setProductsData(res.data.products);
+  }, []);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -57,11 +69,11 @@ function ProductList() {
     // TODO: 串 delete API
   };
 
-  const getProductByQuery = useCallback(async (page, category) => {
-    const res = await fetchProducts(page, category);
-
-    setProductsData(res.data.products);
-  }, []);
+  // // TODO: 增加 table list loading or skeleton
+  const handlePageChange = useCallback(async (page) => {
+    setPagination((prev) => ({ ...prev, current: page }));
+    await getProductByQuery(page);
+  }, [getProductByQuery]);
 
   useEffect(() => {
     const init = () => {
@@ -70,9 +82,15 @@ function ProductList() {
     init();
   }, [getProductByQuery]);
 
+  useEffect(() => {
+    if (pageRef.current) {
+      pageRef.current.scrollIntoView({behavior: "smooth", block: "start"})
+    }
+  }, [pagination])
+
   return (
     <>
-      <div className="w-screen h-screen p-10 bg-secondary/60 ">
+      <div className="w-screen h-screen p-10 bg-secondary/60" ref={pageRef}>
         <div className="relative overflow-x-auto px-10 py-8 bg-white shadow-xs rounded-main">
           <div className="flex flex-column flex-row flex-wrap mb-10 items-center ">
             <button
@@ -91,7 +109,7 @@ function ProductList() {
               onActionClick={onActionClick}
             />
           </div>
-          <Pagination />
+          <Pagination pagination={pagination} onChange={handlePageChange} />
         </div>
         {isModalOpen && (
           <ProductItem

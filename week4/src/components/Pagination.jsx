@@ -1,6 +1,15 @@
-function Pagination({ current = 1, total = 2, range = 3 }) {
+function Pagination({ pagination, onChange, range = 3 }) {
+  const { current, total } = pagination;
   let pagesArr = [];
-  const generateArr = (n, m) => Array.from({ length: m - n + 1 }, (_, i) => n + i);
+
+  const generateArr = (n, m) =>
+    Array.from({ length: m - n + 1 }, (_, i) => n + i);
+
+  const handleOnChange = (e) => {
+    let { page } = e.target.closest("button").dataset;
+    page = Number(page);
+    if (page) onChange(page);
+  };
 
   const getPagesArr = () => {
     let arr = [];
@@ -28,10 +37,11 @@ function Pagination({ current = 1, total = 2, range = 3 }) {
 
   return (
     <>
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2" onClick={handleOnChange}>
         <button
           className="flex justify-center items-center w-10 h-10 rounded-main text-gray-900 bg-gray-100 hover:text-white hover:bg-primary cursor-pointer disabled:text-gray-300 disabled:bg-transparent disabled:cursor-auto"
           disabled={current === 1}
+          data-page={1}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +61,10 @@ function Pagination({ current = 1, total = 2, range = 3 }) {
         {pagesArr.map((page, index) => (
           <button
             key={index}
-            className={`flex justify-center items-center w-10 h-10 rounded-main text-gray-400 bg-gray-100 hover:text-white hover:bg-primary/70 cursor-pointer disabled:text-gray-300 disabled:bg-transparent disabled:cursor-auto ${page === current ? `text-white bg-primary hover:bg-primary-dark` : ""}`}
+            className={`flex justify-center items-center w-10 h-10 rounded-main text-gray-400 bg-gray-100 hover:text-white hover:bg-primary/70 cursor-pointer disabled:text-gray-300 disabled:bg-transparent disabled:cursor-auto
+              ${page === current ? `text-white bg-primary hover:bg-primary-dark` : ""}
+              ${page === "more" ? `bg-transparent hover:bg-transparent cursor-text` : ""}`}
+            data-page={page}
           >
             {page === "more" ? (
               <svg
@@ -60,7 +73,7 @@ function Pagination({ current = 1, total = 2, range = 3 }) {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="size-6"
+                className="size-6 text-gray-400"
               >
                 <path
                   strokeLinecap="round"
@@ -76,6 +89,7 @@ function Pagination({ current = 1, total = 2, range = 3 }) {
         <button
           className="flex justify-center items-center w-10 h-10 rounded-main text-gray-900 bg-gray-100 hover:text-white hover:bg-primary cursor-pointer disabled:text-gray-300 disabled:bg-transparent disabled:cursor-auto"
           disabled={current === total}
+          data-page={total}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
