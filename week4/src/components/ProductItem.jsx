@@ -1,19 +1,6 @@
-import { useState } from "react";
-
-function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
+function ProductItem({ isEditMode, closeModal, data, onSubmit, onFileChange, onInputChange }) {
   const title = isEditMode ? "編輯產品" : "新增產品";
-  const [formData, setFormData] = useState({ ...data });
 
-  // TODO: 檢查必填欄位是否有值
-  const handleOnChange = (e) => {
-    let { name, value } = e.target;
-
-    // 特定欄位 value 處理
-    if (name === "is_enabled") value = e.target.checked ? true : false;
-    if (name === "price" || name === "origin_price") value = Number(value);
-
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
   return (
     <>
       <div
@@ -61,8 +48,8 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                     name="title"
                     id="title"
                     className="input-base"
-                    value={formData?.title}
-                    onChange={handleOnChange}
+                    defaultValue={data?.title}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -75,8 +62,8 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                     name="category"
                     id="category"
                     className="input-base"
-                    value={formData?.category}
-                    onChange={handleOnChange}
+                    defaultValue={data?.category}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -90,8 +77,8 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                     min="0"
                     id="price"
                     className="input-base"
-                    value={formData?.price}
-                    onChange={handleOnChange}
+                    defaultValue={data?.price}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -105,8 +92,8 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                     min="0"
                     id="origin_price"
                     className="input-base"
-                    value={formData?.origin_price}
-                    onChange={handleOnChange}
+                    defaultValue={data?.origin_price}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -119,8 +106,8 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                     name="unit"
                     id="unit"
                     className="input-base"
-                    value={formData?.unit}
-                    onChange={handleOnChange}
+                    defaultValue={data?.unit}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1 flex">
@@ -133,8 +120,8 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                       className="sr-only peer"
                       id="is_enabled"
                       name="is_enabled"
-                      checked={!!formData.is_enabled}
-                      onChange={handleOnChange}
+                      defaultChecked={!!data?.is_enabled}
+                      onChange={onInputChange}
                     />
                     <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-100 dark:peer-focus:ring-gray-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
                     <span className="select-none ms-3"> 是否上架 </span>
@@ -144,17 +131,17 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                   <label htmlFor="imageUrl" className="block mb-2.5">
                     封面圖片
                   </label>
-                  {formData.imageUrl ? (
+                  {data.imageUrl ? (
                     <div className="relative p-3">
                       <input id="imageUrl" className="hidden" />
                       <img
                         className="w-full border rounded-xl border-neutral-gray-light object-cover"
-                        src={formData?.imageUrl}
+                        src={data?.imageUrl || ""}
                         onError={(e) => {
                           e.target.src =
                             "https://placehold.co/300x300/9CAB84/FFF?text=Error";
                         }}
-                        alt={`${formData.title}-cover`}
+                        alt={`${data.title}-cover`}
                       />
                       <button
                         title="移除封面"
@@ -185,6 +172,7 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                         id="imageUrl"
                         className="btn-primary w-full"
                         accept="image/*"
+                        onChange={onFileChange}
                       />
                     </div>
                   )}
@@ -269,22 +257,21 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                     name="description"
                     rows="3"
                     className="input-base"
-                    value={formData?.description}
-                    onChange={handleOnChange}
+                    defaultValue={data?.description}
+                    onChange={onInputChange}
                   ></textarea>
                 </div>
                 <div className="col-span-2">
                   <label htmlFor="content" className="block mb-2.5">
-                    {" "}
-                    食用方式{" "}
+                    食用方式
                   </label>
                   <textarea
                     id="content"
                     name="content"
                     rows="3"
                     className="input-base"
-                    value={formData?.content}
-                    onChange={handleOnChange}
+                    defaultValue={data?.content}
+                    onChange={onInputChange}
                   ></textarea>
                 </div>
               </div>
@@ -293,7 +280,7 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                   type="button"
                   title="儲存"
                   className="inline-flex items-center  text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
-                  onClick={() => onSubmit(formData)}
+                  onClick={onSubmit}
                 >
                   儲存
                 </button>
@@ -301,6 +288,7 @@ function ProductItem({ isEditMode, closeModal, data, onSubmit }) {
                   type="button"
                   title="取消"
                   className="text-primary-dark bg-white box-border border border-primary focus:ring-4 focus:ring-gray-100 shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
+                  onClick={closeModal}
                 >
                   取消
                 </button>

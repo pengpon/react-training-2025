@@ -8,7 +8,7 @@ import Alert from "../components/Alert";
 function ProductList() {
   const pageRef = useRef(null)
   const [productsData, setProductsData] = useState([]);
-  const [selectedProduct, setSelectProduct] = useState({});
+  const [selectedProduct, setSelectedProduct] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -39,7 +39,7 @@ function ProductList() {
 
   const onActionClick = (type, id) => {
     const item = productsData.find((product) => product.id === id) || {};
-    setSelectProduct(item);
+    setSelectedProduct(item);
 
     switch (type) {
       case "create":
@@ -58,10 +58,34 @@ function ProductList() {
     }
   };
 
-  const handleSubmit = (data) => {
+  // TODO: check size
+  const handleFileChange = async(e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append("file", file)
+
+    try {
+      setSelectedProduct({...formData, imageUrl: "https://storage.googleapis.com/vue-course-api.appspot.com/root/1767869218877.jpg"})
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+
+    const handleOnInputChange = (e) => {
+    let { name, value } = e.target;
+    // 特定欄位 value 處理
+    if (name === "is_enabled") value = e.target.checked ? true : false;
+    if (name === "price" || name === "origin_price") value = Number(value);
+
+    setSelectedProduct((prev) => ({...prev, [name]: value}));
+  };
+
+  const handleSubmit = () => {
     // TODO: 串新增 / 編輯 API
-    console.log(data);
-    // 成功關閉, 失敗保持開啟
+    console.log(selectedProduct, 'submit');
+    // TODO: 成功關閉, 失敗保持開啟
     setIsModalOpen(false);
   };
 
@@ -117,6 +141,8 @@ function ProductList() {
             data={selectedProduct}
             onSubmit={handleSubmit}
             closeModal={closeModal}
+            onFileChange={handleFileChange}
+            onInputChange={handleOnInputChange}
           />
         )}
         {isAlertOpen && (
