@@ -1,5 +1,5 @@
-function ProductItem({ isEditMode, closeModal, data, onSubmit, onFileChange, onInputChange }) {
-  const title = isEditMode ? "編輯產品" : "新增產品";
+function ProductItem({ isEdit, closeModal, data, onSubmit, onFileChange, onInputChange }) {
+  const title = isEdit ? "編輯產品" : "新增產品";
 
   return (
     <>

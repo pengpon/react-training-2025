@@ -1,17 +1,24 @@
-import { useState, useEffect, useCallback, useRef} from "react";
-import { fetchProducts } from "../api/products";
+import { useState, useEffect, useCallback, useRef } from "react";
+import {
+  fetchProducts,
+  createProduct,
+  editProduct,
+  deleteProduct,
+} from "../api/products";
 import ProductTable from "../components/ProductTable";
 import Pagination from "../components/Pagination";
 import ProductItem from "../components/ProductItem";
 import Alert from "../components/Alert";
+import { uploadImage } from "../api/upload";
+import Toast from "../utils/swal";
 
 function ProductList() {
-  const pageRef = useRef(null)
+  const pageRef = useRef(null);
   const [productsData, setProductsData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [pagination, setPagination] = useState({
     current: null,
     total: null,
@@ -43,11 +50,11 @@ function ProductList() {
 
     switch (type) {
       case "create":
-        setIsEditMode(false);
+        setIsEdit(false);
         setIsModalOpen(true);
         break;
       case "edit":
-        setIsEditMode(true);
+        setIsEdit(true);
         setIsModalOpen(true);
         break;
       case "delete":
@@ -59,45 +66,85 @@ function ProductList() {
   };
 
   // TODO: check size
-  const handleFileChange = async(e) => {
-    const file = e.target.files[0]
-    if (!file) return
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const formData = new FormData()
-    formData.append("file", file)
+    const formData = new FormData();
+    formData.append("file", file);
 
     try {
-      setSelectedProduct({...formData, imageUrl: "https://storage.googleapis.com/vue-course-api.appspot.com/root/1767869218877.jpg"})
+      const res = await uploadImage(formData);
+      const url = res.data.imageUrl;
+      setSelectedProduct({ ...selectedProduct, imageUrl: url });
     } catch (error) {
-      console.error(error.message)
+      console.error(error.message);
     }
-  }
+  };
 
-    const handleOnInputChange = (e) => {
+  const handleOnInputChange = (e) => {
     let { name, value } = e.target;
     // 特定欄位 value 處理
     if (name === "is_enabled") value = e.target.checked ? true : false;
     if (name === "price" || name === "origin_price") value = Number(value);
 
-    setSelectedProduct((prev) => ({...prev, [name]: value}));
+    setSelectedProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    // TODO: 串新增 / 編輯 API
-    console.log(selectedProduct, 'submit');
-    // TODO: 成功關閉, 失敗保持開啟
-    setIsModalOpen(false);
+  const handleSubmit = async () => {
+    if (!selectedProduct) return;
+    const { id, ...data } = { ...selectedProduct };
+    let res;
+
+    try {
+      if (isEdit) {
+        res = await editProduct(id, data);
+      } else {
+        res = await createProduct(data);
+      }
+
+      Toast.fire({
+        position: "top",
+        icon: "success",
+        title: res.data.message,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#80c684",
+      });
+      await getProductByQuery(1);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
-  const handleDelete = () => {
-    // TODO: 串 delete API
+  const handleDelete = async () => {
+    try {
+      const res = await deleteProduct(selectedProduct.id);
+      Toast.fire({
+        position: "top",
+        icon: "success",
+        title: res.data.message,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#80c684",
+      });
+      await getProductByQuery(1);
+      setIsAlertOpen(false);
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
   };
 
   // // TODO: 增加 table list loading or skeleton
-  const handlePageChange = useCallback(async (page) => {
-    setPagination((prev) => ({ ...prev, current: page }));
-    await getProductByQuery(page);
-  }, [getProductByQuery]);
+  const handlePageChange = useCallback(
+    async (page) => {
+      setPagination((prev) => ({ ...prev, current: page }));
+      await getProductByQuery(page);
+    },
+    [getProductByQuery],
+  );
 
   useEffect(() => {
     const init = () => {
@@ -108,9 +155,9 @@ function ProductList() {
 
   useEffect(() => {
     if (pageRef.current) {
-      pageRef.current.scrollIntoView({behavior: "smooth", block: "start"})
+      pageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [pagination])
+  }, [pagination]);
 
   return (
     <>
@@ -137,7 +184,7 @@ function ProductList() {
         </div>
         {isModalOpen && (
           <ProductItem
-            isEditMode={isEditMode}
+            isEdit={isEdit}
             data={selectedProduct}
             onSubmit={handleSubmit}
             closeModal={closeModal}
