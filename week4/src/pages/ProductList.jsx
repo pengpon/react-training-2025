@@ -96,16 +96,16 @@ function ProductList() {
         {isModalOpen && (
           <ProductItem
             isEditMode={isEditMode}
-            closeModal={closeModal}
             data={selectedProduct}
             onSubmit={handleSubmit}
+            closeModal={closeModal}
           />
         )}
         {isAlertOpen && (
           <Alert
             data={selectedProduct}
-            onCancel={() => setIsAlertOpen(false)}
             onConfirm={handleDelete}
+            onCancel={() => setIsAlertOpen(false)}
           />
         )}
       </div>
