@@ -8,6 +8,7 @@ function ProductItem({
   onInputChange,
 }) {
   const title = isEdit ? "編輯產品" : "新增產品";
+  const action = isEdit ? "儲存" : "新增";
 
   const combinedImages = [
     ...(data?.imagesUrl || []),
@@ -307,7 +308,7 @@ function ProductItem({
                   onClick={onSubmit}
                   disabled={!isFormValid}
                 >
-                  儲存
+                  {action}
                 </button>
                 <button
                   type="button"
