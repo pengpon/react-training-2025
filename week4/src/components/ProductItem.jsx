@@ -7,13 +7,18 @@ function ProductItem({
   onFileChange,
   onInputChange,
 }) {
-
   const title = isEdit ? "編輯產品" : "新增產品";
 
   const combinedImages = [
     ...(data?.imagesUrl || []),
     ...(previews?.imagesUrl || []),
   ];
+
+  const requiredFields = ["title", "category", "origin_price", "price", "unit"];
+  const isFormValid = requiredFields.every((key) => {
+    const value = data[key];
+    return value !== undefined && value !== null && String(value).trim() !== "";
+  });
 
   return (
     <>
@@ -22,6 +27,7 @@ function ProductItem({
         className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-20 justify-center items-center w-full md:inset-0 h-full bg-gray-950/50"
         onClick={closeModal}
       >
+        {isFormValid}
         <div
           className="relative z-30 w-full max-w-xl max-h-full m-auto  p-4"
           onClick={(e) => e.stopPropagation()}
@@ -55,7 +61,7 @@ function ProductItem({
                 <div className="col-span-3">
                   <label htmlFor="title" className="block mb-2.5">
                     名稱
-                    <span className="text-status-warning">*</span>
+                    <span className="text-status-warning">* </span>
                   </label>
                   <input
                     type="text"
@@ -297,8 +303,9 @@ function ProductItem({
                 <button
                   type="button"
                   title="儲存"
-                  className="inline-flex items-center  text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
+                  className="inline-flex items-center  text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
                   onClick={onSubmit}
+                  disabled={!isFormValid}
                 >
                   儲存
                 </button>

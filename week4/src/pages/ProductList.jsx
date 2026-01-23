@@ -126,7 +126,7 @@ function ProductList() {
   };
 
   const handleOnInputChange = (e) => {
-    // 移除圖片
+    // ＊＊＊＊＊＊＊＊移除圖片
     let action;
     let { tagName, name, value } = e.target;
     if (tagName !== "INPUT" && tagName !== "TEXTAREA") {
