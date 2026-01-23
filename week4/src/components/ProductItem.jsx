@@ -279,6 +279,19 @@ function ProductItem({
                     onChange={onInputChange}
                   ></textarea>
                 </div>
+                <div className="col-span-4">
+                  <label htmlFor="note" className="block mb-2.5">
+                    備註
+                  </label>
+                  <textarea
+                    id="note"
+                    name="note"
+                    rows="2"
+                    className="input-base"
+                    defaultValue={data?.note}
+                    onChange={onInputChange}
+                  ></textarea>
+                </div>
               </div>
               <div className="flex items-center space-x-4 border-t border-gray-200 pt-4 md:pt-6 justify-center">
                 <button

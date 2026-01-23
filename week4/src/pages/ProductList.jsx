@@ -157,6 +157,9 @@ function ProductList() {
     let { id, ...data } = { ...selectedProduct };
     let res;
 
+    // ＊＊新增欄位 最近更新時間
+    data['modified_at'] = Date.now()
+
     // 1. 上傳封面圖片 File
     if (tempFiles.imageUrl) {
       const responses = await Promise.all(uploadTasks([tempFiles.imageUrl]));
