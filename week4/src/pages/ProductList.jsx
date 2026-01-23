@@ -75,12 +75,33 @@ function ProductList() {
     }
   };
 
-  // TODO: check size
   const handleFilePreview = (e) => {
     const { files, multiple } = e.target;
     const fileArray = Array.from(files);
     if (fileArray.length === 0) return;
-    const previews = fileArray.map((file) => URL.createObjectURL(file));
+
+    // 檢查檔案大小, 限制 3 MB
+    const MAX_FILE_SIZE = 3 * 1024 * 1024;
+    const oversizedFiles = fileArray.filter(
+      (file) => file.size > MAX_FILE_SIZE,
+    );
+    const checkSizedFilesArr = fileArray.filter(
+      (file) => file.size <= MAX_FILE_SIZE,
+    );
+
+    if (oversizedFiles.length > 0) {
+      const fileNames = oversizedFiles.map((file) => file.name).join(", ");
+      Toast.fire({
+        position: "top",
+        icon: "warning",
+        title: `${fileNames} 檔案太大, 已超過 3 MB，請重新選擇！`,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#ff8f40",
+      });
+    }
+
+    const previews = checkSizedFilesArr.map((file) => URL.createObjectURL(file));
 
     if (multiple) {
       setPreviews((prev) => ({
@@ -89,11 +110,11 @@ function ProductList() {
       }));
       setTempFiles((prev) => ({
         ...prev,
-        imagesUrl: [...prev.imagesUrl, ...fileArray],
+        imagesUrl: [...prev.imagesUrl, ...checkSizedFilesArr],
       }));
     } else {
       setPreviews((prev) => ({ ...prev, imageUrl: previews[0] }));
-      setTempFiles((prev) => ({ ...prev, imageUrl: fileArray[0] }));
+      setTempFiles((prev) => ({ ...prev, imageUrl: checkSizedFilesArr[0] }));
     }
 
     e.target.value = "";
@@ -103,8 +124,7 @@ function ProductList() {
     // 移除圖片
     let action;
     let { tagName, name, value } = e.target;
-    console.log(tagName)
-    if ( tagName !== "INPUT" && tagName !== "TEXTAREA") {
+    if (tagName !== "INPUT" && tagName !== "TEXTAREA") {
       let target = e.target.closest("button");
       name = target.name;
       value = target.value;
@@ -158,7 +178,7 @@ function ProductList() {
     let res;
 
     // ＊＊新增欄位 最近更新時間
-    data['modified_at'] = Date.now()
+    data["modified_at"] = Date.now();
 
     // 1. 上傳封面圖片 File
     if (tempFiles.imageUrl) {
@@ -196,7 +216,7 @@ function ProductList() {
       });
       // 5. 重新取得產品列表
       await getProductByQuery(1);
-      closeModal()
+      closeModal();
     } catch (error) {
       console.error(error.message);
     }
