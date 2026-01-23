@@ -46,6 +46,7 @@ function LoginForm({error, onSubmit}) {
               <div className="relative">
                 <input
                   className="input-base"
+                  type="password"
                   id="password"
                   name="password"
                   value={userData.password}
