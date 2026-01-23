@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+.no-scroll {
+  overflow: hidden;
+}
+
 @theme {
   /* Color */
   --color-primary: #9cab84;

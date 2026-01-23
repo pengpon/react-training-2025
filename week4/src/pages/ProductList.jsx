@@ -5,15 +5,18 @@ import {
   editProduct,
   deleteProduct,
 } from "../api/products";
+import { uploadImage } from "../api/upload";
+import Toast from "../utils/swal";
+
 import ProductTable from "../components/ProductTable";
 import Pagination from "../components/Pagination";
 import ProductItem from "../components/ProductItem";
 import Alert from "../components/Alert";
-import { uploadImage } from "../api/upload";
-import Toast from "../utils/swal";
+import Spinner from "../components/Spinner";
 
 function ProductList() {
   const pageRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [productsData, setProductsData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -101,7 +104,9 @@ function ProductList() {
       });
     }
 
-    const previews = checkSizedFilesArr.map((file) => URL.createObjectURL(file));
+    const previews = checkSizedFilesArr.map((file) =>
+      URL.createObjectURL(file),
+    );
 
     if (multiple) {
       setPreviews((prev) => ({
@@ -174,6 +179,7 @@ function ProductList() {
 
   const handleSubmit = async () => {
     if (!selectedProduct) return;
+    setIsLoading(true);
     let { id, ...data } = { ...selectedProduct };
     let res;
 
@@ -216,13 +222,16 @@ function ProductList() {
       });
       // 5. 重新取得產品列表
       await getProductByQuery(1);
+      setIsLoading(false);
       closeModal();
     } catch (error) {
       console.error(error.message);
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async () => {
+    setIsLoading(true);
     try {
       const res = await deleteProduct(selectedProduct.id);
       Toast.fire({
@@ -234,6 +243,7 @@ function ProductList() {
         background: "#80c684",
       });
       await getProductByQuery(1);
+      setIsLoading(false);
       setIsAlertOpen(false);
     } catch (error) {
       console.error(error.message);
@@ -241,18 +251,20 @@ function ProductList() {
     }
   };
 
-  // // TODO: 增加 table list loading or skeleton
   const handlePageChange = useCallback(
     async (page) => {
+      setIsLoading(true);
       setPagination((prev) => ({ ...prev, current: page }));
       await getProductByQuery(page);
+      setIsLoading(false);
     },
     [getProductByQuery],
   );
 
   useEffect(() => {
-    const init = () => {
-      getProductByQuery(1);
+    const init = async () => {
+      await getProductByQuery(1);
+      setIsLoading(false);
     };
     init();
   }, [getProductByQuery]);
@@ -270,9 +282,26 @@ function ProductList() {
     };
   }, [previews, isModalOpen]);
 
+  useEffect(() => {
+    if (isLoading) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [isLoading]);
+
   return (
     <>
-      <div className="w-screen h-screen p-10 bg-secondary/60" ref={pageRef}>
+      {isLoading && (
+        <div className="fixed z-100 w-screen h-screen bg-gray-700/60">
+          <Spinner />
+        </div>
+      )}
+
+      <div className="w-screen min-h-screen p-10 bg-secondary/60" ref={pageRef}>
         <div className="relative overflow-x-auto px-10 py-8 bg-white shadow-xs rounded-main">
           <div className="flex flex-column flex-row flex-wrap mb-10 items-center ">
             <button
