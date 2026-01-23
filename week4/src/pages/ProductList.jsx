@@ -23,6 +23,15 @@ function ProductList() {
     current: null,
     total: null,
   });
+  const [tempFiles, setTempFiles] = useState({
+    imageUrl: null,
+    imagesUrl: [],
+  });
+
+  const [previews, setPreviews] = useState({
+    imageUrl: "",
+    imagesUrl: [],
+  });
 
   const columns = [
     { header: "產品", key: "summary" },
@@ -42,6 +51,7 @@ function ProductList() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setPreviews({ imageUrl: "", imagesUrl: [] });
   };
 
   const onActionClick = (type, id) => {
@@ -66,24 +76,66 @@ function ProductList() {
   };
 
   // TODO: check size
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleFilePreview = (e) => {
+    const { files, multiple } = e.target;
+    const fileArray = Array.from(files);
+    if (fileArray.length === 0) return;
+    const previews = fileArray.map((file) => URL.createObjectURL(file));
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await uploadImage(formData);
-      const url = res.data.imageUrl;
-      setSelectedProduct({ ...selectedProduct, imageUrl: url });
-    } catch (error) {
-      console.error(error.message);
+    if (multiple) {
+      setPreviews((prev) => ({
+        ...prev,
+        imagesUrl: [...prev.imagesUrl, ...previews],
+      }));
+      setTempFiles((prev) => ({
+        ...prev,
+        imagesUrl: [...prev.imagesUrl, ...fileArray],
+      }));
+    } else {
+      setPreviews((prev) => ({ ...prev, imageUrl: previews[0] }));
+      setTempFiles((prev) => ({ ...prev, imageUrl: fileArray[0] }));
     }
+
+    e.target.value = "";
   };
 
   const handleOnInputChange = (e) => {
-    let { name, value } = e.target;
+    // 移除圖片
+    let action;
+    let { tagName, name, value } = e.target;
+    console.log(tagName)
+    if ( tagName !== "INPUT" && tagName !== "TEXTAREA") {
+      let target = e.target.closest("button");
+      name = target.name;
+      value = target.value;
+      action = target.dataset.action;
+    }
+
+    // 封面圖片
+    if (action === "remove" && name === "imageUrl") {
+      if (value.includes("blob")) {
+        setPreviews((prev) => ({ ...prev, [name]: "" }));
+        setTempFiles((prev) => ({ ...prev, [name]: "" }));
+      } else {
+        setSelectedProduct((prev) => ({ ...prev, [name]: "" }));
+      }
+      return;
+    }
+    // 其他圖片
+    if (action === "remove" && name === "imagesUrl") {
+      if (value.includes("blob")) {
+        const newArray = previews.imagesUrl.filter((image) => image !== value);
+        setPreviews((prev) => ({ ...prev, [name]: newArray }));
+        setTempFiles((prev) => ({ ...prev, [name]: newArray }));
+      } else {
+        const newArray = selectedProduct.imagesUrl.filter(
+          (image) => image !== value,
+        );
+        setSelectedProduct((prev) => ({ ...prev, [name]: newArray }));
+      }
+      return;
+    }
+
     // 特定欄位 value 處理
     if (name === "is_enabled") value = e.target.checked ? true : false;
     if (name === "price" || name === "origin_price") value = Number(value);
@@ -91,12 +143,40 @@ function ProductList() {
     setSelectedProduct((prev) => ({ ...prev, [name]: value }));
   };
 
+  const uploadTasks = (fileArray) => {
+    if (fileArray.length === 0) return [];
+    return fileArray.map((file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      return uploadImage(formData);
+    });
+  };
+
   const handleSubmit = async () => {
     if (!selectedProduct) return;
-    const { id, ...data } = { ...selectedProduct };
+    let { id, ...data } = { ...selectedProduct };
     let res;
 
+    // 1. 上傳封面圖片 File
+    if (tempFiles.imageUrl) {
+      const responses = await Promise.all(uploadTasks([tempFiles.imageUrl]));
+      data.imageUrl = responses[0].data.imageUrl;
+    }
+    // 2. 上傳其他圖片 Files
+    if (tempFiles.imagesUrl && tempFiles.imagesUrl.length > 0) {
+      const responses = await Promise.all(uploadTasks(tempFiles.imagesUrl));
+      const urls = responses.map((res) => res.data.imageUrl);
+      data.imagesUrl = [...(data.imagesUrl || []), ...urls];
+    }
+
+    // 3. 清空暫存 Files
+    setTempFiles({
+      imageUrl: null,
+      imagesUrl: [],
+    });
+
     try {
+      // 4. 送出表單 ( 新增 or 修改 )
       if (isEdit) {
         res = await editProduct(id, data);
       } else {
@@ -111,8 +191,9 @@ function ProductList() {
         iconColor: "#fff",
         background: "#80c684",
       });
+      // 5. 重新取得產品列表
       await getProductByQuery(1);
-      setIsModalOpen(false);
+      closeModal()
     } catch (error) {
       console.error(error.message);
     }
@@ -159,6 +240,13 @@ function ProductList() {
     }
   }, [pagination]);
 
+  useEffect(() => {
+    return () => {
+      previews.imagesUrl.forEach((url) => URL.revokeObjectURL(url));
+      if (previews.imageUrl) URL.revokeObjectURL(previews.main);
+    };
+  }, [previews, isModalOpen]);
+
   return (
     <>
       <div className="w-screen h-screen p-10 bg-secondary/60" ref={pageRef}>
@@ -186,9 +274,10 @@ function ProductList() {
           <ProductItem
             isEdit={isEdit}
             data={selectedProduct}
+            previews={previews}
             onSubmit={handleSubmit}
             closeModal={closeModal}
-            onFileChange={handleFileChange}
+            onFileChange={handleFilePreview}
             onInputChange={handleOnInputChange}
           />
         )}

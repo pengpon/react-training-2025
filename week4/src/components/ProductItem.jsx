@@ -1,5 +1,19 @@
-function ProductItem({ isEdit, closeModal, data, onSubmit, onFileChange, onInputChange }) {
+function ProductItem({
+  isEdit,
+  closeModal,
+  data,
+  previews,
+  onSubmit,
+  onFileChange,
+  onInputChange,
+}) {
+
   const title = isEdit ? "編輯產品" : "新增產品";
+
+  const combinedImages = [
+    ...(data?.imagesUrl || []),
+    ...(previews?.imagesUrl || []),
+  ];
 
   return (
     <>
@@ -131,12 +145,12 @@ function ProductItem({ isEdit, closeModal, data, onSubmit, onFileChange, onInput
                   <label htmlFor="imageUrl" className="block mb-2.5">
                     封面圖片
                   </label>
-                  {data.imageUrl ? (
+                  {previews.imageUrl || data.imageUrl ? (
                     <div className="relative p-3">
                       <input id="imageUrl" className="hidden" />
                       <img
                         className="w-full border rounded-xl border-neutral-gray-light object-cover"
-                        src={data?.imageUrl || ""}
+                        src={previews.imageUrl || data?.imageUrl || ""}
                         onError={(e) => {
                           e.target.src =
                             "https://placehold.co/300x300/9CAB84/FFF?text=Error";
@@ -147,6 +161,10 @@ function ProductItem({ isEdit, closeModal, data, onSubmit, onFileChange, onInput
                         title="移除封面"
                         type="button"
                         className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                        name="imageUrl"
+                        value={previews.imageUrl || data.imageUrl}
+                        data-action="remove"
+                        onClick={onInputChange}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +189,7 @@ function ProductItem({ isEdit, closeModal, data, onSubmit, onFileChange, onInput
                         name="imageUrl"
                         id="imageUrl"
                         className="btn-primary w-full"
-                        accept="image/*"
+                        accept="image/png, image/jpeg, image/jpg"
                         onChange={onFileChange}
                       />
                     </div>
@@ -182,65 +200,52 @@ function ProductItem({ isEdit, closeModal, data, onSubmit, onFileChange, onInput
                     其他圖片
                   </label>
                   <div className="grid grid-cols-2">
-                    <div className="relative p-3 col-span-1">
-                      <img
-                        src="https://dummyimage.com/300x200/000/fff"
-                        className="w-full border rounded-xl border-neutral-gray-light object-cover"
-                      />
+                    {combinedImages.length > 0 &&
+                      combinedImages.map((image, index) => (
+                        <div
+                          className="relative p-3 col-span-1"
+                          key={`${image}-${index}`}
+                        >
+                          <img
+                            src={image}
+                            className="w-full border rounded-xl border-neutral-gray-light object-cover"
+                          />
 
-                      <button
-                        title="移除圖片"
-                        type="button"
-                        className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="size-4"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <div className="relative p-3 col-span-1">
-                      <img
-                        src="https://dummyimage.com/300x200/000/fff"
-                        className="w-full border rounded-xl border-neutral-gray-light object-cover"
-                      />
-                      <button
-                        title="移除圖片"
-                        type="button"
-                        className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="size-4"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                          <button
+                            title="移除圖片"
+                            type="button"
+                            className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
+                            name="imagesUrl"
+                            value={image}
+                            data-action="remove"
+                            onClick={onInputChange}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
                     <div className="col-span-2 flex items-center gap-2">
                       <input
                         type="file"
                         name="imagesUrl"
                         id="imagesUrl"
                         className="btn-primary w-full"
+                        multiple
+                        accept="image/png, image/jpeg, image/jpg"
+                        onChange={onFileChange}
                       />
                     </div>
                   </div>
