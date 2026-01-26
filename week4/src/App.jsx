@@ -1,6 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { getCookie } from "./utils/cookie";
+import { logger } from "./utils/logger";
 import { checkAuth } from "./api/auth";
 
 import Login from "./pages/Login";
@@ -17,7 +18,7 @@ function App() {
         const res = await checkAuth();
         if (res.data.success) setIsAuth(true);
       } catch (error) {
-        console.error(error.message);
+        logger.error(error.message, error);
         setIsAuth(false);
       }
     };

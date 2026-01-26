@@ -7,6 +7,7 @@ import {
 } from "../api/products";
 import { uploadImage } from "../api/upload";
 import Toast from "../utils/swal";
+import { logger } from "../utils/logger";
 
 import ProductTable from "../components/ProductTable";
 import Pagination from "../components/Pagination";
@@ -225,7 +226,7 @@ function ProductList() {
       setIsLoading(false);
       closeModal();
     } catch (error) {
-      console.error(error.message);
+      logger.error(error.message, error);
       setIsLoading(false);
     }
   };
@@ -246,7 +247,7 @@ function ProductList() {
       setIsLoading(false);
       setIsAlertOpen(false);
     } catch (error) {
-      console.error(error.message);
+      logger.error(error.message, error);
       throw error;
     }
   };

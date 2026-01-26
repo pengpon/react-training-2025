@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signIn } from "../api/auth";
 import { setCookie } from "../utils/cookie";
+import { logger } from "../utils/logger";
 import LoginForm from "../components/LoginForm";
 
 function Login({ onLoginSuccess }) {
@@ -12,7 +13,7 @@ function Login({ onLoginSuccess }) {
       setCookie("hexEcToken", res.data.token, res.data.expired);
       onLoginSuccess();
     } catch (error) {
-      console.error(error.message);
+      logger.error(error.message, error);
       if (error.response.data) {
         setError(
           `${error.response.data.message}: ${error.response.data.error.message}`,
