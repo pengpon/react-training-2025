@@ -11,10 +11,10 @@ const API_PATH = import.meta.env.VITE_API_PATH;
 // [PUT] /v2/api/{api_path}/admin/product/{id}
 
 export const fetchAllProducts = () =>
-  axiosInstance.get(`${API_PATH}/admin/products/all`);
+  axiosInstance.get(`/api/${API_PATH}/admin/products/all`);
 
 export const fetchProducts = (page = 1, category) =>
-  axiosInstance.get(`${API_PATH}/admin/products`, {
+  axiosInstance.get(`/api/${API_PATH}/admin/products`, {
     params: {
       page: page,
       category: category
@@ -22,10 +22,10 @@ export const fetchProducts = (page = 1, category) =>
   });
 
 export const createProduct = (data) =>
-  axiosInstance.post(`${API_PATH}/admin/product`, { data });
+  axiosInstance.post(`/api/${API_PATH}/admin/product`, { data });
 
 export const editProduct = (id, data) =>
-  axiosInstance.put(`${API_PATH}/admin/product/${id}`, { data });
+  axiosInstance.put(`/api/${API_PATH}/admin/product/${id}`, { data });
 
 export const deleteProduct = (id) =>
-  axiosInstance.delete(`${API_PATH}/admin/product/${id}`);
+  axiosInstance.delete(`/api/${API_PATH}/admin/product/${id}`);
