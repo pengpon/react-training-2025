@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" data-theme="custom">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Item</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style type="text/tailwindcss">
+          @theme {
+            --font-sans: "Poppins", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+            --font-display: "Poppins", sans-serif;
+
+            /* 品牌核心顏色 */
+            --color-brand-primary: #89986D;    /* 深橄欖綠 - 用於標題、主按鈕 */
+            --color-brand-secondary: #5C503A;  /* 焦糖深棕 - 用於強調文字、重要邊框 */
+            --color-brand-light: #9CAB84;      /* 嫩橄欖綠 - 用於懸停效果、裝飾元素 */
+
+            /* 語意化命名 */
+            --color-primary: var(--color-brand-primary);
+            --color-secondary: var(--color-brand-secondary);
+            --color-accent: var(--color-brand-light);
+
+            /* 狀態變數 - 建議選用較柔和、不突兀的色調 */
+            --color-status-success: #7DA87B;  /* 柔和綠：用於「已加入購物車」、「付款成功」 */
+            --color-status-warning: #D9A05B;  /* 暖沙橘：用於「剩餘庫存少量」 */
+            --color-status-error: #B55D5D;    /* 磚紅色：用於「無庫存」、「刪除確認」 */
+            --color-status-info: #7B98A8;     /* 灰藍色：用於「物流通知」 */
+
+            /* 建議背景色與內容色 */
+            --color-bg-main: #FDFDFB;          /* 極淺米白 - 當作網頁背景，比純白更有質感 */
+            --color-main: #2D2A26;        /* 深灰褐 - 代替純黑文字，閱讀更舒服 */
+            --color-muted: #6B7280;       /* 靜音灰 - 用於副標題或日期 */
+
+            /* 圓角設定 (符合文青風的圓潤感) */
+            --radius-main: 12px;
+            --radius-button: 8px;
+            --radius-badge: 10px;
+
+            /* 陰影設定 */
+            --shadow-card: 0 4px 20px -2px rgba(92, 80, 58, 0.08); /* 帶有棕色調的柔和陰影 */
+          }
+    </style>
+  </head>
+  <body class="font-sans">
+    <div class="bg-bg-main min-h-screen p-8">
+      <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap:6">
+        <div class="group">
+          <figure class="">
+            <img
+              class="w-full mb-2 rounded-main"
+              src="https://dummyimage.com/600x400/eeeeee/fff"
+              alt="cover"
+            />
+            <div class="grid grid-cols-3 justify-start gap-2">
+              <img
+                class="  rounded-main"
+                src="https://dummyimage.com/600x400/eeeeee/fff"
+                alt="others"
+              />
+              <img
+                class="  rounded-main"
+                src="https://dummyimage.com/600x400/eeeeee/fff"
+                alt="others"
+              />
+              <img
+                class="  rounded-main"
+                src="https://dummyimage.com/600x400/eeeeee/fff"
+                alt="others"
+              />
+            </div>
+          </figure>
+        </div>
+        <div class="group">
+          <h1 class="font-semibold text-4xl text-secondary mb-4">
+            產地直送鮮甜草莓
+          </h1>
+          <div class="text-xl">
+            <span class="text-gray-700 font-semibold mb-2">$110</span>
+            <span class="text-muted font-light line-through italic">$130</span>
+          </div>
+          <p>富含維生素 C，產地直送草莓，新鮮香甜、風味自然。</p>
+          <div class="block w-full h-0.5 bg-gray-100 my-4"></div>
+          <div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div
+                class="mx-auto w-fit inline-flex items-center border border-[--color-brand-secondary]/20 rounded-lg overflow-hidden bg-white shadow-sm"
+              >
+                <button
+                  class="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold"
+                >
+                  －
+                </button>
+
+                <input
+                  type="number"
+                  value="1"
+                  min="1"
+                  class="w-12 text-center border-x border-[--color-brand-secondary]/10 py-2 font-poppins font-medium text-secondary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+
+                <button
+                  class="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold"
+                >
+                  ＋
+                </button>
+              </div>
+
+              <button
+                class="px-4 bg-primary hover:bg-accent text-white py-2 rounded-button transition-colors"
+              >
+                Add To Cart
+              </button>
+            </div>
+            <div class="">
+              <button
+                class="w-full px-4 bg-primary hover:bg-accent text-white py-2 rounded-button transition-colors"
+              >
+                But It Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en" data-theme="custom">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product List</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style type="text/tailwindcss">
+      @theme {
+        --font-sans: "Poppins", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+        --font-display: "Poppins", sans-serif;
+
+        /* 品牌核心顏色 */
+        --color-brand-primary: #89986D;    /* 深橄欖綠 - 用於標題、主按鈕 */
+        --color-brand-secondary: #5C503A;  /* 焦糖深棕 - 用於強調文字、重要邊框 */
+        --color-brand-light: #9CAB84;      /* 嫩橄欖綠 - 用於懸停效果、裝飾元素 */
+
+        /* 語意化命名 */
+        --color-primary: var(--color-brand-primary);
+        --color-secondary: var(--color-brand-secondary);
+        --color-accent: var(--color-brand-light);
+
+        /* 建議背景色與內容色 */
+        --color-bg-main: #FDFDFB;          /* 極淺米白 - 當作網頁背景，比純白更有質感 */
+        --color-main: #2D2A26;        /* 深灰褐 - 代替純黑文字，閱讀更舒服 */
+        --color-muted: #6B7280;       /* 靜音灰 - 用於副標題或日期 */
+
+        /* 圓角設定 (符合文青風的圓潤感) */
+        --radius-main: 12px;
+        --radius-button: 8px;
+        --radius-badge: 10px;
+
+        /* 陰影設定 */
+        --shadow-card: 0 4px 20px -2px rgba(92, 80, 58, 0.08); /* 帶有棕色調的柔和陰影 */
+      }
+    </style>
+  </head>
+  <body class="font-sans">
+    <div class="bg-bg-main min-h-screen p-8">
+      <h1 class="text-primary text-3xl font-bold mb-6">Products</h1>
+
+      <div class="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-6">
+        <div class="p-1 lg:p-4 rounded-main group">
+          <a href="#">
+            <div
+              class="relative aspect-square overflow-hidden rounded-lg mb-4 bg-gray-200"
+            >
+              <figure class="w-full h-full overflow-hidden relative">
+                <img
+                  src="https://dummyimage.com/600x400/cdcdcd/fff"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
+                />
+
+                <div
+                  class="opacity-0 transition-all duration-700 group-hover:opacity-100 "
+                >
+                  <img
+                    src="https://dummyimage.com/300x400/eeeeee/fff"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                  />
+                  <button
+                    class="absolute bottom-10 left-0 right-0 mx-auto px-4 w-fit bg-primary hover:bg-accent text-white py-2 mt-4 rounded-button transition-colors"
+                  >
+                    Quick Add
+                  </button>
+                </div>
+              </figure>
+              <span
+                class="w-fit absolute top-4 right-4 rounded-badge px-4 bg-white"
+                >sale</span
+              >
+            </div>
+          </a>
+
+          <h2 class="text-secondary font-bold">清甜爽脆新鮮蘋果</h2>
+          <div>
+            <span class="text-primary font-semibold mt-1">$52</span>
+            <span class="text-muted font-light line-through italic">$60</span>
+          </div>
+        </div>
+        <div class="p-1 lg:p-4 rounded-main group">
+          <a href="#">
+            <div
+              class="aspect-square overflow-hidden rounded-lg mb-4 bg-gray-200"
+            >
+              <figure class="w-full h-full overflow-hidden relative">
+                <img
+                  src="https://dummyimage.com/600x400/cdcdcd/fff"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
+                />
+                <div
+                  class="opacity-0 transition-all duration-700 group-hover:opacity-100 "
+                >
+                  <img
+                    src="https://dummyimage.com/300x400/eeeeee/fff"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                  />
+                  <button
+                    class="absolute bottom-10 left-0 right-0 mx-auto px-4 w-fit bg-primary hover:bg-accent text-white py-2 mt-4 rounded-button transition-colors"
+                  >
+                    Quick View
+                  </button>
+                </div>
+              </figure>
+            </div>
+          </a>
+
+          <h2 class="text-secondary font-bold">清甜爽脆新鮮蘋果</h2>
+          <div>
+            <span class="text-primary font-semibold mt-1">$52</span>
+            <span class="text-muted font-light line-through italic">$60</span>
+          </div>
+        </div>
+        <div class="p-1 lg:p-4 rounded-main group">
+          <a href="#">
+            <div
+              class="aspect-square overflow-hidden rounded-lg mb-4 bg-gray-200"
+            >
+              <figure class="w-full h-full overflow-hidden relative">
+                <img
+                  src="https://dummyimage.com/600x400/cdcdcd/fff"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
+                />
+                <div
+                  class="opacity-0 transition-all duration-700 group-hover:opacity-100 "
+                >
+                  <img
+                    src="https://dummyimage.com/300x400/eeeeee/fff"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                  />
+                  <button
+                    class="absolute bottom-10 left-0 right-0 mx-auto px-4 w-fit bg-primary hover:bg-accent text-white py-2 mt-4 rounded-button transition-colors"
+                  >
+                    Quick View
+                  </button>
+                </div>
+              </figure>
+            </div>
+          </a>
+
+          <h2 class="text-secondary font-bold">清甜爽脆新鮮蘋果</h2>
+          <div>
+            <span class="text-primary font-semibold mt-1">$52</span>
+            <span class="text-muted font-light line-through italic">$60</span>
+          </div>
+        </div>
+        <div class="p-1 lg:p-4 rounded-main group">
+          <a href="#">
+            <div
+              class="aspect-square overflow-hidden rounded-lg mb-4 bg-gray-200"
+            >
+              <figure class="w-full h-full overflow-hidden relative">
+                <img
+                  src="https://dummyimage.com/600x400/cdcdcd/fff"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
+                />
+                <div
+                  class="opacity-0 transition-all duration-700 group-hover:opacity-100 "
+                >
+                  <img
+                    src="https://dummyimage.com/300x400/eeeeee/fff"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                  />
+                  <button
+                    class="absolute bottom-10 left-0 right-0 mx-auto px-4 w-fit bg-primary hover:bg-accent text-white py-2 mt-4 rounded-button transition-colors"
+                  >
+                    Quick View
+                  </button>
+                </div>
+              </figure>
+            </div>
+          </a>
+
+          <h2 class="text-secondary font-bold">清甜爽脆新鮮蘋果</h2>
+          <div>
+            <span class="text-primary font-semibold mt-1">$52</span>
+            <span class="text-muted font-light line-through italic">$60</span>
+          </div>
+        </div>
+        <div class="p-1 lg:p-4 rounded-main group">
+          <a href="#">
+            <div
+              class="aspect-square overflow-hidden rounded-lg mb-4 bg-gray-200"
+            >
+              <figure class="w-full h-full overflow-hidden relative">
+                <img
+                  src="https://dummyimage.com/600x400/cdcdcd/fff"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
+                />
+                <div
+                  class="opacity-0 transition-all duration-700 group-hover:opacity-100 "
+                >
+                  <img
+                    src="https://dummyimage.com/300x400/eeeeee/fff"
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                  />
+                  <button
+                    class="absolute bottom-10 left-0 right-0 mx-auto px-4 w-fit bg-primary hover:bg-accent text-white py-2 mt-4 rounded-button transition-colors"
+                  >
+                    Quick View
+                  </button>
+                </div>
+              </figure>
+            </div>
+          </a>
+
+          <h2 class="text-secondary font-bold">清甜爽脆新鮮蘋果</h2>
+          <div>
+            <span class="text-primary font-semibold mt-1">$52</span>
+            <span class="text-muted font-light line-through italic">$60</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
