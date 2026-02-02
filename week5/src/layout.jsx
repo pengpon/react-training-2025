@@ -1,16 +1,18 @@
-import { Outlet, NavLink } from "react-router";
+import { Outlet } from "react-router";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function Layout() {
   return (
     <>
-      <header>Header</header>
-      <div className="flex gap-2">
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/products">List</NavLink>
-        <NavLink to="/cart">Cart</NavLink>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="flex gap-2"></div>
+        <main className="flex-1 container">
+          <Outlet />
+        </main>
+        <Footer />
       </div>
-      <Outlet />
-      <footer>Footer</footer>
     </>
   );
 }
