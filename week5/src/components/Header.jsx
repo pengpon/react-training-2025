@@ -8,9 +8,15 @@ import {
 } from "@heroicons/react/24/outline";
 import logo from "../assets/images/logo.png";
 import { useEffect, useRef, useState } from "react";
+import { Link, NavLink } from "react-router";
 
 function Header() {
-  const menuItems = ["Catalog", "Vegetables & Fruits", "Blog", "About Us"];
+  const menuItems = [
+    { title: "Catalog", path: "products" },
+    // { title: "Vegetables & Fruits", path: "products" },
+    { title: "Blog", path: "blog" },
+    { title: "About Us", path: "about" },
+  ];
   const menuRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -56,8 +62,10 @@ function Header() {
           <ul className="text-base px-1 hidden lg:flex lg:gap-4 lg:items-center">
             {menuItems.map((item, index) => (
               <li key={index} className="relative group">
-                <a href="#">{item}</a>
-                <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
+                <NavLink to={item.path}>
+                  {item.title}
+                  <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -75,22 +83,28 @@ function Header() {
         </div>
         {/* navbar end */}
         <div className="flex flex-1 gap-2 items-center justify-end">
-          <UserIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
-          <MapPinIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
-          <div className="relative">
-            <ShoppingBagIcon className="size-8 p-1 hover:stroke-[2px] text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
-            <span className="absolute top-0 right-0 rounded-full bg-accent w-3 h-3"></span>
-          </div>
+          <Link to="login">
+            <UserIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+          </Link>
+          <Link to="/location">
+            <MapPinIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+          </Link>
+          <Link to="/cart">
+            <div className="relative">
+              <ShoppingBagIcon className="size-8 p-1 hover:stroke-[2px] text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+              <span className="absolute top-0 right-0 rounded-full bg-accent w-3 h-3"></span>
+            </div>
+          </Link>
         </div>
 
         {/* overlay */}
         {isMenuOpen && (
-          <div className="absolute w-screen h-screen left-0 top-0 bg-gray-800/50"></div>
+          <div className="absolute z-10 w-screen h-screen left-0 top-0 bg-gray-800/50"></div>
         )}
 
         {/* menu */}
         <div
-          className="fixed -left-100 w-[320px] h-screen px-4 py-10 bg-root-bg transition-all duration-300"
+          className="fixed z-10 -left-100 w-[320px] h-screen px-4 py-10 bg-root-bg transition-all duration-300 ease-in-out"
           ref={menuRef}
         >
           <div className="h-full flex flex-col gap-6">
@@ -104,31 +118,40 @@ function Header() {
             </div>
             <div className="flex-1">
               <h2 className="text-3xl font-bold leading-tight mb-10">Shop</h2>
-              <ul className="flex flex-col gap-4 text-xl font-normal">
+              <ul
+                className="flex flex-col gap-4 text-xl font-normal"
+                onClick={handleMenuClose}
+              >
                 {menuItems.map((item, index) => (
                   <li key={index} className="relative w-fit group">
-                    {item}
-                    <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
+                    <NavLink to={item.path}>
+                      {item.title}
+                      <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
             </div>
             <div className="">
-              <button className="text-white bg-secondary/80 rounded-button px-4 py-2 hover:bg-secondary cursor-pointer">
-                Log In
-              </button>
+              <Link to="login" onClick={handleMenuClose}>
+                <button className="text-white bg-secondary/80 rounded-button px-4 py-2 hover:bg-secondary cursor-pointer">
+                  Log In
+                </button>
+              </Link>
               <div className="text-sm italic text-content-muted py-2">
                 <div className="flex gap-2">
                   <span>No Account Yet ?</span>
-                  <button
-                    type="button"
-                    className="flex gap-2 items-center cursor-pointer  text-content-muted hover:text-primary transition-colors duration-300 group"
-                  >
-                    <span className="text-sm font-medium underline underline-offset-4 decoration-root-border hover:decoration-primary">
-                      Create Account
-                    </span>
-                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                  </button>
+                  <Link to="register" onClick={handleMenuClose}>
+                    <button
+                      type="button"
+                      className="flex gap-2 items-center cursor-pointer  text-content-muted hover:text-primary transition-colors duration-300 group"
+                    >
+                      <span className="text-sm font-medium underline underline-offset-4 decoration-root-border hover:decoration-primary">
+                        Create Account
+                      </span>
+                      <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
