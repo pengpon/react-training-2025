@@ -1,0 +1,142 @@
+import {
+  MapPinIcon,
+  Bars3CenterLeftIcon,
+  ShoppingBagIcon,
+  UserIcon,
+  XMarkIcon,
+  ArrowRightIcon,
+} from "@heroicons/react/24/outline";
+import logo from "../assets/images/logo.png";
+import { useEffect, useRef, useState } from "react";
+
+function Header() {
+  const menuItems = ["Catalog", "Vegetables & Fruits", "Blog", "About Us"];
+  const menuRef = useRef(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMenuOpen = () => {
+    menuRef.current.style.left = "0";
+    setIsMenuOpen(true);
+  };
+
+  const handleMenuClose = () => {
+    menuRef.current.style.left = "-400px";
+    setIsMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+
+    const handleMediaChange = (e) => {
+      if (e.matches) {
+        menuRef.current.style.left = "-400px";
+        setIsMenuOpen(false);
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+  }, []);
+
+  return (
+    <>
+      <header className="flex h-10 lg:h-20 px-4 lg:px-10 justify-between shadow-sm font-sans">
+        {/* navbar start */}
+        <div className="flex items-center flex-1">
+          <div
+            tabIndex="0"
+            role="button"
+            className="lg:hidden"
+            onClick={handleMenuOpen}
+          >
+            <Bars3CenterLeftIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+          </div>
+
+          <ul className="text-base px-1 hidden lg:flex lg:gap-4 lg:items-center">
+            {menuItems.map((item, index) => (
+              <li key={index} className="relative group">
+                <a href="#">{item}</a>
+                <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* navbar center */}
+        <div className="flex">
+          <a href="#" className="inline">
+            <h1 className="sr-only">r・oot</h1>
+            <img
+              className="w-full h-full object-contain"
+              src={logo}
+              alt="logo"
+            />
+          </a>
+        </div>
+        {/* navbar end */}
+        <div className="flex flex-1 gap-2 items-center justify-end">
+          <UserIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+          <MapPinIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+          <div className="relative">
+            <ShoppingBagIcon className="size-8 p-1 hover:stroke-[2px] text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+            <span className="absolute top-0 right-0 rounded-full bg-accent w-3 h-3"></span>
+          </div>
+        </div>
+
+        {/* overlay */}
+        {isMenuOpen && (
+          <div className="absolute w-screen h-screen left-0 top-0 bg-gray-800/50"></div>
+        )}
+
+        {/* menu */}
+        <div
+          className="fixed -left-100 w-[320px] h-screen px-4 py-10 bg-root-bg transition-all duration-300"
+          ref={menuRef}
+        >
+          <div className="h-full flex flex-col gap-6">
+            <div className="flex justify-end">
+              <button
+                className="group p-2 -m-2 text-content-muted hover:text-content-main rounded-full transition-all duration-200 cursor-pointer"
+                onClick={handleMenuClose}
+              >
+                <XMarkIcon className="size-6 transition-transform group-hover:rotate-90" />
+              </button>
+            </div>
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold leading-tight mb-10">Shop</h2>
+              <ul className="flex flex-col gap-4 text-xl font-normal">
+                {menuItems.map((item, index) => (
+                  <li key={index} className="relative w-fit group">
+                    {item}
+                    <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="">
+              <button className="text-white bg-secondary/80 rounded-button px-4 py-2 hover:bg-secondary cursor-pointer">
+                Log In
+              </button>
+              <div className="text-sm italic text-content-muted py-2">
+                <div className="flex gap-2">
+                  <span>No Account Yet ?</span>
+                  <button
+                    type="button"
+                    className="flex gap-2 items-center cursor-pointer  text-content-muted hover:text-primary transition-colors duration-300 group"
+                  >
+                    <span className="text-sm font-medium underline underline-offset-4 decoration-root-border hover:decoration-primary">
+                      Create Account
+                    </span>
+                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    </>
+  );
+}
+
+export default Header;
