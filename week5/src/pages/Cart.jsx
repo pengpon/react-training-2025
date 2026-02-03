@@ -101,7 +101,7 @@ function Cart() {
       {isPageLoading && <Spinner />}
       {!isPageLoading &&
         (cartItems?.length > 0 ? (
-          <div className="w-250 max-w-[80%] m-auto">
+          <div className="max-w-250 w-[90%] m-auto">
             <div className="my-4">
               <h1 className="text-center text-3xl font-bold text-primary-dark">
                 Shopping Cart
@@ -110,8 +110,8 @@ function Cart() {
 
             <ul className="divide-y divide-gray-200 border-t border-b border-gray-200">
               {cartItems.map((item) => (
-                <li className="flex py-6 justify-around" key={item.id}>
-                  <div className="size-30 lg:size-40">
+                <li className="flex py-6 items-center lg:justify-around gap-4" key={item.id}>
+                  <div className="size-20 lg:size-30">
                     <img
                       className="rounded-main w-full h-full object-cover"
                       src={
@@ -121,49 +121,51 @@ function Cart() {
                       alt="cover"
                     />
                   </div>
-                  <div className="text-gray-900 lg:w-1/3 flex items-center">
-                    <p className="text-md">{item.product.title}</p>
-                    <span className="text-sm font-medium">
-                      {" "}
-                      ${item.product.price}{" "}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="mx-auto w-fit inline-flex items-center border border-[--color-brand-secondary]/20 rounded-lg overflow-hidden bg-white shadow-sm">
-                      <button
-                        className="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold cursor-pointer disabled:text-gray-300 disabled:cursor-not-allowed"
-                        onClick={() => handleQuantityChange(item.id, "minus")}
-                        disabled={item.qty <= 1}
-                      >
-                        －
-                      </button>
-
-                      <input
-                        type="number"
-                        value={item.qty}
-                        min={1}
-                        max={99}
-                        className="w-12 text-center border-x border-[--color-brand-secondary]/10 py-2 font-poppins font-medium text-secondary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        data-id={item.id}
-                        onChange={handleQuantityInputChange}
-                        onBlur={handleQuantityInputBlur}
-                      />
-
-                      <button
-                        className="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold cursor-pointer disabled:text-gray-300 disabled:cursor-not-allowed"
-                        onClick={() => handleQuantityChange(item.id, "plus")}
-                        disabled={item.qty >= 99}
-                      >
-                        ＋
-                      </button>
+                  <div className="flex-1 flex flex-col gap-4 lg:gap-8 lg:flex-row">
+                    <div className="text-gray-900 lg:w-1/2 flex gap-6 items-center">
+                      <p className="text-md">{item.product.title}</p>
+                      <span className="text-sm font-medium">
+                        {" "}
+                        ${item.product.price}{" "}
+                      </span>
                     </div>
-                    <div className="p-2">
-                      <button
-                        className="text-red-500  hover:text-red-800 cursor-pointer"
-                        onClick={() => handleRemove(item.id)}
-                      >
-                        <TrashIcon className="size-5" />
-                      </button>
+                    <div className="flex items-center gap-4">
+                      <div className="mx-auto w-fit inline-flex items-center border border-[--color-brand-secondary]/20 rounded-lg overflow-hidden bg-white shadow-sm">
+                        <button
+                          className="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold cursor-pointer disabled:text-gray-300 disabled:cursor-not-allowed"
+                          onClick={() => handleQuantityChange(item.id, "minus")}
+                          disabled={item.qty <= 1}
+                        >
+                          －
+                        </button>
+
+                        <input
+                          type="number"
+                          value={item.qty}
+                          min={1}
+                          max={99}
+                          className="w-12 text-center border-x border-[--color-brand-secondary]/10 py-2 font-poppins font-medium text-secondary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          data-id={item.id}
+                          onChange={handleQuantityInputChange}
+                          onBlur={handleQuantityInputBlur}
+                        />
+
+                        <button
+                          className="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold cursor-pointer disabled:text-gray-300 disabled:cursor-not-allowed"
+                          onClick={() => handleQuantityChange(item.id, "plus")}
+                          disabled={item.qty >= 99}
+                        >
+                          ＋
+                        </button>
+                      </div>
+                      <div className="p-2">
+                        <button
+                          className="text-red-500  hover:text-red-800 cursor-pointer"
+                          onClick={() => handleRemove(item.id)}
+                        >
+                          <TrashIcon className="size-5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -182,7 +184,9 @@ function Cart() {
                     <Spinner />
                   </div>
                 ) : (
-                  <span className="text-3xl">${addThousandsSeparator(finalTotal, ",")}</span>
+                  <span className="text-3xl">
+                    ${addThousandsSeparator(finalTotal, ",")}
+                  </span>
                 )}
               </div>
             </div>
