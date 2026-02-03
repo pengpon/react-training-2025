@@ -3,8 +3,10 @@ import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router";
 import { fetchCarts, removeCartItem, updateCartItem } from "../api/cart";
 import { addThousandsSeparator } from "../utils/format";
+import Spinner from "../components/Spinner";
 
 function Cart() {
+  const [isLoading, setIsLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [finalTotal, setFinalTotal] = useState(0);
 
@@ -15,7 +17,8 @@ function Cart() {
   }, []);
 
   // 加減按鈕
-  const handleQuantityChange = (id, type) => {
+  const handleQuantityChange = async (id, type) => {
+    setIsLoading(true);
     const currentItem = cartItems.find((item) => item.id === id);
     const diff = type === "plus" ? 1 : -1;
     const newQty = currentItem.qty + diff;
@@ -25,7 +28,8 @@ function Cart() {
     );
 
     setCartItems(updatedItems);
-    updateCart(id, updatedItems);
+    await updateCart(id, updatedItems);
+    setIsLoading(false);
   };
 
   // 手動輸入
@@ -41,7 +45,8 @@ function Cart() {
   };
 
   // Blur 檢查
-  const handleQuantityInputBlur = (e) => {
+  const handleQuantityInputBlur = async (e) => {
+    setIsLoading(true);
     const id = e.target.dataset.id;
     const value = parseInt(e.target.value, 10);
 
@@ -57,7 +62,8 @@ function Cart() {
     );
 
     setCartItems(updatedItems);
-    updateCart(id, updatedItems);
+    await updateCart(id, updatedItems);
+    setIsLoading(false);
   };
 
   const updateCart = async (id, data) => {
@@ -67,11 +73,8 @@ function Cart() {
       product_id: updateItem.product_id,
       qty: updateItem.qty,
     });
-    getCarts();
-  };
-
-  const removeCart = (id) => {
-    removeCartItem(id);
+    await getCarts();
+    setIsLoading(false);
   };
 
   const handleRemove = async (id) => {
@@ -79,8 +82,9 @@ function Cart() {
       const updatedItems = prev.filter((item) => item.id !== id);
       return updatedItems;
     });
-    await removeCart(id);
-    getCarts();
+    await removeCartItem(id);
+    await getCarts();
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -162,13 +166,19 @@ function Cart() {
           </ul>
           <div className="mb-4 p-4 flex justify-between">
             <div>
-              <h2 className="font-medium text-xl">Subtotal</h2>
+              <h2 className="font-medium text-xl">Estimated total</h2>
               <p className="text-gray-400">
                 Shipping and taxes will be calculated at checkout.
               </p>
             </div>
             <div>
-              <span>${addThousandsSeparator(finalTotal, ",")}</span>
+              {isLoading ? (
+                <div className="w-5">
+                  <Spinner />
+                </div>
+              ) : (
+                <span>${addThousandsSeparator(finalTotal, ",")}</span>
+              )}
             </div>
           </div>
           <div className="mb-4">

@@ -24,9 +24,9 @@ function Item({ data }) {
                   }
                   className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
                 />
-                <button className="absolute bottom-10 left-0 right-0 mx-auto px-4 w-fit bg-primary hover:bg-accent text-white py-2 mt-4 rounded-button transition-colors">
+                {/* <button className="absolute bottom-10 left-0 right-0 mx-auto px-4 w-fit bg-primary hover:bg-accent text-white py-2 mt-4 rounded-button transition-colors">
                   Quick Add
-                </button>
+                </button> */}
               </div>
             </figure>
             {/* <span className="w-fit absolute top-4 right-4 rounded-badge px-4 bg-white">

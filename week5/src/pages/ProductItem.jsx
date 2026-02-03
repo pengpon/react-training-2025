@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { logger } from "../utils/logger";
 import { addToCart, fetchCarts, updateCartItem } from "../api/cart";
 import { addThousandsSeparator } from "../utils/format";
+import Spinner from "../components/Spinner";
 
 function ProductItem() {
   const params = useParams();
@@ -12,6 +13,7 @@ function ProductItem() {
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
 
   // 切換大圖
   const handleImageClick = (e) => {
@@ -49,6 +51,8 @@ function ProductItem() {
   };
 
   const handleAddToCart = async () => {
+    setIsAddToCartLoading(true);
+
     const res = await fetchCarts();
     const carts = res.data.data.carts;
 
@@ -56,16 +60,22 @@ function ProductItem() {
       (item) => item.product_id === product.id,
     );
 
-    if (existingItemIndex >= 0) {
-      await updateCartItem(carts[existingItemIndex].id, {
-        product_id: product.id,
-        qty: carts[existingItemIndex].qty + quantity,
-      });
-    } else {
-      await addToCart({
-        product_id: product.id,
-        qty: quantity,
-      });
+    try {
+      if (existingItemIndex >= 0) {
+        await updateCartItem(carts[existingItemIndex].id, {
+          product_id: product.id,
+          qty: carts[existingItemIndex].qty + quantity,
+        });
+      } else {
+        await addToCart({
+          product_id: product.id,
+          qty: quantity,
+        });
+      }
+    } catch (error) {
+      logger.error(error.message, error);
+    } finally {
+      setIsAddToCartLoading(false);
     }
   };
 
@@ -86,6 +96,7 @@ function ProductItem() {
 
   return (
     <>
+      {isLoading && <Spinner />}
       {!isLoading && (
         <div className="min-h-screen p-8">
           <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap:6">
@@ -99,7 +110,7 @@ function ProductItem() {
                   alt="cover"
                 />
                 <div className="grid grid-cols-3 justify-start gap-2">
-                  {product.imagesUrl.map((image, index) => (
+                  {product?.imagesUrl?.map((image, index) => (
                     <div
                       key={`${image}-${index}`}
                       className="cursor-pointer"
@@ -165,10 +176,10 @@ function ProductItem() {
                   </div>
 
                   <button
-                    className="px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors cursor-pointer"
+                    className="px-4 bg-primary hover:bg-primary-dark text-white rounded-button transition-colors cursor-pointer"
                     onClick={handleAddToCart}
                   >
-                    Add To Cart
+                    {isAddToCartLoading ? <Spinner /> : "Add To Cart"}
                   </button>
                 </div>
                 <div className="">
