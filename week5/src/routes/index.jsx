@@ -8,6 +8,7 @@ import Layout from "../layout";
 import Blog from "../pages/Blog";
 import Login from "../pages/Login";
 import Checkout from "../pages/Checkout";
+import NotFound from "../pages/NotFound";
 
 const routes = [
   {
@@ -53,6 +54,10 @@ const routes = [
       {
         path: "/register",
         element: <Login />,
+      },
+      {
+        path: "*",
+        element: <NotFound/>,
       },
     ],
   },
