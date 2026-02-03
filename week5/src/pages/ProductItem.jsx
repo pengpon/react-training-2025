@@ -1,10 +1,12 @@
 import { Link, useParams } from "react-router";
 import { fetchProduct } from "../api/products";
 import { useEffect, useState, useRef } from "react";
-import { logger } from "../utils/logger";
 import { addToCart, fetchCarts, updateCartItem } from "../api/cart";
-import { addThousandsSeparator } from "../utils/format";
+import ErrorState from "../components/ErrorState";
 import Spinner from "../components/Spinner";
+import Toast from "../utils/swal";
+import { addThousandsSeparator } from "../utils/format";
+import { logger } from "../utils/logger";
 
 function ProductItem() {
   const params = useParams();
@@ -90,12 +92,20 @@ function ProductItem() {
     const getProduct = async (id) => {
       try {
         const res = await fetchProduct(id);
-
-        setIsLoading(false);
-        setProduct(res.data.product);
+        setProduct(res?.data?.product);
         setActiveImage(res.data?.product?.imageUrl);
       } catch (error) {
+        Toast.fire({
+          position: "top",
+          icon: "warning",
+          title: `Something Wrong...`,
+          color: "#fff",
+          iconColor: "#fff",
+          background: "#ff8f40",
+        });
         logger.error(error.message, error);
+      } finally {
+        setIsLoading(false);
       }
     };
     if (id) getProduct(id);
@@ -103,8 +113,9 @@ function ProductItem() {
 
   return (
     <>
-      {isLoading && <Spinner />}
-      {!isLoading && (
+      {!product && (isLoading ? <Spinner /> : <ErrorState />)}
+
+      {!isLoading && product && (
         <div className="min-h-screen p-8">
           <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap:6">
             <div className="group">

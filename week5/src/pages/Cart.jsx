@@ -2,8 +2,11 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "react-router";
 import { fetchCarts, removeCartItem, updateCartItem } from "../api/cart";
-import { addThousandsSeparator } from "../utils/format";
 import Spinner from "../components/Spinner";
+import ErrorState from "../components/ErrorState";
+import Toast from "../utils/swal";
+import { addThousandsSeparator } from "../utils/format";
+import { logger } from "../utils/logger";
 
 function Cart() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -97,8 +100,21 @@ function Cart() {
 
   useEffect(() => {
     const init = async () => {
-      await getCarts();
-      setIsPageLoading(false);
+      try {
+        await getCarts();
+      } catch (error) {
+        Toast.fire({
+          position: "top",
+          icon: "warning",
+          title: `Something Wrong...`,
+          color: "#fff",
+          iconColor: "#fff",
+          background: "#ff8f40",
+        });
+        logger.error(error.message, error);
+      } finally {
+        setIsPageLoading(false);
+      }
     };
     init();
   }, [getCarts]);
@@ -113,8 +129,9 @@ function Cart() {
 
   return (
     <>
-      {isPageLoading && <Spinner />}
+      {!cartItems && (isPageLoading ? <Spinner /> : <ErrorState />)}
       {!isPageLoading &&
+        cartItems &&
         (cartItems?.length > 0 ? (
           <div className="max-w-250 w-[90%] m-auto">
             <div className="my-4">
