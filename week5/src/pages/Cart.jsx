@@ -2,6 +2,7 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router";
 import { fetchCarts, removeCartItem, updateCartItem } from "../api/cart";
+import { addThousandsSeparator } from "../utils/format";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -167,7 +168,7 @@ function Cart() {
               </p>
             </div>
             <div>
-              <span>${finalTotal}</span>
+              <span>${addThousandsSeparator(finalTotal, ",")}</span>
             </div>
           </div>
           <div className="mb-4">

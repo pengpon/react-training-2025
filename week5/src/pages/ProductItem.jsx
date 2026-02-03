@@ -3,6 +3,7 @@ import { fetchProduct } from "../api/products";
 import { useEffect, useState } from "react";
 import { logger } from "../utils/logger";
 import { addToCart, fetchCarts, updateCartItem } from "../api/cart";
+import { addThousandsSeparator } from "../utils/format";
 
 function ProductItem() {
   const params = useParams();
@@ -122,9 +123,11 @@ function ProductItem() {
                   {product.title}
                 </h1>
                 <div className="text-xl flex gap-2 items-center mb-2">
-                  <span className="font-bold">${product.price}</span>
+                  <span className="font-bold">
+                    ${addThousandsSeparator(product.price)}
+                  </span>
                   <span className="text-sm text-content-muted font-medium line-through italic">
-                    ${product.origin_price}
+                    ${addThousandsSeparator(product.origin_price)}
                   </span>
                 </div>
                 <p>{product.description}</p>
