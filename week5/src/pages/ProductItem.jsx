@@ -1,6 +1,6 @@
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { fetchProduct } from "../api/products";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { logger } from "../utils/logger";
 import { addToCart, fetchCarts, updateCartItem } from "../api/cart";
 import { addThousandsSeparator } from "../utils/format";
@@ -14,6 +14,8 @@ function ProductItem() {
   const [activeImage, setActiveImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const timeRef = useRef(null);
 
   // 切換大圖
   const handleImageClick = (e) => {
@@ -72,6 +74,11 @@ function ProductItem() {
           qty: quantity,
         });
       }
+      setIsSuccess(true);
+      if (timeRef.current) clearTimeout(timeRef.current);
+      timeRef.current = setTimeout(() => {
+        setIsSuccess(false);
+      }, 2000);
     } catch (error) {
       logger.error(error.message, error);
     } finally {
@@ -103,7 +110,7 @@ function ProductItem() {
             <div className="group">
               <figure className="">
                 <img
-                  className="w-full mb-2 rounded-main"
+                  className="w-full object-cover mb-2 rounded-main"
                   src={
                     activeImage || "https://dummyimage.com/600x400/eeeeee/fff"
                   }
@@ -117,7 +124,7 @@ function ProductItem() {
                       onClick={handleImageClick}
                     >
                       <img
-                        className="border border-primary/20 rounded-main"
+                        className="rounded-main"
                         src={
                           image || "https://dummyimage.com/600x400/eeeeee/fff"
                         }
@@ -129,7 +136,7 @@ function ProductItem() {
               </figure>
             </div>
             <div className="flex flex-col group">
-              <div className="flex-1">
+              <div className="flex-1 px-4 flex flex-col gap-2">
                 <h1 className="font-bold text-3xl text-secondary mb-4">
                   {product.title}
                 </h1>
@@ -141,7 +148,7 @@ function ProductItem() {
                     ${addThousandsSeparator(product.origin_price)}
                   </span>
                 </div>
-                <p>{product.description}</p>
+                <p className="text-justify">{product.description}</p>
               </div>
 
               <div className="w-full h-0.5 bg-gray-100 my-4"></div>
@@ -176,16 +183,40 @@ function ProductItem() {
                   </div>
 
                   <button
-                    className="px-4 bg-primary hover:bg-primary-dark text-white rounded-button transition-colors cursor-pointer"
+                    className="px-4 bg-primary hover:bg-primary-dark text-white rounded-button transition-colors cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
                     onClick={handleAddToCart}
                   >
-                    {isAddToCartLoading ? <Spinner /> : "Add To Cart"}
+                    {isAddToCartLoading ? (
+                      <Spinner />
+                    ) : isSuccess ? (
+                      <div className="flex justify-center items-center gap-2 animate-success-pop">
+                        {/* 動態打勾 SVG */}
+                        <svg
+                          className="w-8 h-8"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path
+                            className="animate-draw-check"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                    ) : (
+                      "Add To Cart"
+                    )}
                   </button>
                 </div>
                 <div className="">
-                  <button className="w-full px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors disabled:bg-gray-200">
-                    But It Now
-                  </button>
+                  <Link to="/checkout">
+                    <button className="w-full px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors disabled:bg-gray-200">
+                      But It Now
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

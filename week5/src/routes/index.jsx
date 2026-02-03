@@ -7,6 +7,7 @@ import Location from "../pages/Location";
 import Layout from "../layout";
 import Blog from "../pages/Blog";
 import Login from "../pages/Login";
+import Checkout from "../pages/Checkout";
 
 const routes = [
   {
@@ -40,6 +41,10 @@ const routes = [
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
       },
       {
         path: "/login",

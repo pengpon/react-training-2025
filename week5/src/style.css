@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -32,5 +33,27 @@
 
 body {
   font-size: 16px;
-  ling-height: 1.6;
+  line-height: 1.6;
+}
+/* animation */
+@keyframes draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes success-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.animate-draw-check {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: draw-check 0.4s ease-out forwards;
+}
+
+.animate-success-pop {
+  animation: success-bounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s forwards;
 }
