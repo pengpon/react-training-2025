@@ -1,5 +1,5 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "react-router";
 import { fetchCarts, removeCartItem, updateCartItem } from "../api/cart";
 import { addThousandsSeparator } from "../utils/format";
@@ -10,6 +10,7 @@ function Cart() {
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [cartItems, setCartItems] = useState(null);
   const [finalTotal, setFinalTotal] = useState(0);
+  const timerRef = useRef(null);
 
   const getCarts = useCallback(async () => {
     const res = await fetchCarts();
@@ -27,10 +28,16 @@ function Cart() {
     const updatedItems = cartItems.map((item) =>
       item.id === id ? { ...item, qty: newQty } : item,
     );
-
     setCartItems(updatedItems);
-    await updateCart(id, updatedItems);
-    setIsActionLoading(false);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(async () => {
+      await updateCart(id, updatedItems);
+      setIsActionLoading(false);
+    }, 500);
   };
 
   // 手動輸入
@@ -96,6 +103,14 @@ function Cart() {
     init();
   }, [getCarts]);
 
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
   return (
     <>
       {isPageLoading && <Spinner />}
@@ -110,7 +125,10 @@ function Cart() {
 
             <ul className="divide-y divide-gray-200 border-t border-b border-gray-200">
               {cartItems.map((item) => (
-                <li className="flex py-6 items-center lg:justify-around gap-4" key={item.id}>
+                <li
+                  className="flex py-6 items-center lg:justify-around gap-4"
+                  key={item.id}
+                >
                   <div className="size-20 lg:size-30">
                     <img
                       className="rounded-main w-full h-full object-cover"
@@ -172,22 +190,20 @@ function Cart() {
               ))}
             </ul>
             <div className="mb-4 p-4 flex justify-between">
-              <div>
-                <h2 className="font-medium text-xl">Estimated total</h2>
-                <p className="text-gray-400">
+              <div className="">
+                <h2 className="text-xl font-medium">Estimated total</h2>
+                <p className="text-sm font-normal text-gray-400">
                   Shipping and taxes will be calculated at checkout.
                 </p>
               </div>
-              <div>
-                {isActionLoading ? (
-                  <div className="w-5">
+              <div className="flex items-center">
+                <span className="text-xl lg:text-3xl ">
+                  {isActionLoading ? (
                     <Spinner />
-                  </div>
-                ) : (
-                  <span className="text-3xl">
-                    ${addThousandsSeparator(finalTotal, ",")}
-                  </span>
-                )}
+                  ) : (
+                    `$${addThousandsSeparator(finalTotal, ",")}`
+                  )}
+                </span>
               </div>
             </div>
             <div className="mb-4">
