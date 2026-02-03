@@ -182,7 +182,7 @@ function Cart() {
                     <Spinner />
                   </div>
                 ) : (
-                  <span>${addThousandsSeparator(finalTotal, ",")}</span>
+                  <span className="text-3xl">${addThousandsSeparator(finalTotal, ",")}</span>
                 )}
               </div>
             </div>
