@@ -1,41 +1,30 @@
-import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router";
+import { fetchCarts, removeCartItem, updateCartItem } from "../api/cart";
 
 function Cart() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: "-OhYqNYOyROLs-DVZT3N",
-      title: "清脆鮮採小黃瓜",
-      price: 17,
-      quantity: 1,
-      imageUrl:
-        "https://storage.googleapis.com/vue-course-api.appspot.com/root/1767017558836.jpg",
-    },
-    {
-      id: "-OiSFkA5o9oRQDPxCx1R",
-      title: "清新酸香新鮮檸檬",
-      price: 28,
-      quantity: 1,
-      imageUrl:
-        "https://storage.googleapis.com/vue-course-api.appspot.com/root/1767868736194.jpg",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const [finalTotal, setFinalTotal] = useState(0);
+
+  const getCarts = useCallback(async () => {
+    const res = await fetchCarts();
+    setCartItems(res.data.data.carts);
+    setFinalTotal(res.data.data.final_total);
+  }, []);
 
   // 加減按鈕
   const handleQuantityChange = (id, type) => {
-    if (type === "plus") {
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
-        ),
-      );
-    } else {
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
-        ),
-      );
-    }
+    const currentItem = cartItems.find((item) => item.id === id);
+    const diff = type === "plus" ? 1 : -1;
+    const newQty = currentItem.qty + diff;
+
+    const updatedItems = cartItems.map((item) =>
+      item.id === id ? { ...item, qty: newQty } : item,
+    );
+
+    setCartItems(updatedItems);
+    updateCart(id, updatedItems);
   };
 
   // 手動輸入
@@ -45,9 +34,7 @@ function Cart() {
 
     if (value === "" || !isNaN(value)) {
       setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: value } : item,
-        ),
+        prev.map((item) => (item.id === id ? { ...item, qty: value } : item)),
       );
     }
   };
@@ -57,27 +44,54 @@ function Cart() {
     const id = e.target.dataset.id;
     const value = parseInt(e.target.value, 10);
 
-    let finalQuantity = value;
+    let newQty = value;
     if (isNaN(value) || value < 1) {
-      finalQuantity = 1;
+      newQty = 1;
     } else if (value > 99) {
-      finalQuantity = 99;
+      newQty = 99;
     }
 
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: finalQuantity } : item,
-      ),
+    const updatedItems = cartItems.map((item) =>
+      item.id === id ? { ...item, qty: newQty } : item,
     );
+
+    setCartItems(updatedItems);
+    updateCart(id, updatedItems);
   };
 
-  const handleRemove = (id) => {
-    setCartItems((prev) => [...prev].filter((item) => item.id !== id));
+  const updateCart = async (id, data) => {
+    const updateItem = data.find((item) => item.id === id);
+
+    await updateCartItem(id, {
+      product_id: updateItem.product_id,
+      qty: updateItem.qty,
+    });
+    getCarts();
   };
+
+  const removeCart = (id) => {
+    removeCartItem(id);
+  };
+
+  const handleRemove = async (id) => {
+    setCartItems((prev) => {
+      const updatedItems = prev.filter((item) => item.id !== id);
+      return updatedItems;
+    });
+    await removeCart(id);
+    getCarts();
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      await getCarts();
+    };
+    init();
+  }, [getCarts]);
 
   return (
     <>
-      {cartItems.length > 0 ? (
+      {cartItems?.length > 0 ? (
         <div className="w-125 max-w-[80%] m-auto">
           <div className="mb-4">
             <h1 className="text-center text-3xl font-bold text-gray-900">
@@ -91,29 +105,32 @@ function Cart() {
                 <div className="size-30 lg:size-40">
                   <img
                     src={
-                      item.imageUrl ||
+                      item.product.imageUrl ||
                       "https://dummyimage.com/600x400/eeeeee/fff"
                     }
                     alt="cover"
                   />
                 </div>
                 <div className="text-gray-900">
-                  <p className="text-md">{item.title}</p>
-                  <span className="text-sm font-medium"> ${item.price} </span>
+                  <p className="text-md">{item.product.title}</p>
+                  <span className="text-sm font-medium">
+                    {" "}
+                    ${item.product.price}{" "}
+                  </span>
                 </div>
                 <div>
                   <div className="mx-auto w-fit inline-flex items-center border border-[--color-brand-secondary]/20 rounded-lg overflow-hidden bg-white shadow-sm">
                     <button
                       className="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold cursor-pointer disabled:text-gray-300 disabled:cursor-not-allowed"
                       onClick={() => handleQuantityChange(item.id, "minus")}
-                      disabled={item.quantity <= 1}
+                      disabled={item.qty <= 1}
                     >
                       －
                     </button>
 
                     <input
                       type="number"
-                      value={item.quantity}
+                      value={item.qty}
                       min={1}
                       max={99}
                       className="w-12 text-center border-x border-[--color-brand-secondary]/10 py-2 font-poppins font-medium text-secondary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -125,7 +142,7 @@ function Cart() {
                     <button
                       className="px-3 py-2 text-secondary hover:bg-gray-100 transition-colors active:scale-95 select-none font-bold cursor-pointer disabled:text-gray-300 disabled:cursor-not-allowed"
                       onClick={() => handleQuantityChange(item.id, "plus")}
-                      disabled={item.quantity >= 99}
+                      disabled={item.qty >= 99}
                     >
                       ＋
                     </button>
@@ -150,7 +167,7 @@ function Cart() {
               </p>
             </div>
             <div>
-              <span>$1000</span>
+              <span>${finalTotal}</span>
             </div>
           </div>
           <div className="mb-4">
@@ -161,8 +178,14 @@ function Cart() {
         </div>
       ) : (
         <div className="flex flex-col gap-4 items-center">
-          <h1 className="text-3xl text-primary font-bold">Your cart is empty</h1>
-          <button className="w-fit p-2 text-base text-white rounded-button bg-accent/90 hover:bg-accent cursor-pointer">Continue Shopping</button>
+          <h1 className="text-3xl text-primary font-bold">
+            Your cart is empty
+          </h1>
+          <Link to="/products">
+            <button className="w-fit p-2 text-base text-white rounded-button bg-accent/90 hover:bg-accent cursor-pointer">
+              Continue Shopping
+            </button>
+          </Link>
         </div>
       )}
     </>

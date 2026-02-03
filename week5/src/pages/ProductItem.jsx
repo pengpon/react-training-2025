@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import { fetchProduct } from "../api/products";
 import { useEffect, useState } from "react";
 import { logger } from "../utils/logger";
+import { addToCart, fetchCarts, updateCartItem } from "../api/cart";
 
 function ProductItem() {
   const params = useParams();
@@ -11,6 +12,7 @@ function ProductItem() {
   const [activeImage, setActiveImage] = useState("");
   const [quantity, setQuantity] = useState(1);
 
+  // 切換大圖
   const handleImageClick = (e) => {
     setActiveImage(e.target.src);
   };
@@ -40,9 +42,31 @@ function ProductItem() {
     }
   };
 
+  // Blur 檢查
   const handleQuantityInputBlur = () => {
     if (!quantity) setQuantity(0);
-  }
+  };
+
+  const handleAddToCart = async () => {
+    const res = await fetchCarts();
+    const carts = res.data.data.carts;
+
+    const existingItemIndex = carts.findIndex(
+      (item) => item.product_id === product.id,
+    );
+
+    if (existingItemIndex >= 0) {
+      await updateCartItem(carts[existingItemIndex].id, {
+        product_id: product.id,
+        qty: carts[existingItemIndex].qty + quantity,
+      });
+    } else {
+      await addToCart({
+        product_id: product.id,
+        qty: quantity,
+      });
+    }
+  };
 
   useEffect(() => {
     const getProduct = async (id) => {
@@ -58,6 +82,7 @@ function ProductItem() {
     };
     if (id) getProduct(id);
   }, [id]);
+
   return (
     <>
       {!isLoading && (
@@ -136,16 +161,15 @@ function ProductItem() {
                     </button>
                   </div>
 
-                  <button className="px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors cursor-pointer">
+                  <button
+                    className="px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors cursor-pointer"
+                    onClick={handleAddToCart}
+                  >
                     Add To Cart
                   </button>
                 </div>
                 <div className="">
-                  {/* 功能未做, 不開放點擊 */}
-                  <button
-                    disabled
-                    className="w-full px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors disabled:bg-gray-200"
-                  >
+                  <button className="w-full px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors disabled:bg-gray-200">
                     But It Now
                   </button>
                 </div>
