@@ -62,7 +62,7 @@ function Header() {
 
             <ul className="text-base px-1 hidden lg:flex lg:gap-4 lg:items-center">
               {menuItems.map((item, index) => (
-                <li key={index} className="relative group">
+                <li key={index} className="relative group hover:text-primary-dark">
                   <NavLink to={item.path}>
                     {item.title}
                     <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
@@ -85,14 +85,14 @@ function Header() {
           {/* navbar end */}
           <div className="flex flex-1 gap-2 items-center justify-end">
             <Link to="login">
-              <UserIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+              <UserIcon className="size-8 hover:stroke-[2px] p-1 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
             </Link>
             <Link to="/location">
-              <MapPinIcon className="size-8 hover:stroke-[2px] p-1 text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+              <MapPinIcon className="size-8 hover:stroke-[2px] p-1  transition-all duration-300 hover:text-primary-dark cursor-pointer" />
             </Link>
             <Link to="/cart">
               <div className="relative">
-                <ShoppingBagIcon className="size-8 p-1 hover:stroke-[2px] text-primary/80 transition-all duration-300 hover:text-primary-dark cursor-pointer" />
+                <ShoppingBagIcon className="size-8 p-1 hover:stroke-[2px] transition-all duration-300 hover:text-primary-dark cursor-pointer" />
                 {/* <span className="absolute top-0 right-0 rounded-full bg-accent w-3 h-3"></span> */}
               </div>
             </Link>
