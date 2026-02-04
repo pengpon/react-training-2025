@@ -26,7 +26,6 @@
 ## 路由設定
 
 ```bash
-
 # 首頁
 /
 
@@ -39,3 +38,23 @@
 # 購物車
 /cart
 ```
+
+## 安裝 & 打包部署
+`node 使用 v24.12.0`
+```bash
+# 進入 week5 目錄下
+cd week5
+
+# 安裝 package
+npm install
+
+# 啟動本機 Server
+npm run dev
+
+# 只打包產生靜態檔 dist
+npm run build
+
+# 打包並部署至遠端 gh-pages 分支
+npm run deploy
+```
+
