@@ -30,7 +30,7 @@
 /
 
 # 產品列表頁
-/product
+/products
 
 # 產品頁
 /product/:id

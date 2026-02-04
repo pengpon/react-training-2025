@@ -9,3 +9,4 @@ React exercises
 | Week2 | Use RESTful API | [GitHub Pages](https://pengpon.github.io/react-training-2025/week2/) |
 | Week3 | Familiar with React | [GitHub Pages](https://pengpon.github.io/react-training-2025/week3/) |
 | Week4 | React Component-based | [GitHub Pages](https://pengpon.github.io/react-training-2025/week4/) |
+| Week5 | React Router | [GitHub Pages](https://pengpon.github.io/react-training-2025/week5/) |
