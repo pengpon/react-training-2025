@@ -7,7 +7,7 @@ import Login from "../views/Login";
 import Spinner from "../components/Spinner";
 
 function AdminLayout() {
-  const [isLoading, setIsLoading] = useState (true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function AdminLayout() {
       const token = getCookie("hexEcToken");
       if (token) await checkToken();
       if (!token) setIsAuth(false);
-      setIsLoading(false)
+      setIsLoading(false);
     };
     init();
   }, []);
@@ -38,14 +38,9 @@ function AdminLayout() {
         </div>
       )}
 
-      {isAuth ? (
-        <Outlet/>
-      ) : (
-        <Login onLoginSuccess={() => setIsAuth(true)} />
-      )}
+      {isAuth ? <Outlet /> : <Login onLoginSuccess={() => setIsAuth(true)} />}
     </>
   );
-
 }
 
-export default AdminLayout
+export default AdminLayout;

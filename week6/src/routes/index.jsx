@@ -12,6 +12,7 @@ import Checkout from "../views/front/Checkout";
 
 import AdminLayout from "../layouts/AdminLayout";
 import AdminProductList from "../views/admin/AdminProductList";
+import { Navigate } from "react-router";
 
 const routes = [
   {
@@ -19,43 +20,43 @@ const routes = [
     element: <FrontLayout />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Index />,
       },
       {
-        path: "/products",
+        path: "products",
         element: <ProductList />,
       },
       {
-        path: "/product/:id",
+        path: "product/:id",
         element: <ProductItem />,
       },
       {
-        path: "/blog",
+        path: "blog",
         element: <Blog />,
       },
       {
-        path: "/about",
+        path: "about",
         element: <About />,
       },
       {
-        path: "/location",
+        path: "location",
         element: <Location />,
       },
       {
-        path: "/cart",
+        path: "cart",
         element: <Cart />,
       },
       {
-        path: "/checkout",
+        path: "checkout",
         element: <Checkout />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
-        path: "/register",
+        path: "register",
         element: <Login />,
       },
       {
@@ -69,8 +70,8 @@ const routes = [
     element: <AdminLayout/>,
     children: [
       {
-        path: "",
-        element: <Login />
+        index: true,
+        element: <Navigate to="products" replace />
       },
       {
         path: "products",
