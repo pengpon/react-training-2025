@@ -23,6 +23,13 @@
   --color-content-main: #2d2a26;
   --color-content-muted: #6b7280;
 
+  --color-status-success: #54c474;
+  --color-status-error: #fa5e66;
+  --color-status-danger: #d1242f;
+  --color-status-warning: #ff8f40;
+  --color-status-enabled: #54c474;
+  --color-status-disabled: #fa5e66;
+
   --radius-main: 1rem;
   --radius-button: 0.5rem;
   --radius-input: 0.5rem;
