@@ -1,8 +1,8 @@
 import { Outlet } from "react-router";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-function Layout() {
+function FrontLayout() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -18,4 +18,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default FrontLayout;

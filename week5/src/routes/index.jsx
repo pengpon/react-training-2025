@@ -4,7 +4,7 @@ import ProductItem from "../pages/ProductItem";
 import Cart from "../pages/Cart";
 import About from "../pages/About";
 import Location from "../pages/Location";
-import Layout from "../layout";
+import FrontLayout from "../layouts/FrontLayout";
 import Blog from "../pages/Blog";
 import Login from "../pages/Login";
 import Checkout from "../pages/Checkout";
@@ -13,7 +13,7 @@ import NotFound from "../pages/NotFound";
 const routes = [
   {
     path: "/",
-    element: <Layout />,
+    element: <FrontLayout />,
     children: [
       {
         path: "/",
