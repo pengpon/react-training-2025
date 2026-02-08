@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createHashRouter, RouterProvider } from "react-router";
 import routes from "./routes/index.jsx";
-import "./style.css"
+import "./assets/css/style.css"
 
 const router = createHashRouter(routes);
 
