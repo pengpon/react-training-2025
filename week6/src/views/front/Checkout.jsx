@@ -52,8 +52,23 @@ function Checkout() {
       setData(res.data.data);
     })();
   }, []);
+
+  useEffect(() => {
+    if (isPending) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [isPending]);
   return (
     <>
+      {/* overlay */}
+      {isPending && (
+        <div className="absolute z-50 w-screen h-screen left-0 top-0 bg-gray-800/50 "></div>
+      )}
       <div className="py-0 flex flex-col-reverse w-full lg:w-3/4 lg:flex-row lg:items-start gap-6 text-primary-dark">
         <form
           className="mb-2 lg:mb-1 px-6 lg:py-10 w-full lg:w-1/2 lg:border-r border-gray-300"
@@ -229,7 +244,7 @@ function Checkout() {
                     <li key={item.id} className="flex gap-4 w-full mb-4">
                       <div className="relative bg-white rounded-main flex items-center size-16 flex-shrink-0">
                         <img
-                          src={item.product.imageUrl || "" }
+                          src={item.product.imageUrl || ""}
                           alt=""
                           className="rounded-main w-full object-cover"
                         />
@@ -238,7 +253,9 @@ function Checkout() {
                         </span>
                       </div>
                       <h3 className="grow">{item.product.title}</h3>
-                      <span className="flex-end">${addThousandsSeparator(item?.total || 0)}</span>
+                      <span className="flex-end">
+                        ${addThousandsSeparator(item?.total || 0)}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -260,7 +277,12 @@ function Checkout() {
                 <ul>
                   <li className="flex">
                     <span className="grow">
-                      Subtotal・{data?.carts?.reduce((acc, cur)=> acc + Number(cur.qty), 0)} Items
+                      Subtotal・
+                      {data?.carts?.reduce(
+                        (acc, cur) => acc + Number(cur.qty),
+                        0,
+                      )}{" "}
+                      Items
                     </span>
                     <span>${addThousandsSeparator(data?.total || 0)}</span>
                   </li>
@@ -272,7 +294,9 @@ function Checkout() {
               </div>
               <div className="flex text-xl font-medium mb-6">
                 <span className="grow">Total</span>
-                <span className="">${addThousandsSeparator(data?.final_total || 0)}</span>
+                <span className="">
+                  ${addThousandsSeparator(data?.final_total || 0)}
+                </span>
               </div>
             </div>
           </div>

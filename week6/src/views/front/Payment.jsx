@@ -49,8 +49,23 @@ function Payment() {
     })();
   }, [id, setOrder]);
 
+  useEffect(() => {
+    if (isPending) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [isPending]);
+
   return (
     <>
+      {/* overlay */}
+      {isPending && (
+        <div className="absolute z-50 w-screen h-screen left-0 top-0 bg-gray-800/50 "></div>
+      )}
       <div className="w-full lg:w-3/4 grid lg:grid-cols-2 gap-6">
         <form
           action=""
