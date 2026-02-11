@@ -1,18 +1,46 @@
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router";
+import { payOrder } from "../../api/front/payment";
+import { LineWave } from "react-loader-spinner";
+import { logger } from "../../utils/logger";
+import Toast from "../../utils/swal";
+import { useState } from "react";
 
 function Payment() {
+  const [isPending, setIsPending] = useState(false)
+  const navigate = useNavigate();
+  const params = useParams();
+  const { id } = params;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async () => {
+    setIsPending(true)
+    try {
+      await payOrder(id);
+      navigate("/payment/thanks");
+    } catch (error) {
+      logger.error(error.message, error);
+      Toast.fire({
+        position: "top",
+        icon: "warning",
+        title: error.response.data.message,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#ff8f40",
+      });
+    } finally {
+      setIsPending(false)
+    }
   };
   return (
     <>
-      <div className=" w-3/4 grid lg:grid-cols-2 gap-6">
+      <div className="w-full lg:w-3/4 grid lg:grid-cols-2 gap-6">
         <form
           action=""
           className="py-10 px-4 lg:border-r border-gray-300"
@@ -107,11 +135,20 @@ function Payment() {
               type="submit"
               className="text-white bg-primary rounded-button px-4 py-2 hover:bg-primary-dark cursor-pointer"
             >
-              Confirm
+              {isPending ? (
+                <LineWave
+                  width={40}
+                  height={40}
+                  color="#fff"
+                  ariaLabel="line-wave-loading"
+                />
+              ) : (
+                <span className="leading-10">Confirm</span>
+              )}
             </button>
           </div>
         </form>
-        <div className="px-4 py-10">
+        <div className="px-4 py-10 order-first lg:order-last">
           <h2 className="mb-10 text-xl font-medium text-gray-900">
             Order Details
           </h2>

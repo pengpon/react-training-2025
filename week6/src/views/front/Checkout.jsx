@@ -1,13 +1,19 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { createOrder } from "../../api/front/order";
+import { logger } from "../../utils/logger";
+import Toast from "../../utils/swal";
+import { LineWave } from "react-loader-spinner";
 
 function Checkout() {
+  const navigate = useNavigate();
+  const [isPending, setIsPending] = useState(false);
   const [isSummaryShow, setSummaryShow] = useState(false);
   const toggleSummary = () => {
     setSummaryShow(!isSummaryShow);
   };
-
   const {
     register,
     handleSubmit,
@@ -15,12 +21,29 @@ function Checkout() {
   } = useForm();
   const emailRegexPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    setIsPending(true);
+    const { message, ...user } = data;
+    try {
+      const res = await createOrder({ user, message });
+      navigate(`/payment/${res.data.orderId}`);
+    } catch (error) {
+      logger.error(error.message, error);
+      Toast.fire({
+        position: "top",
+        icon: "warning",
+        title: `Something Wrong...`,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#ff8f40",
+      });
+    } finally {
+      setIsPending(false);
+    }
   };
   return (
     <>
-      <div className="py-0 flex flex-col-reverse lg:flex-row w-3/4 lg:items-start gap-6 text-primary-dark">
+      <div className="py-0 flex flex-col-reverse w-full lg:w-3/4 lg:flex-row lg:items-start gap-6 text-primary-dark">
         <form
           className="mb-2 lg:mb-1 px-6 lg:py-10 w-full lg:w-1/2 lg:border-r border-gray-300"
           onSubmit={handleSubmit(onSubmit)}
@@ -159,7 +182,16 @@ function Checkout() {
               type="submit"
               className="text-white bg-primary rounded-button px-4 py-2 hover:bg-primary-dark cursor-pointer"
             >
-              Proceed to Payment
+              {isPending ? (
+                <LineWave
+                  width={40}
+                  height={40}
+                  color="#fff"
+                  ariaLabel="line-wave-loading"
+                />
+              ) : (
+                <span className="leading-10">Proceed to Payment</span>
+              )}
             </button>
           </div>
         </form>
