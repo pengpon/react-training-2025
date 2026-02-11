@@ -6,10 +6,13 @@ import { createOrder } from "../../api/front/order";
 import { logger } from "../../utils/logger";
 import Toast from "../../utils/swal";
 import { LineWave } from "react-loader-spinner";
+import { useEffect } from "react";
+import { fetchCarts } from "../../api/front/cart";
 
 function Checkout() {
   const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
+  const [data, setData] = useState({});
   const [isSummaryShow, setSummaryShow] = useState(false);
   const toggleSummary = () => {
     setSummaryShow(!isSummaryShow);
@@ -41,6 +44,14 @@ function Checkout() {
       setIsPending(false);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetchCarts();
+      setData(res.data.data);
+      // console.log(res.data.data);
+    })();
+  }, []);
   return (
     <>
       <div className="py-0 flex flex-col-reverse w-full lg:w-3/4 lg:flex-row lg:items-start gap-6 text-primary-dark">
@@ -212,22 +223,24 @@ function Checkout() {
             className={`grid px-6 ${isSummaryShow ? "grid-rows-[1fr]" : "grid-rows-[0fr]"} lg:block transition-grid-rows duration-300`}
           >
             <div className="overflow-hidden lg:overflow-visible">
-              <div className="mt-6 lg:mt-0">
+              <div className="mt-6 lg:mt-0 mb-4">
                 <ul>
-                  <li className="flex gap-4 w-full">
-                    <div className="relative size-16">
-                      <img
-                        src="https://dummyimage.com/600x400/000/fff"
-                        alt=""
-                        className="rounded-main"
-                      />
-                      <span className="absolute -top-2 -right-2 text-white bg-gray-900 px-2 py-0.5 rounded-badge text-sm">
-                        1
-                      </span>
-                    </div>
-                    <h3 className="grow">Crisp Fresh-Picked Cucumbers</h3>
-                    <span className="flex-end">$120</span>
-                  </li>
+                  {data?.carts?.map((item) => (
+                    <li key={item.id} className="flex gap-4 w-full">
+                      <div className="relative size-16">
+                        <img
+                          src={item.product.imageUrl || "" }
+                          alt=""
+                          className="rounded-main"
+                        />
+                        <span className="absolute -top-2 -right-2 text-white bg-gray-900 px-2 py-0.5 rounded-badge text-sm">
+                          {item.qty}
+                        </span>
+                      </div>
+                      <h3 className="grow">{item.product.title}</h3>
+                      <span className="flex-end">${item.total}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="flex gap-3 mb-6">
@@ -246,18 +259,20 @@ function Checkout() {
               <div className="mb-6">
                 <ul>
                   <li className="flex">
-                    <span className="grow">Subtotal・2 Items</span>
-                    <span>$123</span>
+                    <span className="grow">
+                      Subtotal・{data?.carts?.reduce((acc, cur)=> acc + Number(cur.qty), 0)} Items
+                    </span>
+                    <span>${data.total}</span>
                   </li>
                   <li className="flex">
                     <span className="grow">Shipping</span>
-                    <span>$10</span>
+                    <span>$0</span>
                   </li>
                 </ul>
               </div>
               <div className="flex text-xl font-medium mb-6">
                 <span className="grow">Total</span>
-                <span className="">$10000</span>
+                <span className="">${data.final_total}</span>
               </div>
             </div>
           </div>
