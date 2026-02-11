@@ -5,13 +5,16 @@ import { payOrder } from "../../api/front/payment";
 import { LineWave } from "react-loader-spinner";
 import { logger } from "../../utils/logger";
 import Toast from "../../utils/swal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { addThousandsSeparator } from "../../utils/format";
+import { fetchOrder } from "../../api/front/order";
 
 function Payment() {
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const { id } = params;
+  const [order, setOrder] = useState({});
 
   const {
     register,
@@ -20,7 +23,7 @@ function Payment() {
   } = useForm();
 
   const onSubmit = async () => {
-    setIsPending(true)
+    setIsPending(true);
     try {
       await payOrder(id);
       navigate("/payment/thanks");
@@ -35,9 +38,17 @@ function Payment() {
         background: "#ff8f40",
       });
     } finally {
-      setIsPending(false)
+      setIsPending(false);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetchOrder(id);
+      setOrder(res.data.order);
+    })();
+  }, [id, setOrder]);
+
   return (
     <>
       <div className="w-full lg:w-3/4 grid lg:grid-cols-2 gap-6">
@@ -154,18 +165,33 @@ function Payment() {
           </h2>
           <div className=" p-2 mb-4 border-b border-gray-300">
             <div className="flex justify-between mb-2">
+              <p>Date</p>
+              <p>
+                {new Date(
+                  Number(String(order?.create_at).padEnd(13, "0")) || 0,
+                ).toLocaleDateString("zh-tw", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })}
+              </p>
+            </div>
+            <div className="flex justify-between mb-2">
               <p>Subtotal</p>
-              <p>$2980</p>
+              <p>${addThousandsSeparator(order?.total || 0)}</p>
             </div>
             <div className="text-sm flex justify-between text-gray-500 ">
               <p>Shipping</p>
-              <p>$20</p>
+              <p>$0</p>
             </div>
           </div>
 
           <div className="flex justify-between p-2 text-xl">
             <p>Total</p>
-            <p>$3000</p>
+            <p>${addThousandsSeparator(order?.total || 0)}</p>
           </div>
         </div>
       </div>

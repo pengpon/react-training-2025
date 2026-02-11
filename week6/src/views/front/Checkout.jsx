@@ -8,6 +8,7 @@ import Toast from "../../utils/swal";
 import { LineWave } from "react-loader-spinner";
 import { useEffect } from "react";
 import { fetchCarts } from "../../api/front/cart";
+import { addThousandsSeparator } from "../../utils/format";
 
 function Checkout() {
   const navigate = useNavigate();
@@ -49,7 +50,6 @@ function Checkout() {
     (async () => {
       const res = await fetchCarts();
       setData(res.data.data);
-      // console.log(res.data.data);
     })();
   }, []);
   return (
@@ -220,25 +220,25 @@ function Checkout() {
           </div>
 
           <div
-            className={`grid px-6 ${isSummaryShow ? "grid-rows-[1fr]" : "grid-rows-[0fr]"} lg:block transition-grid-rows duration-300`}
+            className={`grid px-0 lg:px-6 ${isSummaryShow ? "grid-rows-[1fr]" : "grid-rows-[0fr]"} lg:block transition-grid-rows duration-300`}
           >
             <div className="overflow-hidden lg:overflow-visible">
               <div className="mt-6 lg:mt-0 mb-4">
                 <ul>
                   {data?.carts?.map((item) => (
-                    <li key={item.id} className="flex gap-4 w-full">
-                      <div className="relative size-16">
+                    <li key={item.id} className="flex gap-4 w-full mb-4">
+                      <div className="relative bg-white rounded-main flex items-center size-16 flex-shrink-0">
                         <img
                           src={item.product.imageUrl || "" }
                           alt=""
-                          className="rounded-main"
+                          className="rounded-main w-full object-cover"
                         />
                         <span className="absolute -top-2 -right-2 text-white bg-gray-900 px-2 py-0.5 rounded-badge text-sm">
                           {item.qty}
                         </span>
                       </div>
                       <h3 className="grow">{item.product.title}</h3>
-                      <span className="flex-end">${item.total}</span>
+                      <span className="flex-end">${addThousandsSeparator(item?.total || 0)}</span>
                     </li>
                   ))}
                 </ul>
@@ -262,7 +262,7 @@ function Checkout() {
                     <span className="grow">
                       Subtotal・{data?.carts?.reduce((acc, cur)=> acc + Number(cur.qty), 0)} Items
                     </span>
-                    <span>${data.total}</span>
+                    <span>${addThousandsSeparator(data?.total || 0)}</span>
                   </li>
                   <li className="flex">
                     <span className="grow">Shipping</span>
@@ -272,7 +272,7 @@ function Checkout() {
               </div>
               <div className="flex text-xl font-medium mb-6">
                 <span className="grow">Total</span>
-                <span className="">${data.final_total}</span>
+                <span className="">${addThousandsSeparator(data?.final_total || 0)}</span>
               </div>
             </div>
           </div>

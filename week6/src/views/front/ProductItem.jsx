@@ -224,13 +224,14 @@ function ProductItem() {
                     )}
                   </button>
                 </div>
-                <div className="">
+                {/* <div className="">
                   <Link to="/checkout">
-                    <button className="w-full px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors disabled:bg-gray-200">
-                      But It Now
+                    <button className="w-full px-4 bg-primary hover:bg-primary-dark text-white py-2 rounded-button transition-colors disabled:bg-gray-200"
+                    onClick={handleAddToCart('checkout')}>
+                      Buy It Now
                     </button>
                   </Link>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
