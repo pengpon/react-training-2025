@@ -54,16 +54,21 @@ const routes = [
         element: <Checkout />,
       },
       {
-        path: "payment/:id",
-        element: <Payment />,
-      },
-      {
-        path: "payment/thanks",
-        element: <PaymentSuccess />,
-      },
-      {
-        path: "login",
-        element: <Login />,
+        path: "payment",
+        children: [
+          {
+            path: "thanks",
+            element: <PaymentSuccess />,
+          },
+          {
+            path: ":id",
+            element: <Payment />,
+          },
+          {
+            path: "*",
+            element: <NotFound />,
+          },
+        ],
       },
       {
         path: "register",
@@ -71,24 +76,28 @@ const routes = [
       },
       {
         path: "*",
-        element: <NotFound/>,
+        element: <NotFound />,
       },
     ],
   },
   {
     path: "/admin",
-    element: <AdminLayout/>,
+    element: <AdminLayout />,
     children: [
       {
         index: true,
-        element: <Navigate to="products" replace />
+        element: <Navigate to="products" replace />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
       {
         path: "products",
-        element: <AdminProductList />
-      }
-    ]
-  }
+        element: <AdminProductList />,
+      },
+    ],
+  },
 ];
 
 export default routes;
