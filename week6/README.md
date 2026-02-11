@@ -17,6 +17,19 @@
 
 ```
 
+## 路由設定
+- 前台 (用戶瀏覽、購物使用)
+  - 首頁 `/`
+  - 產品列表 `/products`
+  - 單一產品頁 `/product/:id`
+  - 購物車 `/cart`
+  - 訂單 `/checkout`
+  - 結帳付款 `/payment/:id`
+  - 付款完成 `/payment/thanks`
+
+- 後台 (管理者管理用)
+  - 登入 `/admin/login`
+  - 產品列表 `/admin/products/` or `/admin`
 
 
 ## 安裝 & 打包部署
