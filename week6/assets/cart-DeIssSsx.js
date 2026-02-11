@@ -1,0 +1,1 @@
+import{f as a}from"./axiosInstance-Chy4COHr.js";const r="root",e=()=>a.get(`/api/${r}/cart`),c=t=>a.post(`/api/${r}/cart`,{data:t}),p=(t,o)=>a.put(`/api/${r}/cart/${t}`,{data:o}),i=t=>a.delete(`/api/${r}/cart/${t}`);export{c as a,e as f,i as r,p as u};
