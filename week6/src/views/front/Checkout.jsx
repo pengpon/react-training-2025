@@ -9,10 +9,10 @@ function Checkout() {
 
   return (
     <>
-      <div className="py-0 flex flex-col-reverse lg:flex-row w-full lg:max-w-200 lg:items-start gap-6 text-primary-dark">
+      <div className="py-0 flex flex-col-reverse lg:flex-row w-3/4 lg:items-start gap-6 text-primary-dark">
         <form className="mb-2 lg:mb-1 px-6 lg:py-10 w-full lg:w-1/2 lg:border-r border-gray-300">
           <div className="">
-            <div className="font-medium ">
+            <div className="font-medium">
               <h2 className="text-xl text-gray-900">Contact information</h2>
 
               <div className="my-4">
@@ -25,6 +25,21 @@ function Checkout() {
                     name="email"
                     type="email"
                     autoComplete="email"
+                    className="block w-full rounded-input bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                  />
+                </div>
+                <div className="h-5 text-status-error">error</div>
+              </div>
+              <div className="my-4">
+                <label htmlFor="email" className="block text-sm text-gray-700">
+                  Tel
+                </label>
+                <div className="my-2">
+                  <input
+                    id="tel"
+                    name="tel"
+                    type="text"
+                    autoComplete="tel"
                     className="block w-full rounded-input bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
                   />
                 </div>
@@ -82,7 +97,7 @@ function Checkout() {
             </button>
           </div>
         </form>
-        <div className="lg:w-1/2 lg:py-10 border-b border-gray-200 lg:border-0">
+        <div className="lg:w-1/2 lg:py-10 border-b border-gray-200 lg:border-0 lg:sticky lg:top-20">
           <div
             className="lg:sr-only px-6 py-4 flex items-center gap-2 text-gray-900  bg-gray-200 cursor-pointer"
             onClick={toggleSummary}

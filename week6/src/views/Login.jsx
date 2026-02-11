@@ -50,7 +50,7 @@ function Login({ onLoginSuccess }) {
                 Email:
               </label>
               <input
-                className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm;"
+                className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                 type="email"
                 id="username"
                 placeholder="Type your email"
@@ -62,7 +62,7 @@ function Login({ onLoginSuccess }) {
                   },
                 })}
               />
-              <div className="h-[20px] text-status-error">
+              <div className="h-5 text-status-error">
                 {errors.username ? errors.username.message : ""}
               </div>
             </div>
@@ -82,7 +82,7 @@ function Login({ onLoginSuccess }) {
                   })}
                 />
               </div>
-              <div className="h-[20px] text-status-error">
+              <div className="h-5 text-status-error">
                 {errors.password ? errors.password.message : ""}
               </div>
             </div>

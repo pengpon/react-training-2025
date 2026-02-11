@@ -9,6 +9,7 @@ import About from "../views/front/About";
 import Location from "../views/front/Location";
 import Blog from "../views/front/Blog";
 import Checkout from "../views/front/Checkout";
+import Payment from "../views/front/Payment";
 
 import AdminLayout from "../layouts/AdminLayout";
 import AdminProductList from "../views/admin/AdminProductList";
@@ -50,6 +51,10 @@ const routes = [
       {
         path: "checkout",
         element: <Checkout />,
+      },
+      {
+        path: "payment",
+        element: <Payment />,
       },
       {
         path: "login",
