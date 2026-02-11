@@ -38,12 +38,12 @@ function ProductList() {
   });
 
   const columns = [
-    { header: "產品", key: "summary" },
-    { header: "分類", key: "category" },
-    { header: "原價", key: "origin_price" },
-    { header: "售價", key: "price" },
-    { header: "狀態", key: "is_enabled" },
-    { header: "動作", key: "actions" },
+    { header: "Product", key: "summary" },
+    { header: "Category", key: "category" },
+    { header: "Original Price", key: "origin_price" },
+    { header: "Sale Price", key: "price" },
+    { header: "Status", key: "is_enabled" },
+    { header: "Actions", key: "actions" },
   ];
 
   const getProductByQuery = useCallback(async (page, category) => {
@@ -98,7 +98,7 @@ function ProductList() {
       Toast.fire({
         position: "top",
         icon: "warning",
-        title: `${fileNames} 檔案太大, 已超過 3 MB，請重新選擇！`,
+        title: `${fileNames} Maximum file size is 3MB. Please re-upload.`,
         color: "#fff",
         iconColor: "#fff",
         background: "#ff8f40",
@@ -307,11 +307,11 @@ function ProductList() {
           <div className="flex flex-column flex-row flex-wrap mb-10 items-center ">
             <button
               type="button"
-              className="btn-primary"
+              className="text-white bg-secondary/80 rounded-button px-4 py-2 hover:bg-secondary cursor-pointer"
               onClick={(e) => onActionClick(e.target.dataset.type, "")}
               data-type="create"
             >
-              新增產品
+              Add New Product
             </button>
           </div>
           <div className="mb-10">

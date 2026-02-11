@@ -7,8 +7,8 @@ function ProductItem({
   onFileChange,
   onInputChange,
 }) {
-  const title = isEdit ? "編輯產品" : "新增產品";
-  const action = isEdit ? "儲存" : "新增";
+  const title = isEdit ? "Edit Product" : "Add Product";
+  const action = isEdit ? "Save" : "Add";
 
   const combinedImages = [
     ...(data?.imagesUrl || []),
@@ -61,35 +61,35 @@ function ProductItem({
               <div className="grid gap-4 grid-cols-4 py-4 text-sm font-medium text-gray-600">
                 <div className="col-span-3">
                   <label htmlFor="title" className="block mb-2.5">
-                    名稱
+                    Title
                     <span className="text-status-warning">* </span>
                   </label>
                   <input
                     type="text"
                     name="title"
                     id="title"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.title}
                     onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
                   <label htmlFor="category" className="block mb-2.5">
-                    類別
+                    Category
                     <span className="text-status-warning">*</span>
                   </label>
                   <input
                     type="text"
                     name="category"
                     id="category"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.category}
                     onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
                   <label htmlFor="price" className="block mb-2.5">
-                    售價
+                    Sale Price
                     <span className="text-status-warning">*</span>
                   </label>
                   <input
@@ -97,14 +97,14 @@ function ProductItem({
                     name="price"
                     min="0"
                     id="price"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.price}
                     onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
                   <label htmlFor="origin_price" className="block mb-2.5">
-                    原價
+                    Original Price
                     <span className="text-status-warning">*</span>
                   </label>
                   <input
@@ -112,21 +112,21 @@ function ProductItem({
                     name="origin_price"
                     min="0"
                     id="origin_price"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.origin_price}
                     onChange={onInputChange}
                   />
                 </div>
                 <div className="col-span-1">
                   <label htmlFor="unit" className="block mb-2.5">
-                    單位
+                    Unit
                     <span className="text-status-warning">*</span>
                   </label>
                   <input
                     type="text"
                     name="unit"
                     id="unit"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.unit}
                     onChange={onInputChange}
                   />
@@ -145,12 +145,12 @@ function ProductItem({
                       onChange={onInputChange}
                     />
                     <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-100 dark:peer-focus:ring-gray-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                    <span className="select-none ms-3"> 是否上架 </span>
+                    <span className="select-none ms-3"> Active </span>
                   </label>
                 </div>
                 <div className="col-span-2 pb-3">
                   <label htmlFor="imageUrl" className="block mb-2.5">
-                    封面圖片
+                    Cover Image
                   </label>
                   {previews.imageUrl || data.imageUrl ? (
                     <div className="relative p-3">
@@ -165,7 +165,7 @@ function ProductItem({
                         alt={`${data.title}-cover`}
                       />
                       <button
-                        title="移除封面"
+                        title="remove cover"
                         type="button"
                         className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
                         name="imageUrl"
@@ -195,7 +195,7 @@ function ProductItem({
                         type="file"
                         name="imageUrl"
                         id="imageUrl"
-                        className="btn-primary w-full"
+                        className="px-4 py-2 rounded-main text-white bg-primary hover:bg-primary-dark cursor-pointer w-full"
                         accept="image/png, image/jpeg, image/jpg"
                         onChange={onFileChange}
                       />
@@ -204,7 +204,7 @@ function ProductItem({
                 </div>
                 <div className="col-span-2 pb-3">
                   <label htmlFor="imagesUrl" className="block mb-2.5 text-sm">
-                    其他圖片
+                    Gallery Images
                   </label>
                   <div className="grid grid-cols-2">
                     {combinedImages.length > 0 &&
@@ -219,7 +219,7 @@ function ProductItem({
                           />
 
                           <button
-                            title="移除圖片"
+                            title="remove image"
                             type="button"
                             className="absolute top-1 right-1 p-1 text-white bg-primary/80 rounded-full cursor-pointer"
                             name="imagesUrl"
@@ -249,7 +249,7 @@ function ProductItem({
                         type="file"
                         name="imagesUrl"
                         id="imagesUrl"
-                        className="btn-primary w-full"
+                        className="px-4 py-2 rounded-main text-white bg-primary hover:bg-primary-dark cursor-pointer w-full"
                         multiple
                         accept="image/png, image/jpeg, image/jpg"
                         onChange={onFileChange}
@@ -262,39 +262,39 @@ function ProductItem({
                     htmlFor="description"
                     className="block mb-2.5 text-sm font-medium text-gray-900"
                   >
-                    描述
+                    Description
                   </label>
                   <textarea
                     id="description"
                     name="description"
                     rows="3"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.description}
                     onChange={onInputChange}
                   ></textarea>
                 </div>
                 <div className="col-span-2">
                   <label htmlFor="content" className="block mb-2.5">
-                    食用方式
+                    Content
                   </label>
                   <textarea
                     id="content"
                     name="content"
                     rows="3"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.content}
                     onChange={onInputChange}
                   ></textarea>
                 </div>
                 <div className="col-span-4">
                   <label htmlFor="note" className="block mb-2.5">
-                    備註
+                    Note
                   </label>
                   <textarea
                     id="note"
                     name="note"
                     rows="2"
-                    className="input-base"
+                    className="w-full block p-2 border border-gray-300 rounded-input hover:border-primary focus:border-primary focus:outline-0 placeholder:text-sm"
                     defaultValue={data?.note}
                     onChange={onInputChange}
                   ></textarea>
@@ -303,7 +303,7 @@ function ProductItem({
               <div className="flex items-center space-x-4 border-t border-gray-200 pt-4 md:pt-6 justify-center">
                 <button
                   type="button"
-                  title="儲存"
+                  title="save"
                   className="inline-flex items-center  text-white bg-primary hover:bg-primary-dark box-border border border-transparent focus:ring-4 focus:ring-white shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
                   onClick={onSubmit}
                   disabled={!isFormValid}
@@ -312,11 +312,11 @@ function ProductItem({
                 </button>
                 <button
                   type="button"
-                  title="取消"
+                  title="cancel"
                   className="text-primary-dark bg-white box-border border border-primary focus:ring-4 focus:ring-gray-100 shadow-xs font-medium leading-5 rounded-md text-sm px-4 py-2.5 focus:outline-none cursor-pointer"
                   onClick={closeModal}
                 >
-                  取消
+                  Cancel
                 </button>
               </div>
             </form>

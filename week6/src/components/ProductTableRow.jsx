@@ -4,7 +4,7 @@ const StatusBadge = ({isEnabled}) => {
     <>
       <div className="flex items-center">
         <div className={`h-2.5 w-2.5 me-2 rounded-full ${isEnabled ? 'bg-status-enabled': 'bg-status-disabled'}`}></div>
-        {isEnabled ? "上架" : "下架"}
+        {isEnabled ? "Active" : "Inactive"}
       </div>
     </>
   );
@@ -13,7 +13,7 @@ const StatusBadge = ({isEnabled}) => {
 const ActionButtons = ({onActionClick}) => {
   return (
     <>
-      <button href="#" type="button" className="btn-ghost" onClick={onActionClick} data-type="edit">
+      <button href="#" type="button" className="p-2 rounded-main hover:bg-white cursor-pointer" onClick={onActionClick} data-type="edit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -29,7 +29,7 @@ const ActionButtons = ({onActionClick}) => {
           />
         </svg>
       </button>
-      <button href="#" type="button" className="btn-ghost" onClick={onActionClick} data-type="delete">
+      <button href="#" type="button" className="p-2 rounded-main hover:bg-white cursor-pointer" onClick={onActionClick} data-type="delete">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

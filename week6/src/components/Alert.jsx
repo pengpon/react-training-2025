@@ -24,26 +24,26 @@ function Alert({data, onConfirm, onCancel}) {
                 </svg>
               </div>
               <div className="text-gray-700">
-                <p className="text-md">是否確定刪除「 <span className="font-bold">{data.title}</span>」嗎？</p>
-                <span className="text-sm font-medium">注意: 此動作無法復原。</span>
+                <p className="text-md">Are you sure you want to delete "<span className="font-bold">{data.title}</span>" ?</p>
+                <span className="text-sm font-normal">Warning: This action cannot be undone.</span>
               </div>
             </div>
             <div className="flex justify-center gap-2 text-center">
               <button
-                title="刪除"
+                title="delete"
                 type="button"
                 className="px-4 py-2 rounded-main border font-medium border-gray-200 text-status-danger bg-gray-100 hover:text-white hover:bg-status-danger cursor-pointer"
                 onClick={onConfirm}
               >
-                刪除
+                Delete
               </button>
               <button
-                title="取消"
+                title="cancel"
                 type="button"
                 className="px-4 py-2 rounded-main border font-medium border-gray-200 text-gray-600 bg-white hover:bg-gray-50 cursor-pointer"
                 onClick={onCancel}
               >
-                取消
+                Cancel
               </button>
             </div>
           </div>
