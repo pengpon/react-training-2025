@@ -14,6 +14,7 @@ import Payment from "../views/front/Payment";
 import AdminLayout from "../layouts/AdminLayout";
 import AdminProductList from "../views/admin/AdminProductList";
 import { Navigate } from "react-router";
+import PaymentSuccess from "../views/front/PaymentSuccess";
 
 const routes = [
   {
@@ -53,8 +54,12 @@ const routes = [
         element: <Checkout />,
       },
       {
-        path: "payment",
+        path: "payment/:id",
         element: <Payment />,
+      },
+      {
+        path: "payment/thanks",
+        element: <PaymentSuccess />,
       },
       {
         path: "login",
