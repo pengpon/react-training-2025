@@ -6,7 +6,7 @@ import ErrorState from "../../components/ErrorState";
 import Spinner from "../../components/Spinner";
 import Toast from "../../utils/swal";
 import { addThousandsSeparator } from "../../utils/format";
-import { logger } from "../../utils/logger"
+import { logger } from "../../utils/logger";
 
 function ProductItem() {
   const params = useParams();
@@ -113,7 +113,9 @@ function ProductItem() {
 
   return (
     <>
-      {!product && (isLoading ? <Spinner /> : <ErrorState />)}
+      <div className="flex items-center">
+        {!product && (isLoading ? <Spinner /> : <ErrorState />)}
+      </div>
 
       {!isLoading && product && (
         <div className="min-h-screen p-8">
