@@ -1,15 +1,30 @@
+import { useForm } from "react-hook-form";
+
 function Payment() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
   return (
     <>
       <div className=" w-3/4 grid lg:grid-cols-2 gap-6">
-        <form action="" className="py-10 px-4 lg:border-r border-gray-300">
+        <form
+          action=""
+          className="py-10 px-4 lg:border-r border-gray-300"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <h2 className="text-xl font-medium">Payment</h2>
           <div className="my-4">
             <label
               htmlFor="credit-card"
               className="block text-sm text-gray-700"
             >
-              Credit Card
+              Credit Card Number
             </label>
             <div className="my-2">
               <input
@@ -18,9 +33,18 @@ function Payment() {
                 type="text"
                 autoComplete="credit-card"
                 className="block w-full rounded-input bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                {...register("credit-card", {
+                  required: "Enter a card number",
+                  pattern: {
+                    value: /^[0-9]{13,19}$/,
+                    message: "Enter a valid card number",
+                  },
+                })}
               />
             </div>
-            <div className="h-5 text-status-error">error</div>
+            <div className="h-4 text-sm text-status-error">
+              {errors["credit-card"] && errors["credit-card"].message}
+            </div>
           </div>
           <div className="my-4">
             <label
@@ -37,9 +61,18 @@ function Payment() {
                 autoComplete="expiration-date"
                 placeholder="(MM/YY)"
                 className="block w-full rounded-input bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                {...register("expiration-date", {
+                  required: "Enter expiration date",
+                  pattern: {
+                    value: /^(0[1-9]|1[0-2])\/?([0-9]{2})$/,
+                    message: "Enter a valid expiration date",
+                  },
+                })}
               />
             </div>
-            <div className="h-5 text-status-error">error</div>
+            <div className="h-4 text-sm  text-status-error">
+              {errors["expiration-date"] && errors["expiration-date"].message}
+            </div>
           </div>
           <div className="my-4">
             <label
@@ -55,9 +88,18 @@ function Payment() {
                 type="text"
                 autoComplete="cvv-code"
                 className="block w-full rounded-input bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                {...register("cvv-code", {
+                  required: "Enter the CVV or security code on your card",
+                  pattern: {
+                    value: /^[0-9]{3,4}$/,
+                    message: "Enter the CVV or security code on your card",
+                  },
+                })}
               />
             </div>
-            <div className="h-5 text-status-error">error</div>
+            <div className="h-4 text-sm text-status-error">
+              {errors["cvv-code"] && errors["cvv-code"].message}
+            </div>
           </div>
 
           <div className="mb-4 lg:mb-0 mt-10 text-center">

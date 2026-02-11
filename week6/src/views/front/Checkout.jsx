@@ -1,5 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 function Checkout() {
   const [isSummaryShow, setSummaryShow] = useState(false);
@@ -7,10 +8,24 @@ function Checkout() {
     setSummaryShow(!isSummaryShow);
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const emailRegexPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
   return (
     <>
       <div className="py-0 flex flex-col-reverse lg:flex-row w-3/4 lg:items-start gap-6 text-primary-dark">
-        <form className="mb-2 lg:mb-1 px-6 lg:py-10 w-full lg:w-1/2 lg:border-r border-gray-300">
+        <form
+          className="mb-2 lg:mb-1 px-6 lg:py-10 w-full lg:w-1/2 lg:border-r border-gray-300"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+        >
           <div className="">
             <div className="font-medium">
               <h2 className="text-xl text-gray-900">Contact information</h2>
@@ -26,24 +41,46 @@ function Checkout() {
                     type="email"
                     autoComplete="email"
                     className="block w-full rounded-input bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                    {...register("email", {
+                      required: "Enter email",
+                      pattern: {
+                        value: emailRegexPattern,
+                        message: "Please enter a valid email address",
+                      },
+                    })}
                   />
                 </div>
-                <div className="h-5 text-status-error">error</div>
+                <div className="h-4 text-sm text-status-error">
+                  {errors.email && errors.email.message}
+                </div>
               </div>
-              <div className="my-4">
+              <div className="my-2">
                 <label htmlFor="email" className="block text-sm text-gray-700">
-                  Tel
+                  Phone
                 </label>
                 <div className="my-2">
                   <input
                     id="tel"
                     name="tel"
-                    type="text"
+                    type="tel"
                     autoComplete="tel"
                     className="block w-full rounded-input bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                    {...register("tel", {
+                      required: "Enter tel",
+                      minLength: {
+                        value: 8,
+                        message: "Enter a valid phone number",
+                      },
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "Enter a valid phone number",
+                      },
+                    })}
                   />
                 </div>
-                <div className="h-5 text-status-error">error</div>
+                <div className="h-4 text-sm text-status-error">
+                  {errors.tel && errors.tel.message}
+                </div>
               </div>
             </div>
 
@@ -53,7 +90,7 @@ function Checkout() {
               <h2 className="text-xl  text-gray-900">Shipping information</h2>
 
               <div className="mt-4 ">
-                <div className="">
+                <div className="my-4">
                   <label htmlFor="name" className="block text-sm text-gray-700">
                     Name
                   </label>
@@ -63,11 +100,17 @@ function Checkout() {
                       name="name"
                       type="text"
                       autoComplete="name"
-                      className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary sm:text-sm/6"
+                      className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                      {...register("name", {
+                        required: "Enter name",
+                      })}
                     />
                   </div>
+                  <div className="h-4 text-sm text-status-error">
+                    {errors.name && errors.name.message}
+                  </div>
                 </div>
-                <div className="">
+                <div className="my-4">
                   <label
                     htmlFor="address"
                     className="block text-sm font-medium text-gray-700"
@@ -80,7 +123,30 @@ function Checkout() {
                       name="address"
                       type="text"
                       autoComplete="street-address"
-                      className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary sm:text-sm/6"
+                      className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                      {...register("address", {
+                        required: "Enter address",
+                      })}
+                    />
+                  </div>
+                  <div className="h-4 text-sm text-status-error">
+                    {errors.address && errors.address.message}
+                  </div>
+                </div>
+                <div className="">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Message
+                  </label>
+                  <div className="mt-2">
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows="2"
+                      className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-primary"
+                      {...register("message")}
                     />
                   </div>
                 </div>
