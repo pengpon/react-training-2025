@@ -4,8 +4,10 @@ import { logger } from "../utils/logger";
 import logo from "../assets/images/logo_full.png";
 import { useForm } from "react-hook-form";
 import Toast from "../utils/swal";
+import { useNavigate } from "react-router";
 
 function Login({ onLoginSuccess }) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,35 +18,35 @@ function Login({ onLoginSuccess }) {
     try {
       const res = await signIn(data);
       setCookie("hexEcToken", res.data.token, res.data.expired);
-      onLoginSuccess();
+      navigate("/admin/products");
+      onLoginSuccess?.();
     } catch (error) {
       logger.error(error.message, error);
-      if (error.response.data) {
-        Toast.fire({
-          position: "top",
-          icon: "error",
-          title: error.response.data.message,
-          color: "#fff",
-          iconColor: "#fff",
-          background: "#ef5350",
-        });
-      }
+
+      Toast.fire({
+        position: "top",
+        icon: "error",
+        title: error?.response?.data?.message,
+        color: "#fff",
+        iconColor: "#fff",
+        background: "#ef5350",
+      });
     }
   };
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen">
-        <div className="w-1/3">
+      <div className="flex flex-col lg:flex-row justify-center items-center lg:h-screen gap-2">
+        <div className="w-full max-w-3/5 lg:w-1/3">
           <img src={logo} alt="logo" />
         </div>
         <form
-          className="w-1/2 max-w-120 min-w-fit px-20 py-10 flex flex-col justify-center align-middle text-gray-600 bg-white rounded-main"
+          className="w-full lg:w-1/2 max-w-120 min-w-fit px-2 py-6 lg:px-20 lg:py-10 flex flex-col justify-center align-middle text-gray-600 lg:bg-white rounded-main"
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          <h1 className="mb-10 text-3xl text-center">Login</h1>
-          <div className="px-5 py-16">
+          <h1 className="mb-2 lg:mb-10 text-3xl text-center">Login</h1>
+          <div className="px-5 py-6 lg:py-16">
             <div className="mb-6">
               <label htmlFor="username" className="text-xl">
                 Email:
