@@ -1,12 +1,10 @@
-
 import "./App.css";
+import { createHashRouter, RouterProvider } from "react-router";
+import routes from "./routes/index.jsx";
+
+const router = createHashRouter(routes);
+
 function App() {
-
-  return (
-    <>
-    <h1 className="text-3xl text-gray-800">Week7</h1>
-    </>
-  )
+  return <RouterProvider router={router} />;
 }
-
-export default App
+export default App;
