@@ -1,14 +1,19 @@
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
 import { fetchProduct } from "../../api/front/products";
 import { useEffect, useState, useRef } from "react";
-import { addToCart, fetchCarts, updateCartItem } from "../../api/front/cart";
+import { addToCart, updateCartItem } from "../../api/front/cart";
 import ErrorState from "../../components/ErrorState";
 import Spinner from "../../components/Spinner";
 import Toast from "../../utils/swal";
 import { addThousandsSeparator } from "../../utils/format";
 import { logger } from "../../utils/logger";
+import { useDispatch } from "react-redux";
+import { getCartAsync } from "../../store/slices/cartSlice";
+import { useSelector } from "react-redux";
 
 function ProductItem() {
+  const dispatch = useDispatch();
+  const cartList = useSelector((state) => state.cart.cartList);
   const params = useParams();
   const { id } = params;
   const [isLoading, setIsLoading] = useState(true);
@@ -57,18 +62,15 @@ function ProductItem() {
   const handleAddToCart = async () => {
     setIsAddToCartLoading(true);
 
-    const res = await fetchCarts();
-    const carts = res.data.data.carts;
-
-    const existingItemIndex = carts.findIndex(
+    const existingItemIndex = cartList.findIndex(
       (item) => item.product_id === product.id,
     );
 
     try {
       if (existingItemIndex >= 0) {
-        await updateCartItem(carts[existingItemIndex].id, {
+        await updateCartItem(cartList[existingItemIndex].id, {
           product_id: product.id,
-          qty: carts[existingItemIndex].qty + quantity,
+          qty: cartList[existingItemIndex].qty + Number(quantity),
         });
       } else {
         await addToCart({
@@ -77,10 +79,13 @@ function ProductItem() {
         });
       }
       setIsSuccess(true);
+
+      // 控制 check icon 顯示
       if (timeRef.current) clearTimeout(timeRef.current);
       timeRef.current = setTimeout(() => {
         setIsSuccess(false);
       }, 2000);
+      dispatch(getCartAsync())
     } catch (error) {
       logger.error(error.message, error);
     } finally {

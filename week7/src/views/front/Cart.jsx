@@ -1,29 +1,25 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router";
-import {
-  fetchCarts,
-  removeCartItem,
-  updateCartItem,
-} from "../../api/front/cart";
+import { removeCartItem, updateCartItem } from "../../api/front/cart";
 import Spinner from "../../components/Spinner";
 import ErrorState from "../../components/ErrorState";
 import Toast from "../../utils/swal";
 import { addThousandsSeparator } from "../../utils/format";
 import { logger } from "../../utils/logger";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { getCartAsync } from "../../store/slices/cartSlice";
 
 function Cart() {
+  const dispatch = useDispatch();
+  const cartList = useSelector((state) => state.cart.cartList);
+  const finalTotal = useSelector((state) => state.cart.finalTotal);
+
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [cartItems, setCartItems] = useState(null);
-  const [finalTotal, setFinalTotal] = useState(0);
   const timerRef = useRef(null);
-
-  const getCarts = useCallback(async () => {
-    const res = await fetchCarts();
-    setCartItems(res.data.data.carts);
-    setFinalTotal(res.data.data.final_total);
-  }, []);
 
   // 加減按鈕
   const handleQuantityChange = async (id, type) => {
@@ -35,6 +31,7 @@ function Cart() {
     const updatedItems = cartItems.map((item) =>
       item.id === id ? { ...item, qty: newQty } : item,
     );
+
     setCartItems(updatedItems);
 
     if (timerRef.current) {
@@ -88,7 +85,7 @@ function Cart() {
       product_id: updateItem.product_id,
       qty: updateItem.qty,
     });
-    await getCarts();
+    dispatch(getCartAsync());
     setIsActionLoading(false);
   };
 
@@ -98,14 +95,14 @@ function Cart() {
       return updatedItems;
     });
     await removeCartItem(id);
-    await getCarts();
+    dispatch(getCartAsync());
     setIsActionLoading(false);
   };
 
   useEffect(() => {
     const init = async () => {
       try {
-        await getCarts();
+        dispatch(getCartAsync());
       } catch (error) {
         Toast.fire({
           position: "top",
@@ -121,7 +118,7 @@ function Cart() {
       }
     };
     init();
-  }, [getCarts]);
+  }, [dispatch]);
 
   useEffect(() => {
     return () => {
@@ -130,6 +127,10 @@ function Cart() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    setCartItems([...cartList]);
+  }, [cartList]);
 
   return (
     <>

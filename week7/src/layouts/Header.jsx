@@ -9,8 +9,13 @@ import {
 import logo from "../assets/images/logo.png";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getCartAsync } from "../store/slices/cartSlice";
 
 function Header() {
+  const dispatch = useDispatch();
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const menuItems = [
     { title: "Catalog", path: "products" },
     // { title: "Vegetables & Fruits", path: "products" },
@@ -45,6 +50,9 @@ function Header() {
     return () => mediaQuery.removeEventListener("change", handleMediaChange);
   }, []);
 
+  useEffect(() => {
+    dispatch(getCartAsync());
+  }, [dispatch]);
   return (
     <>
       <header className="sticky top-0 z-50 w-full shadow-">
@@ -62,7 +70,10 @@ function Header() {
 
             <ul className="text-base px-1 hidden lg:flex lg:gap-4 lg:items-center">
               {menuItems.map((item, index) => (
-                <li key={index} className="relative group hover:text-primary-dark">
+                <li
+                  key={index}
+                  className="relative group hover:text-primary-dark"
+                >
                   <NavLink to={item.path}>
                     {item.title}
                     <span className="absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
@@ -93,7 +104,11 @@ function Header() {
             <Link to="/cart">
               <div className="relative">
                 <ShoppingBagIcon className="size-8 p-1 hover:stroke-[2px] transition-all duration-300 hover:text-primary-dark cursor-pointer" />
-                {/* <span className="absolute top-0 right-0 rounded-full bg-accent w-3 h-3"></span> */}
+                <span
+                  className="absolute top-0 lg:-top-2 -right-2 flex items-center justify-center min-w-[1.25rem] h-5 px-1 text-[10px] font-bold leading-none text-white bg-red-400 rounded-full ring-2 ring-white"
+                >
+                  {totalQuantity > 99 ? "99+" : totalQuantity}
+                </span>
               </div>
             </Link>
           </div>
