@@ -105,7 +105,8 @@ function Header() {
               <div className="relative">
                 <ShoppingBagIcon className="size-8 p-1 hover:stroke-[2px] transition-all duration-300 hover:text-primary-dark cursor-pointer" />
                 <span
-                  className="absolute top-0 lg:-top-2 -right-2 flex items-center justify-center min-w-[1.25rem] h-5 px-1 text-[10px] font-bold leading-none text-white bg-red-400 rounded-full ring-2 ring-white"
+                key={totalQuantity}
+                  className="absolute top-0 lg:-top-2 -right-2 flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold leading-none text-white bg-red-400 rounded-full ring-2 ring-white animate-badge"
                 >
                   {totalQuantity > 99 ? "99+" : totalQuantity}
                 </span>
