@@ -5,8 +5,11 @@ import logo from "../assets/images/logo_full.png";
 import { useForm } from "react-hook-form";
 import Toast from "../utils/swal";
 import { useNavigate } from "react-router";
+import { loginSuccess } from "../store/slices/authSlice";
+import { useDispatch } from "react-redux";
 
-function Login({ onLoginSuccess }) {
+function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     register,
@@ -18,8 +21,8 @@ function Login({ onLoginSuccess }) {
     try {
       const res = await signIn(data);
       setCookie("hexEcToken", res.data.token, res.data.expired);
+      dispatch(loginSuccess());
       navigate("/admin/products");
-      onLoginSuccess?.();
     } catch (error) {
       logger.error(error.message, error);
 

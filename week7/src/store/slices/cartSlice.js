@@ -18,7 +18,7 @@ const cartSlice = createSlice({
 
 export const getCartAsync = createAsyncThunk(
   'cart/getCartAsync',
-  async(data, params) => {
+  async(_, params) => {
     const res = await fetchCarts()
     params.dispatch(setCart(res.data.data))
   }
