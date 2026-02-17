@@ -1,6 +1,15 @@
 # Week 7 - Mission
 
+## 頁面連結
 [Week7 頁面連結](https://pengpon.github.io/react-training-2025/week7/)
+
+- 前台
+  - [產品列表頁](https://pengpon.github.io/react-training-2025/week7/#/products)
+  - [購物車頁](https://pengpon.github.io/react-training-2025/week7/#/cart)
+- Admin 後台
+  - [登入頁](https://pengpon.github.io/react-training-2025/week7/#/admin/login)
+  - [產品管理頁](https://pengpon.github.io/react-training-2025/week7/#/admin/products)
+
 
 ## 需求
 ```
