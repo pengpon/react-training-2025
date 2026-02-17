@@ -1,0 +1,1 @@
+import{j as r}from"./index-C8jhmTRd.js";import{F as e}from"./WrenchScrewdriverIcon-CpRjPr61.js";function a(){return r.jsx(r.Fragment,{children:r.jsxs("div",{className:"flex items-center gap-6 text-primary-dark",children:[r.jsx(e,{className:"size-6"}),r.jsxs("p",{children:[r.jsx("strong",{children:"Location Page"})," ...Under Construction..."]})]})})}export{a as default};
