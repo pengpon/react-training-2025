@@ -15,7 +15,7 @@ import ProductItem from "../../components/ProductItem";
 import Alert from "../../components/Alert";
 import Spinner from "../../components/Spinner";
 
-function ProductList() {
+function AdminProductList() {
   const pageRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [productsData, setProductsData] = useState([]);
@@ -302,8 +302,8 @@ function ProductList() {
         </div>
       )}
 
-      <div className="w-screen min-h-screen p-10 bg-secondary/60" ref={pageRef}>
-        <div className="relative overflow-x-auto px-10 py-8 bg-white shadow-xs rounded-main">
+      <div className="min-w-200 min-h-screen p-10 bg-secondary/60 overflow-auto" ref={pageRef}>
+        <div className="relative px-10 py-8 bg-white shadow-xs rounded-main overflow-auto">
           <div className="flex flex-column flex-row flex-wrap mb-10 items-center ">
             <button
               type="button"
@@ -346,4 +346,4 @@ function ProductList() {
   );
 }
 
-export default ProductList;
+export default AdminProductList;

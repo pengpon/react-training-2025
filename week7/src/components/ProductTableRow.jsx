@@ -59,7 +59,7 @@ function ProductTableRow({ columns, data, onActionClick }) {
               <th
                 key={col.key}
                 scope="row"
-                className="px-6 py-4 flex items-center text-gray-800"
+                className="min-w-100 px-6 py-4 flex items-center text-gray-800"
               >
                 <img
                   className="w-10 h-10 rounded-full"
@@ -74,7 +74,7 @@ function ProductTableRow({ columns, data, onActionClick }) {
                 />
                 <div className="ps-3">
                   <div className="text-lg font-semibold">{data.title}</div>
-                  <div className="font-normal text-gray-500">
+                  <div className="font-normal text-gray-500 line-clamp-5">
                     {data.description}
                   </div>
                 </div>

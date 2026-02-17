@@ -242,7 +242,7 @@ function Checkout() {
                 <ul>
                   {data?.carts?.map((item) => (
                     <li key={item.id} className="flex gap-4 w-full mb-4">
-                      <div className="relative bg-white rounded-main flex items-center size-16 flex-shrink-0">
+                      <div className="relative bg-white rounded-main flex items-center size-16 shrink-0">
                         <img
                           src={item.product.imageUrl || ""}
                           alt=""
