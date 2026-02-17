@@ -4,7 +4,7 @@ function Alert({data, onConfirm, onCancel}) {
       <div className="flex items-center justify-center fixed z-50 inset-0 bg-black/60">
         <div className="relative px-4 min-h-screen flex items-center justify-center">
           <div className="relative bg-white rounded-lg max-w-md p-4 inset-x-0 bottom-0 z-50 mb-4 shadow-lg">
-            <p className="mb-4 font-bold text-center">提醒 ! </p>
+            <p className="mb-4 font-bold text-center">Delete Item ? </p>
 
             <div className="flex justify-center items-center gap-4 mb-6">
               <div className="flex items-center justify-center w-16 h-16 rounded-full bg-status-danger/10">

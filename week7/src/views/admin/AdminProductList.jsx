@@ -85,7 +85,8 @@ function AdminProductList() {
     if (fileArray.length === 0) return;
 
     // 檢查檔案大小, 限制 3 MB
-    const MAX_FILE_SIZE = 3 * 1024 * 1024;
+    const MAX_MB = 3;
+    const MAX_FILE_SIZE = MAX_MB * 1024 * 1024;
     const oversizedFiles = fileArray.filter(
       (file) => file.size > MAX_FILE_SIZE,
     );
@@ -98,10 +99,11 @@ function AdminProductList() {
       Toast.fire({
         position: "top",
         icon: "warning",
-        title: `${fileNames} Maximum file size is 3MB. Please re-upload.`,
-        color: "#fff",
-        iconColor: "#fff",
-        background: "#ff8f40",
+        title: "File too large",
+        text: `${fileNames} exceeds ${MAX_MB} MB.`,
+        color: "#1f2937",
+        iconColor: "#f59e0b",
+        background: "#ffffff",
       });
     }
 
@@ -213,13 +215,15 @@ function AdminProductList() {
         res = await createProduct(data);
       }
 
+      const title = isEdit ? "Updated!" : "Created!";
+
       Toast.fire({
         position: "top",
         icon: "success",
-        title: res.data.message,
-        color: "#fff",
-        iconColor: "#fff",
-        background: "#80c684",
+        title: res.data.success ? title : "Error",
+        color: "#1f2937",
+        iconColor: "#10b981",
+        background: "#ffffff",
       });
       // 5. 重新取得產品列表
       await getProductByQuery(1);
@@ -235,13 +239,15 @@ function AdminProductList() {
     setIsLoading(true);
     try {
       const res = await deleteProduct(selectedProduct.id);
+      const title = "Deleted!";
+
       Toast.fire({
         position: "top",
         icon: "success",
-        title: res.data.message,
-        color: "#fff",
-        iconColor: "#fff",
-        background: "#80c684",
+        title: res.data.success ? title : "Error",
+        color: "#1f2937",
+        iconColor: "#10b981",
+        background: "#ffffff",
       });
       await getProductByQuery(1);
       setIsLoading(false);
@@ -302,7 +308,10 @@ function AdminProductList() {
         </div>
       )}
 
-      <div className="min-w-200 min-h-screen p-10 bg-secondary/60 overflow-auto" ref={pageRef}>
+      <div
+        className="min-w-200 min-h-screen p-10 bg-secondary/60 overflow-auto"
+        ref={pageRef}
+      >
         <div className="relative px-10 py-8 bg-white shadow-xs rounded-main overflow-auto">
           <div className="flex flex-column flex-row flex-wrap mb-10 items-center ">
             <button
