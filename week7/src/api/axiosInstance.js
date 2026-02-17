@@ -27,23 +27,6 @@ adminApi.interceptors.request.use((config) => {
     return Promise.reject(error);
   },)
 
-// api.interceptors.request.use(
-//   (config) => {
-//     // check request URL
-//     if (config.url.includes("/admin") || config.url.includes("/user/check")) {
-//       const token = getCookie("hexEcToken");
-//       if (token) {
-//         config.headers.Authorization = `${token}`;
-//       }
-//     }
-
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   },
-// );
-
 adminApi.interceptors.response.use(
   (response) => {
     return response;
@@ -51,21 +34,19 @@ adminApi.interceptors.response.use(
   (error) => {
     const { response } = error;
 
-    const message = response?.data?.message || "Oops! Something went wrong.";
+    const message = !response?.data.success ?  "Something went wrong." : "" ;
 
       Toast.fire({
         position: "top",
         icon: "error",
         title: message,
-        color: "#fff",
-        iconColor: "#fff",
-        background: "#ef5350",
+        color: "#1f2937",
+        iconColor: "#ef4444",
+        background: "#ffffff",
       });
 
     return Promise.reject(error);
   },
 );
-
-
 
 export  {frontApi, adminApi} ;
