@@ -11,3 +11,4 @@ React exercises
 | Week4 | React Component-based | [GitHub Pages](https://pengpon.github.io/react-training-2025/week4/) |
 | Week5 | React Router | [GitHub Pages](https://pengpon.github.io/react-training-2025/week5/) |
 | Week6 | React Hook Form  | [GitHub Pages](https://pengpon.github.io/react-training-2025/week6/) |
+| Week7 | Redux Toolkit  | [GitHub Pages](https://pengpon.github.io/react-training-2025/week7/) |
