@@ -1,9 +1,28 @@
-import { Outlet, Link } from "react-router";
+import { Outlet, Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { logout } from "../store/slices/authSlice";
+import { logoutAsync } from "../store/slices/authSlice";
+import Toast from "../utils/swal";
+
 
 function AdminLayout() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutAsync()).unwrap();
+      navigate("/admin/login");
+    } catch (errorMessage) {
+      Toast.fire({
+        position: "top",
+        icon: "error",
+        title: errorMessage,
+        color: "#1f2937",
+        iconColor: "#ef4444",
+        background: "#ffffff",
+      });
+    }
+  };
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gray-100">
@@ -23,7 +42,7 @@ function AdminLayout() {
             Products
           </Link>
           <button
-            onClick={() => dispatch(logout())}
+            onClick={handleLogout}
             className="w-fit m-auto px-4 py-2 text-red-500 hover:bg-red-50 rounded-button"
           >
             Logout

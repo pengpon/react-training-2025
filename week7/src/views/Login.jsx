@@ -1,11 +1,8 @@
-import { signIn } from "../api/admin/auth";
-import { setCookie } from "../utils/cookie";
-import { logger } from "../utils/logger";
 import logo from "../assets/images/logo_full.png";
 import { useForm } from "react-hook-form";
 import Toast from "../utils/swal";
 import { useNavigate } from "react-router";
-import { loginSuccess } from "../store/slices/authSlice";
+import { loginAsync } from "../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 
 function Login() {
@@ -19,20 +16,16 @@ function Login() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await signIn(data);
-      setCookie("hexEcToken", res.data.token, res.data.expired);
-      dispatch(loginSuccess());
+      await dispatch(loginAsync(data)).unwrap();
       navigate("/admin/products");
-    } catch (error) {
-      logger.error(error.message, error);
-
+    } catch (errorMessage) {
       Toast.fire({
         position: "top",
         icon: "error",
-        title: error?.response?.data?.message,
-        color: "#fff",
-        iconColor: "#fff",
-        background: "#ef5350",
+        title: errorMessage,
+        color: "#1f2937",
+        iconColor: "#ef4444",
+        background: "#ffffff",
       });
     }
   };
