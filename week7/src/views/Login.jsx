@@ -53,10 +53,10 @@ function Login() {
                 id="username"
                 placeholder="Type your email"
                 {...register("username", {
-                  required: "請輸入 Email",
+                  required: "Please enter your email",
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: "Email 格式錯誤",
+                    message: "Invalid email format",
                   },
                 })}
               />
@@ -75,8 +75,8 @@ function Login() {
                   id="password"
                   placeholder="Type your password"
                   {...register("password", {
-                    required: "請輸入密碼",
-                    minLength: { value: 6, message: "密碼長度至少需 6 碼" },
+                    required: "Please enter your password",
+                    minLength: { value: 6, message: "Password must be at least 6 characters" },
                   })}
                 />
               </div>
